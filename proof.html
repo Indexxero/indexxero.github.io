@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The same customers, measured two ways</title>
+<style>
+  :root {
+    color-scheme: light;
+    --plane: #f9f9f7;
+    --surface: #fcfcfb;
+    --ink: #0b0b0b;
+    --ink-2: #52514e;
+    --muted: #898781;
+    --grid: #e1e0d9;
+    --axis: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --asof: #2a78d6;
+    --export: #eb6834;
+    --shadow: 0 1px 2px rgba(11,11,11,.05), 0 8px 24px rgba(11,11,11,.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --plane: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7;
+      --muted: #898781; --grid: #2c2c2a; --axis: #383835;
+      --border: rgba(255,255,255,0.10);
+      --asof: #3987e5; --export: #d95926;
+      --shadow: none;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --plane: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7;
+    --muted: #898781; --grid: #2c2c2a; --axis: #383835;
+    --border: rgba(255,255,255,0.10);
+    --asof: #3987e5; --export: #d95926;
+    --shadow: none;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--plane); color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 16px; line-height: 1.62;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px 96px; }
+
+  header { padding: 72px 0 8px; }
+  .eyebrow {
+    font-size: 12px; letter-spacing: .10em; text-transform: uppercase;
+    color: var(--muted); font-weight: 600; margin: 0 0 18px;
+  }
+  h1 { font-size: clamp(30px, 5vw, 44px); line-height: 1.14; letter-spacing: -.022em; margin: 0 0 20px; font-weight: 660; }
+  .standfirst { font-size: 19px; color: var(--ink-2); margin: 0 0 8px; max-width: 62ch; }
+
+  h2 { font-size: 23px; letter-spacing: -.014em; margin: 64px 0 12px; font-weight: 640; }
+  h3 { font-size: 15px; letter-spacing: -.005em; margin: 0 0 4px; font-weight: 620; }
+  p { margin: 0 0 16px; max-width: 70ch; }
+  .lede { color: var(--ink-2); }
+  a { color: var(--asof); text-underline-offset: 2px; }
+
+  hr.rule { border: 0; border-top: 1px solid var(--border); margin: 40px 0 0; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 24px; margin: 24px 0;
+    box-shadow: var(--shadow);
+  }
+  .card-head { margin-bottom: 18px; }
+  .card-head p { font-size: 13.5px; color: var(--muted); margin: 0; max-width: none; }
+
+  /* hero pair */
+  .hero { display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; align-items: center; }
+  .hero-cell { text-align: center; padding: 8px 4px; }
+  .hero-num { font-size: clamp(48px, 11vw, 78px); line-height: 1; letter-spacing: -.035em; font-weight: 660; }
+  .hero-num.export { color: var(--export); }
+  .hero-num.asof { color: var(--asof); }
+  .hero-cap { font-size: 13px; color: var(--ink-2); margin-top: 10px; }
+  .hero-cap b { color: var(--ink); font-weight: 600; display: block; font-size: 13.5px; }
+  .hero-vs { font-size: 12px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
+  @media (max-width: 640px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-vs { display: none; }
+  }
+
+  .legend { display: flex; gap: 20px; flex-wrap: wrap; margin: 0 0 14px; font-size: 13px; color: var(--ink-2); }
+  .legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .swatch { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+
+  svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .grid-line { stroke: var(--grid); stroke-width: 1; }
+  .axis-line { stroke: var(--axis); stroke-width: 1; }
+  .tick { fill: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+  .dlabel { font-size: 12.5px; font-weight: 600; fill: var(--ink); }
+  .dlabel-sub { font-size: 11px; fill: var(--muted); }
+
+  .tip {
+    position: fixed; pointer-events: none; opacity: 0; transition: opacity .1s;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 9px;
+    padding: 9px 11px; font-size: 12.5px; box-shadow: 0 6px 20px rgba(0,0,0,.13);
+    z-index: 20; white-space: nowrap; color: var(--ink);
+  }
+  .tip .tr { display: flex; align-items: center; gap: 7px; }
+  .tip .tm { color: var(--muted); margin-bottom: 5px; font-size: 11px; }
+  .tip b { font-variant-numeric: tabular-nums; }
+
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 700px) { .two { grid-template-columns: 1fr; } }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 6px 0 0; }
+  th, td { text-align: right; padding: 9px 8px; border-bottom: 1px solid var(--border); font-variant-numeric: tabular-nums; }
+  th:first-child, td:first-child { text-align: left; font-variant-numeric: normal; }
+  thead th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .02em; }
+  tbody tr:last-child td { border-bottom: 0; }
+
+  details { margin-top: 10px; }
+  summary { cursor: pointer; font-size: 13.5px; color: var(--ink-2); padding: 6px 0; }
+  pre {
+    background: var(--plane); border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px; overflow-x: auto; font-size: 12.5px; line-height: 1.62;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--ink-2);
+  }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .92em; }
+
+  .note {
+    font-size: 13.5px; color: var(--ink-2); border-left: 2px solid var(--axis);
+    padding: 2px 0 2px 16px; margin: 20px 0;
+  }
+  .mech { margin: 0; padding: 0; list-style: none; }
+  .mech li { padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .mech li:last-child { border-bottom: 0; }
+  .mech b { font-weight: 620; }
+  .mech span { display: block; color: var(--ink-2); font-size: 14px; margin-top: 2px; }
+
+  footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--border); font-size: 13.5px; color: var(--muted); }
+  .cta {
+    display: inline-block; margin-top: 8px; padding: 11px 20px; border-radius: 9px;
+    background: var(--ink); color: var(--surface); text-decoration: none; font-weight: 600; font-size: 14.5px;
+  }
+  .toggle {
+    position: fixed; top: 16px; right: 16px; z-index: 30;
+    background: var(--surface); border: 1px solid var(--border); color: var(--ink-2);
+    border-radius: 8px; padding: 6px 11px; font-size: 12.5px; cursor: pointer;
+    font-family: inherit;
+  }
+</style>
+</head>
+<body>
+<button class="toggle" id="themeToggle" type="button">Dark</button>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Indexxero &middot; Demonstration</p>
+  <h1>The same customers, measured two ways</h1>
+  <p class="standfirst">One book of 2,000 accounts. One set of churn events. Two analyses that differ in exactly one respect: when the field values were read. The gap between them is not a rounding error.</p>
+</header>
+
+<hr class="rule">
+
+<h2>The worklist</h2>
+<p class="lede">A retention model is validated, and it reports that 31 of the 100 highest-risk accounts will churn in the next six months. The team staffs against that number.</p>
+<p class="lede">Rerun on data that only knows what was knowable on the day, the same model finds 9.</p>
+
+<div class="card">
+  <div class="hero">
+    <div class="hero-cell">
+      <div class="hero-num export">31</div>
+      <div class="hero-cap"><b>Backtest on the current export</b>accounts in the top 100 that churn</div>
+    </div>
+    <div class="hero-vs">versus</div>
+    <div class="hero-cell">
+      <div class="hero-num asof">9</div>
+      <div class="hero-cap"><b>Backtest reconstructed as of the day</b>accounts in the top 100 that churn</div>
+    </div>
+  </div>
+</div>
+
+<p>Both figures come from the same model specification, the same accounts, the same churn events and the same train and test split. The team was not staffed for a list that is three and a half times weaker than the one they were shown.</p>
+
+<h2>The retention curve</h2>
+<p class="lede">The same distortion turns up before any model is built, in the number a board sees.</p>
+<p>Rebuild a three year cohort from the customer table as it stands today and the accounts that were purged under an ordinary data-retention policy are simply absent from the denominator. They were customers. They left. The table no longer holds them, so the cohort appears to have been made of survivors from the beginning.</p>
+
+<div class="card">
+  <div class="card-head">
+    <h3>Share of the opening cohort still a customer</h3>
+    <p>2,000 accounts opened. 1,772 still on file today. Churned accounts are deleted 12 months after they leave.</p>
+  </div>
+  <div class="legend">
+    <span><i class="swatch" style="background:var(--export)"></i> Rebuilt from today's customer table</span>
+    <span><i class="swatch" style="background:var(--asof)"></i> Reconstructed from the event ledger</span>
+  </div>
+  <svg id="curve" viewBox="0 0 720 320" role="img" aria-label="Two cohort retention curves. The curve rebuilt from today's customer table stays flat at 100 percent for 23 months before declining to 91.6 percent. The curve reconstructed from the event ledger declines steadily from month one to 81.2 percent."></svg>
+  <details>
+    <summary>View as a table</summary>
+    <table id="curveTable">
+      <thead><tr><th>Month</th><th>From today's table</th><th>From the event ledger</th><th>Gap</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </details>
+</div>
+
+<p><b>Look at the first two years.</b> The reconstructed curve shows a company losing customers steadily from month one. The curve built from today's table shows a company that lost nobody at all until month 23. Not a slower decline. A flat line at 100 percent.</p>
+
+<p>That flat segment is not a data error and nobody falsified anything. It is what happens when the only accounts you can still see are the ones that stayed.</p>
+
+<h2>Model quality, and how much of it was real</h2>
+<p class="lede">Two standard measures, same rows, same labels, same split. The only difference is where the five account fields were read from.</p>
+
+<div class="two">
+  <div class="card">
+    <div class="card-head">
+      <h3>Area under the ROC curve</h3>
+      <p>Test period, months 24 to 35</p>
+    </div>
+    <svg id="bars1" viewBox="0 0 320 200" role="img" aria-label="Bar chart. AUC from the current export is 0.92. AUC reconstructed as of the day is 0.69."></svg>
+  </div>
+  <div class="card">
+    <div class="card-head">
+      <h3>Precision in the top decile</h3>
+      <p>Share of the flagged list that churns</p>
+    </div>
+    <svg id="bars2" viewBox="0 0 320 200" role="img" aria-label="Bar chart. Precision from the current export is 30.9 percent. Precision reconstructed as of the day is 8.9 percent. The base rate is 3.9 percent."></svg>
+  </div>
+</div>
+
+<p>An AUC of 0.92 is the kind of figure that ends the discussion in a model review. It is also, here, mostly an artifact. The honest figure of 0.69 is a real model doing real work, and it is a different conversation about what the team should expect.</p>
+
+<h2>What was actually different</h2>
+<p class="lede">Five account fields. None of them is a bug, and none of the writes below is unusual. Every one of them puts information from after the prediction date into a field that carries no history.</p>
+
+<div class="card">
+  <ul class="mech">
+    <li><b>Seats set to zero on offboarding</b><span>Deprovisioning is the correct operational response to a cancellation. The field records the outcome, and there is no record of what it held last March.</span></li>
+    <li><b>Owner unassigned when the account closes</b><span>An empty owner field is a near perfect churn predictor, and it is empty because they already left.</span></li>
+    <li><b>Plan moved to a closed tier</b><span>Billing hygiene. The tier as of the prediction date is gone.</span></li>
+    <li><b>Usage and ticket counts frozen at the last live value</b><span>The final month of a departing customer looks nothing like the month you were trying to predict from.</span></li>
+    <li><b>Churned accounts deleted after 12 months</b><span>A retention policy, often a contractual obligation. It removes rows from the denominator of every historical rate.</span></li>
+  </ul>
+</div>
+
+<p>Any single one of these is recoverable. Together they are why a retention model that reviewed well does not reproduce in production, and why a retention figure in a diligence pack is not the figure the business actually ran.</p>
+
+<h2>The spread, across 25 independent runs</h2>
+<p class="lede">One dataset could be a lucky draw. The entire world generation and both analyses were rerun under 25 independent seeds. The ranges below are the observed minimum and maximum, not confidence intervals.</p>
+
+<div class="card">
+  <table>
+    <thead>
+      <tr><th>Measure</th><th>Current export</th><th>As of the day</th><th>Gap</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Precision, top decile</td><td>30.9%<br><span class="tick">23.4 to 35.8</span></td><td>8.9%<br><span class="tick">5.1 to 11.5</span></td><td>3.5&times;</td></tr>
+      <tr><td>Area under ROC</td><td>0.922<br><span class="tick">0.892 to 0.951</span></td><td>0.688<br><span class="tick">0.623 to 0.731</span></td><td>0.23</td></tr>
+      <tr><td>Three year logo retention</td><td>91.6%<br><span class="tick">90.9 to 93.7</span></td><td>80.8%<br><span class="tick">79.5 to 82.8</span></td><td>10.8 pts</td></tr>
+      <tr><td>Three year ARR retention</td><td>92.4%<br><span class="tick">90.4 to 94.3</span></td><td>81.9%<br><span class="tick">79.7 to 84.1</span></td><td>10.4 pts</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<p>The ranges do not overlap on any of the four measures. The effect is a property of the mechanism, not of one draw.</p>
+
+<h2>Reproduce it</h2>
+<p class="lede">The generative process is written before either analysis, and neither analysis can see it. Roughly 200 lines, numpy and scikit-learn, about seven seconds for all 25 runs.</p>
+
+<div class="card">
+  <details open>
+    <summary>The only difference between the two analyses</summary>
+<pre><code>def features_as_of(w, acc, mon):
+    """Point-in-time fields: the value each field held on the prediction date."""
+    return np.column_stack(_history_features(w, acc, mon) + [
+        w["usage"][acc, mon], w["tickets"][acc, mon], w["seats"][acc, mon],
+        np.ones(len(acc)), w["plan"][acc].astype(float),
+    ])
+
+
+def features_from_today(w, crm, acc, mon):
+    """The same five fields, read from the current export instead.
+    Identical rows, identical labels, identical trend features."""
+    return np.column_stack(_history_features(w, acc, mon) + [
+        crm["usage"][acc], crm["tickets"][acc], crm["seats"][acc],
+        crm["csm"][acc], crm["plan"][acc],
+    ])</code></pre>
+  </details>
+  <details>
+    <summary>The post-churn writes, in full</summary>
+<pre><code># Ordinary operational hygiene. None of it malicious. All of it writes the
+# future into fields that carry no history.
+cur["seats"] = np.where(churned &amp; (RNG.random(n) &lt; 0.72), 0.0, cur["seats"])
+cur["csm"]   = np.where(churned &amp; (RNG.random(n) &lt; 0.66), 0.0, cur["csm"])
+cur["plan"]  = np.where(churned &amp; (RNG.random(n) &lt; 0.58), 0.0, cur["plan"])
+
+months_since = np.where(churned, (N_MONTHS - 1) - cm, -1)
+cur["purged"] = churned &amp; (months_since &gt; PURGE_AFTER_MONTHS)</code></pre>
+  </details>
+</div>
+
+<p class="note"><b>Every figure on this page is synthetic.</b> No customer data of any kind was used. The point of generating the book rather than using a real one is that the truth is known in advance, so the gap between the two analyses is measured rather than estimated. Run it against your own export and the gap will be different. It will not be zero.</p>
+
+<h2>Why this is the whole problem</h2>
+<p>Every retention figure in a board pack, a diligence file or a model review was produced by someone who already knew which customers churned. That is not an accusation. It is the default condition of any analysis run against a live system, because live systems overwrite state and delete rows, and doing both is correct behaviour.</p>
+<p>Indexxero reconstructs what was knowable on each historical date and reruns the analysis against that. Where the data cannot support the reconstruction, it reports that instead of producing a number. Two of the eight sections in a typical report come back empty, with an explanation of what would fill them.</p>
+
+<footer>
+  <p><b>Indexxero</b> &middot; Retention measurement for software investors and operators.</p>
+  <p>Check whether your own export can support the reconstruction, in your browser, with no upload.</p>
+  <a class="cta" href="./index.html">Run the data sufficiency check</a>
+</footer>
+
+</div>
+<div class="tip" id="tip"></div>
+
+<script>
+const DATA = {
+  months: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35],
+  asof:   [1.0,0.9975,0.9925,0.9885,0.983,0.979,0.974,0.9675,0.9625,0.9575,0.954,0.947,0.9395,0.934,0.9305,0.9225,0.917,0.913,0.9085,0.905,0.8975,0.8905,0.886,0.8825,0.8735,0.869,0.8585,0.854,0.846,0.842,0.835,0.831,0.825,0.8225,0.8165,0.8115],
+  exp:    [1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.996,0.9859,0.9808,0.969,0.9639,0.9549,0.9503,0.9424,0.9379,0.9312,0.9283,0.9216,0.9159]
+};
+
+const NS = "http://www.w3.org/2000/svg";
+const el = (n, a) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const tip = document.getElementById('tip');
+
+function showTip(html, ev) {
+  tip.innerHTML = html;
+  tip.style.opacity = 1;
+  const r = tip.getBoundingClientRect();
+  let x = ev.clientX + 14, y = ev.clientY - r.height - 12;
+  if (x + r.width > window.innerWidth - 8) x = ev.clientX - r.width - 14;
+  if (y < 8) y = ev.clientY + 18;
+  tip.style.left = x + 'px'; tip.style.top = y + 'px';
+}
+const hideTip = () => tip.style.opacity = 0;
+
+/* ---------------- cohort curves ---------------- */
+function drawCurve() {
+  const svg = document.getElementById('curve');
+  svg.textContent = '';
+  const W = 720, H = 320, L = 44, R = 92, T = 14, B = 38;
+  const iw = W - L - R, ih = H - T - B;
+  const yMin = 0.75, yMax = 1.0;
+  const x = i => L + (i / 35) * iw;
+  const y = v => T + (1 - (v - yMin) / (yMax - yMin)) * ih;
+
+  for (let v = 0.75; v <= 1.0001; v += 0.05) {
+    svg.appendChild(el('line', { class: 'grid-line', x1: L, x2: L + iw, y1: y(v), y2: y(v) }));
+    const t = el('text', { class: 'tick', x: L - 10, y: y(v) + 4, 'text-anchor': 'end' });
+    t.textContent = Math.round(v * 100) + '%'; svg.appendChild(t);
+  }
+  svg.appendChild(el('line', { class: 'axis-line', x1: L, x2: L + iw, y1: y(yMin), y2: y(yMin) }));
+  [0, 6, 12, 18, 24, 30, 35].forEach(m => {
+    const t = el('text', { class: 'tick', x: x(m), y: H - 14, 'text-anchor': 'middle' });
+    t.textContent = m === 0 ? 'Start' : 'M' + m; svg.appendChild(t);
+  });
+
+  const path = arr => arr.map((v, i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1)).join(' ');
+  svg.appendChild(el('path', { d: path(DATA.exp), fill: 'none', stroke: css('--export'), 'stroke-width': 2, 'stroke-linejoin': 'round' }));
+  svg.appendChild(el('path', { d: path(DATA.asof), fill: 'none', stroke: css('--asof'), 'stroke-width': 2, 'stroke-linejoin': 'round' }));
+
+  const endLabel = (arr, colour, txt) => {
+    const i = arr.length - 1;
+    svg.appendChild(el('circle', { cx: x(i), cy: y(arr[i]), r: 4, fill: colour, stroke: css('--surface'), 'stroke-width': 2 }));
+    const t = el('text', { class: 'dlabel', x: x(i) + 10, y: y(arr[i]) + 4 });
+    t.textContent = (arr[i] * 100).toFixed(1) + '%'; svg.appendChild(t);
+    const s = el('text', { class: 'dlabel-sub', x: x(i) + 10, y: y(arr[i]) + 19 });
+    s.textContent = txt; svg.appendChild(s);
+  };
+  endLabel(DATA.exp, css('--export'), "today's table");
+  endLabel(DATA.asof, css('--asof'), 'event ledger');
+
+  const cross = el('line', { class: 'axis-line', y1: T, y2: T + ih, opacity: 0 });
+  svg.appendChild(cross);
+  const dotE = el('circle', { r: 4.5, fill: css('--export'), stroke: css('--surface'), 'stroke-width': 2, opacity: 0 });
+  const dotA = el('circle', { r: 4.5, fill: css('--asof'), stroke: css('--surface'), 'stroke-width': 2, opacity: 0 });
+  svg.appendChild(dotE); svg.appendChild(dotA);
+
+  const hit = el('rect', { x: L, y: T, width: iw, height: ih, fill: 'transparent' });
+  svg.appendChild(hit);
+  hit.addEventListener('pointermove', ev => {
+    const bb = svg.getBoundingClientRect();
+    const px = (ev.clientX - bb.left) / bb.width * W;
+    let i = Math.round((px - L) / iw * 35);
+    i = Math.max(0, Math.min(35, i));
+    cross.setAttribute('x1', x(i)); cross.setAttribute('x2', x(i)); cross.setAttribute('opacity', 1);
+    dotE.setAttribute('cx', x(i)); dotE.setAttribute('cy', y(DATA.exp[i])); dotE.setAttribute('opacity', 1);
+    dotA.setAttribute('cx', x(i)); dotA.setAttribute('cy', y(DATA.asof[i])); dotA.setAttribute('opacity', 1);
+    const gap = ((DATA.exp[i] - DATA.asof[i]) * 100).toFixed(1);
+    showTip(
+      `<div class="tm">Month ${i}</div>
+       <div class="tr"><i class="swatch" style="background:${css('--export')}"></i>Today's table <b>${(DATA.exp[i]*100).toFixed(1)}%</b></div>
+       <div class="tr"><i class="swatch" style="background:${css('--asof')}"></i>Event ledger <b>${(DATA.asof[i]*100).toFixed(1)}%</b></div>
+       <div class="tm" style="margin:5px 0 0">Overstated by ${gap} points</div>`, ev);
+  });
+  hit.addEventListener('pointerleave', () => {
+    hideTip(); cross.setAttribute('opacity', 0);
+    dotE.setAttribute('opacity', 0); dotA.setAttribute('opacity', 0);
+  });
+}
+
+/* ---------------- paired bars ---------------- */
+function drawBars(id, rows, fmt, maxV, footnote) {
+  const svg = document.getElementById(id);
+  svg.textContent = '';
+  const W = 320, H = 200, L = 8, R = 8, T = 10, B = footnote ? 44 : 28;
+  const iw = W - L - R, ih = H - T - B;
+  const bw = 78, gap = 46;
+  const x0 = L + (iw - (bw * 2 + gap)) / 2;
+
+  rows.forEach((r, i) => {
+    const bx = x0 + i * (bw + gap);
+    const h = Math.max(2, (r.v / maxV) * ih);
+    svg.appendChild(el('rect', {
+      x: bx, y: T + ih - h, width: bw, height: h, rx: 4, fill: r.c
+    }));
+    const t = el('text', { class: 'dlabel', x: bx + bw / 2, y: T + ih - h - 10, 'text-anchor': 'middle' });
+    t.textContent = fmt(r.v); svg.appendChild(t);
+    const s = el('text', { class: 'dlabel-sub', x: bx + bw / 2, y: T + ih + 16, 'text-anchor': 'middle' });
+    s.textContent = r.l; svg.appendChild(s);
+
+    const hit = el('rect', { x: bx - 6, y: T, width: bw + 12, height: ih, fill: 'transparent' });
+    svg.appendChild(hit);
+    hit.addEventListener('pointermove', ev => showTip(
+      `<div class="tr"><i class="swatch" style="background:${r.c}"></i>${r.full} <b>${fmt(r.v)}</b></div>`, ev));
+    hit.addEventListener('pointerleave', hideTip);
+  });
+  svg.appendChild(el('line', { class: 'axis-line', x1: L, x2: W - R, y1: T + ih, y2: T + ih }));
+  if (footnote) {
+    const f = el('text', { class: 'dlabel-sub', x: W / 2, y: H - 8, 'text-anchor': 'middle' });
+    f.textContent = footnote; svg.appendChild(f);
+  }
+}
+
+function drawAll() {
+  drawCurve();
+  drawBars('bars1', [
+    { v: 0.922, l: 'Current export', full: 'Backtest on the current export', c: css('--export') },
+    { v: 0.688, l: 'As of the day',  full: 'Reconstructed as of the day',    c: css('--asof') }
+  ], v => v.toFixed(2), 1.0, '1.00 is perfect, 0.50 is a coin flip');
+  drawBars('bars2', [
+    { v: 0.309, l: 'Current export', full: 'Backtest on the current export', c: css('--export') },
+    { v: 0.089, l: 'As of the day',  full: 'Reconstructed as of the day',    c: css('--asof') }
+  ], v => (v * 100).toFixed(1) + '%', 0.40, 'Base rate in the period is 3.9%');
+}
+
+/* table view */
+(function () {
+  const tb = document.querySelector('#curveTable tbody');
+  DATA.months.forEach((m, i) => {
+    if (m % 3 !== 0 && m !== 35) return;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>Month ${m}</td><td>${(DATA.exp[i]*100).toFixed(1)}%</td>` +
+                   `<td>${(DATA.asof[i]*100).toFixed(1)}%</td>` +
+                   `<td>${((DATA.exp[i]-DATA.asof[i])*100).toFixed(1)} pts</td>`;
+    tb.appendChild(tr);
+  });
+})();
+
+/* theme */
+const btn = document.getElementById('themeToggle');
+const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark' ||
+  (!document.documentElement.getAttribute('data-theme') && matchMedia('(prefers-color-scheme: dark)').matches);
+function syncBtn() { btn.textContent = isDark() ? 'Light' : 'Dark'; }
+btn.addEventListener('click', () => {
+  document.documentElement.setAttribute('data-theme', isDark() ? 'light' : 'dark');
+  syncBtn(); drawAll();
+});
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { syncBtn(); drawAll(); });
+
+syncBtn();
+drawAll();
+addEventListener('resize', () => { hideTip(); });
+</script>
+</body>
+</html>

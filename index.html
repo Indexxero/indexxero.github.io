@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free Retention Data Check | Indexxero</title>
+<meta name="description" content="Find out in 30 seconds whether your churn data can support a conclusive retention backtest. No signup, no sales call.">
+<style>
+  :root{
+    --ink:#12120f; --ink-2:#403f39; --ink-3:#6c6b64;
+    --rule:#e3e1d9; --rule-2:#f0eee7;
+    --bg:#fcfcfb; --panel:#f7f6f1;
+    --brand:#2a78d6; --good:#1baf7a; --warn:#eda100; --bad:#e34948;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:16px/1.6 ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:44rem; margin:0 auto; padding:0 1.5rem}
+  header{padding:3.5rem 0 0}
+  .brand{font-weight:700; letter-spacing:-.01em; font-size:1.05rem}
+  h1{font-size:2.3rem; line-height:1.14; letter-spacing:-.025em; margin:2.2rem 0 1rem; font-weight:680}
+  .lede{font-size:1.14rem; color:var(--ink-2); margin:0 0 2rem; max-width:36rem}
+  h2{font-size:1.28rem; letter-spacing:-.015em; margin:3rem 0 .8rem; font-weight:650}
+  h3{font-size:1rem; margin:1.6rem 0 .4rem; font-weight:650}
+  p{margin:0 0 1rem}
+  a{color:var(--brand)}
+
+  .tool{
+    background:var(--panel); border:1px solid var(--rule); border-radius:12px;
+    padding:1.6rem; margin:2rem 0 2.5rem;
+  }
+  .tool h2{margin:0 0 .3rem; font-size:1.12rem}
+  .tool .hint{color:var(--ink-3); font-size:.9rem; margin-bottom:1.3rem}
+  .fields{display:flex; gap:1rem; flex-wrap:wrap}
+  .field{flex:1 1 11rem}
+  label{display:block; font-size:.8rem; font-weight:600; color:var(--ink-2); margin-bottom:.35rem}
+  input[type=number]{
+    width:100%; padding:.62rem .7rem; font-size:1rem; font-family:inherit;
+    border:1px solid var(--rule); border-radius:7px; background:#fff; color:var(--ink);
+  }
+  input[type=number]:focus{outline:2px solid var(--brand); outline-offset:1px; border-color:var(--brand)}
+  .unit{color:var(--ink-3); font-weight:400}
+
+  .verdict{margin-top:1.4rem; padding:1.1rem 1.2rem; border-radius:9px; border:1px solid var(--rule); background:#fff}
+  .verdict .row{display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap}
+  .verdict .events{font-size:2rem; font-weight:680; letter-spacing:-.02em; font-variant-numeric:tabular-nums}
+  .verdict .events-lab{color:var(--ink-3); font-size:.9rem}
+  .tag{
+    display:inline-block; padding:.16rem .55rem; border-radius:20px;
+    font-size:.74rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+  }
+  .tag.go{background:#e6f6ef; color:#0d6b4a}
+  .tag.thin{background:#fdf4e3; color:#7d5500}
+  .tag.no{background:#fdeceb; color:#9c2726}
+  .verdict p{margin:.7rem 0 0; font-size:.94rem; color:var(--ink-2)}
+  .bar{height:7px; border-radius:4px; background:var(--rule-2); margin-top:.9rem; overflow:hidden}
+  .bar span{display:block; height:100%; border-radius:4px; background:var(--brand); transition:width .28s ease}
+  .scale{display:flex; justify-content:space-between; font-size:.74rem; color:var(--ink-3); margin-top:.35rem}
+
+  ul{margin:.5rem 0 1rem; padding-left:1.2rem}
+  li{margin-bottom:.45rem}
+  .fine{font-size:.9rem; color:var(--ink-3)}
+
+  .cta{
+    display:inline-block; background:var(--ink); color:#fff; text-decoration:none;
+    padding:.78rem 1.4rem; border-radius:8px; font-weight:600; font-size:.98rem; margin-top:.4rem;
+  }
+  .cta:hover{background:#000}
+  .cta.secondary{background:transparent; color:var(--ink); border:1px solid var(--rule); margin-right:.6rem}
+  .cta+.cta{margin-left:0}
+
+  table{width:100%; border-collapse:collapse; margin:1rem 0 1.4rem; font-size:.93rem}
+  th{text-align:left; font-size:.74rem; text-transform:uppercase; letter-spacing:.05em;
+     color:var(--ink-3); border-bottom:1px solid var(--rule); padding:.4rem .6rem .4rem 0}
+  td{padding:.5rem .6rem .5rem 0; border-bottom:1px solid var(--rule-2)}
+  th.num, td.num{text-align:right; font-variant-numeric:tabular-nums; padding-right:2rem}
+
+  footer{margin:4rem 0 3rem; padding-top:1.4rem; border-top:1px solid var(--rule);
+         font-size:.86rem; color:var(--ink-3)}
+  @media (max-width:520px){ h1{font-size:1.85rem} .fields{flex-direction:column} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="brand">Indexxero</div>
+  <h1>Can your churn data actually tell you anything?</h1>
+  <p class="lede">
+    Most retention analysis is built on too few events to be conclusive, and nobody says so.
+    Check yours in 30 seconds. No signup, no sales call, no email required.
+  </p>
+</header>
+
+<div class="tool">
+  <h2>Data sufficiency check</h2>
+  <p class="hint">Two numbers. Nothing is sent anywhere, this runs entirely in your browser.</p>
+  <div class="fields">
+    <div class="field">
+      <label for="accounts">Paying accounts <span class="unit">(today)</span></label>
+      <input type="number" id="accounts" value="1200" min="1" step="10" inputmode="numeric">
+    </div>
+    <div class="field">
+      <label for="churn">Annual logo churn <span class="unit">(%)</span></label>
+      <input type="number" id="churn" value="9" min="0" max="100" step="0.5" inputmode="decimal">
+    </div>
+    <div class="field">
+      <label for="months">History available <span class="unit">(months)</span></label>
+      <input type="number" id="months" value="24" min="1" max="60" step="1" inputmode="numeric">
+    </div>
+  </div>
+
+  <div class="verdict" id="verdict" aria-live="polite">
+    <div class="row">
+      <span class="events" id="events">216</span>
+      <span class="events-lab">churn events in the window</span>
+      <span class="tag go" id="tag">Conclusive</span>
+    </div>
+    <div class="bar"><span id="bar" style="width:100%"></span></div>
+    <div class="scale"><span>0</span><span>100 events, the floor</span><span>200+</span></div>
+    <p id="explain"></p>
+  </div>
+</div>
+
+<h2>Why 100 events, and not 20</h2>
+<p>
+  Twenty events is enough for a single pooled estimate. A useful retention report is not one estimate.
+  It splits churn three ways (voluntary, payment failure, contraction) and crosses that with three
+  lead-time windows, plus a random control. That is nine to twelve separate cells, each needing
+  roughly 20 to 30 events before the number means anything.
+</p>
+<p>
+  Below that, the honest answer is "inconclusive", and a report that says otherwise is selling you
+  confidence it does not have.
+</p>
+
+<table>
+  <thead><tr><th>Your shape</th><th class="num">Events in 24 months</th><th>Verdict</th></tr></thead>
+  <tbody>
+    <tr><td>4,000 accounts, 12% churn</td><td class="num">960</td><td>Conclusive, with room to segment</td></tr>
+    <tr><td>1,200 accounts, 9% churn</td><td class="num">216</td><td>Conclusive</td></tr>
+    <tr><td>600 accounts, 8% churn</td><td class="num">96</td><td>Borderline, headline only</td></tr>
+    <tr><td>200 accounts, 6% churn</td><td class="num">24</td><td>Not conclusive</td></tr>
+  </tbody>
+</table>
+
+<h2>What we do when the data clears the bar</h2>
+<p>
+  We rebuild your last 24 months exactly as they looked at each past date, not as they look now, and
+  produce a board document that answers three questions your dashboard cannot.
+</p>
+<ul>
+  <li><strong>What did you actually lose?</strong> ARR split into voluntary cancellation, payment
+      failure and contraction. Most companies have never separated these, and each has a different fix.</li>
+  <li><strong>What was knowable in advance?</strong> How much churned ARR was already flaggable at 30,
+      60 and 90 days out, with a random baseline printed beside every figure so you can see whether the
+      signal is real.</li>
+  <li><strong>How fast did you react?</strong> Days between the first recorded intervention and the
+      cancellation, and how much ARR churned with no intervention at all.</li>
+</ul>
+<p>
+  You get a sealed forward forecast with it: our prediction for your next two quarters, hash committed
+  before the period starts and scored publicly when it ends, whether or not we were right.
+</p>
+
+<h3>Terms</h3>
+<p class="fine">
+  $15,000 fixed, ten business days, from CSV exports. No production access and no integration project.
+  If your data cannot support conclusions we tell you within 48 hours and refund in full. We would
+  rather refund than publish a number too wide to act on.
+</p>
+
+<h3>Two sample reports</h3>
+<p class="fine" style="margin-bottom:1rem">
+  The report adapts to how you bill. If you charge a card automatically, payment-failure churn is a real
+  and separately measurable category. If you invoice against annual renewals, it structurally cannot
+  happen, and we report it as not measurable rather than as zero. Pick whichever matches you.
+</p>
+<p style="margin-top:1.2rem">
+  <a class="cta secondary" href="./Sample-Retention-Backtest.pdf">Sample: card on file, monthly</a>
+  <a class="cta secondary" href="./Sample-Retention-Backtest-Invoice-Billed.pdf">Sample: invoiced, annual</a>
+</p>
+
+<p style="margin-top:1.8rem">
+  <a class="cta" href="mailto:sajjad.hossain@indexxero.com?subject=Retention%20backtest%20enquiry&amp;body=Accounts%3A%20%0AAnnual%20logo%20churn%3A%20%0ABilling%20system%3A%20%0ACRM%3A%20">Send us your numbers</a>
+</p>
+
+<h2>What this will not tell you</h2>
+<p>
+  It will not prove that intervening on a flagged account would have saved it. That requires a
+  randomised holdout running forward, where a share of at-risk accounts is deliberately withheld from
+  outreach and assigned before outcomes are known. Everything in the backtest is prediction and
+  correlation, and the report says so on its own page rather than burying it.
+</p>
+<p class="fine">
+  We say this up front because the alternative is a category where every vendor claims outcomes and
+  none of them publish a hit rate.
+</p>
+
+<footer>
+  Indexxero · Retention measurement<br>
+  Questions: <a href="mailto:sajjad.hossain@indexxero.com">sajjad.hossain@indexxero.com</a>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var a=document.getElementById('accounts'),
+      c=document.getElementById('churn'),
+      m=document.getElementById('months'),
+      ev=document.getElementById('events'),
+      tag=document.getElementById('tag'),
+      bar=document.getElementById('bar'),
+      ex=document.getElementById('explain');
+
+  function calc(){
+    var accounts=Math.max(0,+a.value||0),
+        churn=Math.max(0,+c.value||0)/100,
+        months=Math.max(1,+m.value||24),
+        events=Math.round(accounts*churn*(months/12));
+
+    ev.textContent=events.toLocaleString();
+    bar.style.width=Math.min(100,(events/200)*100)+'%';
+
+    var cls,label,text;
+    if(events>=200){
+      cls='go'; label='Conclusive';
+      text='Comfortably above the floor. There is enough here to segment the findings by plan tier or '
+         + 'cohort as well as report the headline.';
+      bar.style.background='#1baf7a';
+    } else if(events>=100){
+      cls='go'; label='Conclusive';
+      text='Above the floor. Every cell in the report should be reportable, though segmenting further '
+         + 'than the headline split may thin out.';
+      bar.style.background='#2a78d6';
+    } else if(events>=50){
+      cls='thin'; label='Borderline';
+      text='Enough for a headline finding, not enough to split three ways across three lead times. '
+         + 'We would run it and tell you plainly which cells are too thin to report, or refund if too many are.';
+      bar.style.background='#eda100';
+    } else {
+      cls='no'; label='Not conclusive';
+      text='Below what any honest method can work with. A report on '+events+' events would be a story, '
+         + 'not a measurement. Come back when the book is larger, or when you have more history.';
+      bar.style.background='#e34948';
+    }
+    tag.className='tag '+cls;
+    tag.textContent=label;
+    ex.textContent=text;
+  }
+  [a,c,m].forEach(function(el){ el.addEventListener('input',calc); });
+  calc();
+})();
+</script>
+</body>
+</html>
