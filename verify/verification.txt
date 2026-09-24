@@ -1,0 +1,12 @@
+
+Indexxero report check
+
+  PASS          content hash                    c26bddd0d6dffe7bbd16da88ac603fcbc717e2f946fc0d91c7fcb5e8b1b77994
+  PASS          input bytes                     d21112939b2f0a75255e16192dfb5c538d50e53a4b0152c9dc59d6040005a367
+  PASS          input rows                      4cb09da88d662623494764a60640aa9676a4242617501e26725e665a25d3751a
+  PASS          document seal                   de0245df77c8b0dbb61fa9468df722fc28bd0191768ad74deb5a57465225845b
+  PASS          versions                        method 1.0.0, engine not recorded by this build
+
+RESULT: PASS. Every check that ran passed.
+
+This establishes that the report was not altered and that it belongs to the named input. It does not establish that the computation from input to number is correct.

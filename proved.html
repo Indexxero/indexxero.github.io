@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="What Indexxero has proved so far, with the files and commands to check each claim yourself, offline.">
+<link rel="canonical" href="https://measure.indexxero.com/proved.html">
+<title>What Indexxero has proved, and how to check it yourself</title>
+<style>
+  :root{
+    color-scheme:light;
+    --plane:#f9f9f7; --surface:#fcfcfb; --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+    --grid:#e1e0d9; --border:rgba(11,11,11,0.10); --asof:#2a78d6; --export:#eb6834; --ok:#2f7d5b;
+    --shadow:0 1px 2px rgba(11,11,11,.05),0 8px 24px rgba(11,11,11,.04);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      color-scheme:dark; --plane:#0f0f0e; --surface:#161615; --ink:#f2f2ee; --ink-2:#c9c8c1; --muted:#8f8e87;
+      --grid:#2a2a27; --border:rgba(255,255,255,0.10); --asof:#5c9cf0; --export:#f0855a; --ok:#5fb58c;
+      --shadow:none;
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme:dark; --plane:#0f0f0e; --surface:#161615; --ink:#f2f2ee; --ink-2:#c9c8c1; --muted:#8f8e87;
+    --grid:#2a2a27; --border:rgba(255,255,255,0.10); --asof:#5c9cf0; --export:#f0855a; --ok:#5fb58c; --shadow:none;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--plane);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px 96px}
+  header{padding:56px 0 28px;border-bottom:1px solid var(--grid)}
+  .eyebrow{font:500 12px/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--asof);margin:0 0 14px}
+  h1{font-size:2rem;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em;text-wrap:balance}
+  h2{font-size:1.3rem;margin:44px 0 10px;text-wrap:balance}
+  h3{font-size:1.02rem;margin:22px 0 6px}
+  p{margin:0 0 14px;max-width:70ch}
+  .standfirst{font-size:19px;color:var(--ink-2);max-width:62ch}
+  .muted{color:var(--muted)}
+  a{color:var(--asof)}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);padding:20px 22px;margin:18px 0}
+  .card h3{margin-top:0}
+  pre{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;overflow-x:auto;font:13px/1.6 ui-monospace,Menlo,Consolas,monospace;color:var(--ink-2);margin:10px 0 14px}
+  pre .ok{color:var(--ok)} pre .bad{color:var(--export)} pre .dim{color:var(--muted)}
+  code{font:.92em ui-monospace,Menlo,Consolas,monospace;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 5px}
+  ul{margin:0 0 14px;padding-left:1.2rem} li{margin:4px 0}
+  .btn{display:inline-block;background:var(--asof);color:#fff;text-decoration:none;font-weight:600;padding:9px 14px;border-radius:6px;font-size:.95rem}
+  .btn.ghost{background:transparent;color:var(--asof);border:1px solid var(--asof)}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0 6px}
+  .toggle{position:fixed;top:14px;right:16px;font:12px system-ui;border:1px solid var(--border);background:var(--surface);color:var(--ink-2);padding:6px 10px;border-radius:999px;cursor:pointer}
+  /* the seal */
+  .seal{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow);margin:14px 0 8px}
+  .seal-head,.seal-foot{display:flex;justify-content:space-between;gap:12px;padding:8px 14px;font:11px/1.4 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.06em;color:var(--muted);background:var(--plane);border-bottom:1px solid var(--grid)}
+  .seal-foot{border-bottom:0;border-top:1px solid var(--grid);flex-direction:column;gap:6px;letter-spacing:0}
+  .seal ul{list-style:none;margin:0;padding:0}
+  .seal li{display:flex;align-items:center;gap:12px;padding:9px 14px;border-bottom:1px solid var(--grid)}
+  .seal li:last-child{border-bottom:0}
+  .lab{flex:1;min-width:0} .lab b{display:block;font-weight:500;font-size:14px} .lab small{font:11px ui-monospace,Menlo,monospace;color:var(--muted)}
+  .val{width:5.4rem;text-align:right;font:15px ui-monospace,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
+  .val.moved{color:var(--export)} .val.nil{color:var(--muted)}
+  .step{display:flex;flex-direction:column;border:1px solid var(--border);border-radius:5px;overflow:hidden}
+  .step button{font:11px/1 system-ui;padding:3px 8px;border:0;background:var(--surface);color:var(--ink-2);cursor:pointer}
+  .step button+button{border-top:1px solid var(--border)}
+  .step button:hover{background:var(--plane);color:var(--ink)}
+  .chip{font:10px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;padding:4px 7px;border-radius:4px;width:7.2rem;text-align:center;flex-shrink:0}
+  .chip.m{color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent)} .chip.u{color:var(--muted);background:var(--plane)}
+  .kv{display:flex;justify-content:space-between;gap:12px} .kv .ok{color:var(--ok)} .kv .bad{color:var(--export)}
+  .reset{align-self:flex-end;font:12px system-ui;border:1px solid var(--border);background:var(--surface);color:var(--ink-2);padding:4px 10px;border-radius:5px;cursor:pointer}
+  .reset:disabled{opacity:.4;cursor:default}
+  @media (max-width:640px){ .chip{display:none} h1{font-size:1.6rem} }
+</style>
+</head>
+<body>
+<button class="toggle" id="themeToggle" type="button">Dark</button>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Indexxero &middot; What we have proved</p>
+  <h1>Four things you can check without trusting us.</h1>
+  <p class="standfirst">Every claim on this page comes with the file or the command that lets you test it yourself, offline. Where something is not yet proved, it says so.</p>
+</header>
+
+<h2>1. The same customers, measured two ways</h2>
+<p>One synthetic book of 2,000 accounts. Two analyses that differ in exactly one respect: when the field values were read. Three year retention comes out at 91.6 percent one way and 80.8 percent the other. The gap is not a rounding error, it is the difference between reading a field as it is today and as it was on the day the decision was made.</p>
+<div class="row">
+  <a class="btn" href="proof.html">Read the demonstration</a>
+  <a class="btn ghost" href="https://github.com/Indexxero/survivorship-demo" rel="noopener">Run the code yourself</a>
+</div>
+<p class="muted">The repository regenerates the book from a fixed seed. Its README says which four fields move between runs and why, rather than promising a byte match it cannot keep.</p>
+
+<h2>2. A report whose seal you can break</h2>
+<p>A manifest is a short file that lets a stranger confirm a report matches the data it came from, with our servers off. Below is a live example. Change any measured number and watch the seal break and name the row. The unmeasurable row has nothing to change, because you cannot edit a number that was never produced.</p>
+
+<div class="seal" id="seal">
+  <div class="seal-head"><span>MANIFEST &middot; EXAMPLE, NOT A CLIENT</span><span>METHOD 1.0.0</span></div>
+  <ul id="rows"></ul>
+  <div class="seal-foot">
+    <div class="kv"><span>content_hash</span><span id="hash" class="dim">computing</span></div>
+    <div class="kv"><span>seal</span><span id="state">computing</span></div>
+    <button class="reset" id="reset" type="button" disabled>Restore</button>
+  </div>
+</div>
+<p class="muted">The hash is SHA-256 over the canonical rows, computed in your browser with Web Crypto. Nothing is sent anywhere.</p>
+
+<h2>3. The same thing, on a whole report, on your own machine</h2>
+<p>Download the folder. It holds an invented input file generated from a committed seed, the report our production code produced from it, the manifest, an offline verifier that needs nothing but Python, and a tampered copy of the report with exactly one field changed.</p>
+<div class="row">
+  <a class="btn" href="verify/verifiable-retention-report.zip">Download the folder</a>
+  <a class="btn ghost" href="verify/README.md">Read the README first</a>
+</div>
+<h3>Run it on the clean report</h3>
+<pre><span class="dim">$</span> python3 verify_report.py retention_report.manifest.json --csv synthetic_input.csv --report retention_report.json
+<span class="ok">PASS</span>  input rows      4cb09da88d66…
+<span class="ok">PASS</span>  document seal   de0245df77c8…
+<span class="ok">PASS</span>  versions        method 1.0.0
+<span class="ok">RESULT: PASS.</span> Every check that ran passed.</pre>
+<h3>Run it on the tampered copy</h3>
+<pre><span class="dim">$</span> python3 verify_report.py retention_report.manifest.json --csv synthetic_input.csv --report tamper/retention_report.json
+<span class="ok">PASS</span>  input rows      4cb09da88d66…
+<span class="bad">FAIL</span>  document seal   this report seals to ea25198a9147… <b>manifest payload differs at accounts_analysed</b>
+<span class="ok">PASS</span>  versions        method 1.0.0
+<span class="bad">RESULT: FAIL.</span> 1 of 5 checks did not pass.</pre>
+<p>Those two runs are what a stranger performs. We cannot make the second one pass, and that is the point.</p>
+<div class="card">
+  <h3>What this does and does not establish</h3>
+  <p>It establishes that a report was not altered after it was sealed, and that it belongs to the named input. <b>It does not establish that the computation from input to number is correct.</b> The verifier says that in its own output, on every run. The correctness of the computation is what the first demonstration and the code behind it are for.</p>
+</div>
+
+<h2>4. Every figure says how it was known</h2>
+<p>On a real run over 1,400 accounts, names removed, our report left four of eight sections unreported and printed the reason instead of a number. Gross revenue retention was not reported because contraction could not be measured and 46 accounts whose ending could not be resolved were still sitting on the retained side of the ratio. Either one is enough to make the percentage wrong in the direction that flatters you.</p>
+<p>Three labels, measured, a floor, or not measurable, and no fourth. A tool that estimates can print a retention percentage for anybody who uploads a file. Often we cannot, and we print the reason.</p>
+
+<h2>In progress, and not yet proved</h2>
+<div class="card">
+  <p><b>A detector for the same defect in public code.</b> We are running a scanner for outputs that print zero where nothing was measured against widely used open source reporting and analytics libraries. It has produced findings across several repositories. <b>No project is named here until its maintainers have heard from us first.</b> Counts and reproductions will follow when that is done.</p>
+  <p class="muted" style="margin:0">Last updated 24 September 2026.</p>
+</div>
+
+<h2>What none of this proves</h2>
+<ul>
+  <li>That anyone will pay for it. We have no customers yet. The first few engagements are free and the story of how they went is the payment.</li>
+  <li>That your export will map cleanly. Every company's columns are different, and we say up front when mapping is needed rather than guessing.</li>
+  <li>That we are faster than the diligence team. We say the turnaround before you send, not on this page.</li>
+</ul>
+<p>If you are a few months from a raise or a sale, or you know someone who is, the short version of what we do is at <a href="what-we-do.html">what-we-do.html</a>.</p>
+
+</div>
+
+<script>
+(function(){
+  // theme toggle, same as proof.html
+  var t=document.getElementById('themeToggle'), root=document.documentElement;
+  function label(){ var d=root.getAttribute('data-theme')==='dark' || (!root.getAttribute('data-theme') && matchMedia('(prefers-color-scheme: dark)').matches); t.textContent=d?'Light':'Dark'; }
+  t.addEventListener('click',function(){ var d=root.getAttribute('data-theme')==='dark' || (!root.getAttribute('data-theme') && matchMedia('(prefers-color-scheme: dark)').matches); root.setAttribute('data-theme', d?'light':'dark'); label(); });
+  label();
+
+  // the seal
+  var ORIGINAL=[
+    {key:'gross_revenue_retention',label:'Gross revenue retention',value:0.861,places:3,state:'measured'},
+    {key:'net_revenue_retention',label:'Net revenue retention',value:0.974,places:3,state:'measured'},
+    {key:'logo_churn_12m',label:'Logo churn, 12 months',value:0.139,places:3,state:'measured'},
+    {key:'accounts_in_scope',label:'Accounts in scope',value:1400,places:0,state:'measured'},
+    {key:'expansion_by_cohort',label:'Expansion by cohort',value:null,places:3,state:'unmeasurable',note:'no plan history in the export'}
+  ];
+  var rows=ORIGINAL.map(function(r){return Object.assign({},r);});
+  var rowsEl=document.getElementById('rows'), hashEl=document.getElementById('hash'), stateEl=document.getElementById('state'), resetEl=document.getElementById('reset');
+  var originalHash=null, supported=!!(window.crypto&&window.crypto.subtle&&window.TextEncoder);
+
+  function canonical(rs){ return JSON.stringify({method_version:'1.0.0',rows:rs.map(function(r){return {key:r.key,value:r.value===null?null:Number(r.value.toFixed(r.places)),state:r.state};})}); }
+  function hex(buf){ return Array.prototype.map.call(new Uint8Array(buf),function(b){return ('0'+b.toString(16)).slice(-2);}).join(''); }
+  function sha(text){ return window.crypto.subtle.digest('SHA-256',new TextEncoder().encode(text)).then(hex); }
+  function fmt(r){ if(r.value===null) return 'nil'; return r.places===0? r.value.toLocaleString('en-US') : r.value.toFixed(r.places); }
+
+  function render(){
+    rowsEl.innerHTML='';
+    rows.forEach(function(r,i){
+      var moved=r.value!==ORIGINAL[i].value;
+      var li=document.createElement('li');
+      var lab=document.createElement('div'); lab.className='lab'; lab.innerHTML='<b></b><small></small>'; lab.querySelector('b').textContent=r.label; lab.querySelector('small').textContent=r.key;
+      var val=document.createElement('div'); val.className='val'+(r.state==='unmeasurable'?' nil':moved?' moved':''); val.textContent=fmt(r);
+      li.appendChild(lab); li.appendChild(val);
+      if(r.state==='measured'){
+        var st=document.createElement('div'); st.className='step';
+        var up=document.createElement('button'); up.type='button'; up.textContent='▲'; up.setAttribute('aria-label','Increase '+r.label); up.onclick=function(){nudge(i,1);};
+        var dn=document.createElement('button'); dn.type='button'; dn.textContent='▼'; dn.setAttribute('aria-label','Decrease '+r.label); dn.onclick=function(){nudge(i,-1);};
+        st.appendChild(up); st.appendChild(dn); li.appendChild(st);
+      } else { var sp=document.createElement('div'); sp.style.width='2.1rem'; li.appendChild(sp); }
+      var chip=document.createElement('span'); chip.className='chip '+(r.state==='measured'?'m':'u'); chip.textContent=r.state; if(r.note) chip.title='Unmeasurable: '+r.note; li.appendChild(chip);
+      rowsEl.appendChild(li);
+    });
+    var changed=rows.filter(function(r,i){return r.value!==ORIGINAL[i].value;});
+    resetEl.disabled=changed.length===0;
+    if(!supported){ hashEl.textContent='could not be computed in this browser'; stateEl.textContent='not checked, no Web Crypto here'; stateEl.className=''; return; }
+    sha(canonical(rows)).then(function(h){
+      hashEl.textContent='sha256:'+h.slice(0,16)+'…'+h.slice(-6); hashEl.className='';
+      if(changed.length===0){ stateEl.textContent='intact, matches the original'; stateEl.className='ok'; }
+      else { stateEl.textContent='broken, '+(changed.length===1? changed[0].key+' changed' : changed.length+' rows changed')+(originalHash?' (original sha256:'+originalHash.slice(0,16)+'…)':''); stateEl.className='bad'; }
+    });
+  }
+  function nudge(i,dir){ var r=rows[i]; if(r.value===null||r.state!=='measured') return; var step=r.places===0?1:Math.pow(10,-r.places); var next=r.places===0? r.value+dir*step : Number((r.value+dir*step).toFixed(r.places)); r.value=Math.max(0,next); render(); }
+  resetEl.onclick=function(){ rows=ORIGINAL.map(function(r){return Object.assign({},r);}); render(); };
+  if(supported){ sha(canonical(ORIGINAL)).then(function(h){ originalHash=h; render(); }); } else { render(); }
+})();
+</script>
+</body>
+</html>

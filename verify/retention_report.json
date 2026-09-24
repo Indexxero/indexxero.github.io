@@ -1,0 +1,569 @@
+{
+  "accounts_analysed": 72,
+  "audience_mode": "board",
+  "causal_claim": false,
+  "churn_events": 18,
+  "client_id": "00000000-0000-4000-8000-000000000015",
+  "client_name": null,
+  "content_hash": "c26bddd0d6dffe7bbd16da88ac603fcbc717e2f946fc0d91c7fcb5e8b1b77994",
+  "dates_zone": "UTC",
+  "dates_zone_note": "Every date in this report is UTC. Your own timezone is not recorded in the data we hold, so no date here has been converted to it, and a date near midnight may fall on the neighbouring day where you are.",
+  "doc_title": {
+    "client_name": null,
+    "eyebrow": "Churn export audit",
+    "headline": "Churn export audit: 72 accounts, 18 reported endings"
+  },
+  "document_seal": "de0245df77c8b0dbb61fa9468df722fc28bd0191768ad74deb5a57465225845b",
+  "fixture": false,
+  "fixture_label": null,
+  "generated_at": "2026-09-24T02:30:50.226539+00:00",
+  "issued_display": "24 Sep 2026",
+  "join_halt": null,
+  "masthead": {
+    "export_dated": {
+      "display": "18",
+      "state": "measured"
+    },
+    "export_endings": {
+      "display": "18",
+      "state": "measured"
+    },
+    "record_endings": {
+      "display": "18",
+      "state": "measured"
+    }
+  },
+  "method": {
+    "closing": "",
+    "did": [
+      "Labels were derived from dated records of accounts ending rather than from present-day account status, so an account's outcome was read from when it happened and not from how it looks today."
+    ],
+    "label": "Walk-forward evaluation not run; see the method note",
+    "not_run": [
+      "No account state was reconstructed to a prediction date, because no prediction date could be placed.",
+      "No walk-forward evaluation was run: not one out-of-time split could be placed on the history available, so there is no accuracy figure in this report and none is implied."
+    ],
+    "ran": true
+  },
+  "period_display": "1 Jan 2025 to 1 Aug 2026",
+  "period_end": "2026-08-01T00:00:00+00:00",
+  "period_start": "2025-01-01T00:00:00+00:00",
+  "provenance": {
+    "bound": "This establishes that the report was not altered and that it belongs to the named input. It does not establish that the computation from input to number is correct. That needs the engine run against the file.",
+    "content_hash_covers": "Every measured figure in this report and the measurement state beside it. Clock derived and environment derived fields are removed first and are listed by name in the manifest.",
+    "document_seal_covers": "The whole published payload except the seal field itself.",
+    "engine_version": {
+      "measurement": "unmeasurable",
+      "note": "This build carries no version stamp, so which build produced this report was not recorded. A missing stamp is an absence of a record. It is not a version of zero.",
+      "value": null
+    },
+    "float_places": 6,
+    "hash_algorithm": "sha256",
+    "input_fingerprint": {
+      "bytes": 2487,
+      "columns": [
+        "account_id",
+        "arr",
+        "monthly_active_users",
+        "plan_tier",
+        "region",
+        "seats"
+      ],
+      "file_sha256": "d21112939b2f0a75255e16192dfb5c538d50e53a4b0152c9dc59d6040005a367",
+      "filename": "synthetic_input.csv",
+      "how_to_check": "Run shasum -a 256 on the file you sent us and compare it with file_sha256. If it differs but row_hash matches, the file was re-saved and the data is unchanged.",
+      "measurement": "measured",
+      "normalisations": [
+        "byte order mark removed",
+        "line endings ignored",
+        "surrounding whitespace removed from every cell",
+        "header names lowercased and trimmed",
+        "columns sorted by name, so a column reorder is not a difference",
+        "rows sorted by their own content, so a row reorder is not a difference",
+        "wholly empty rows dropped",
+        "numbers compared by value, so 0.10 and 0.1 are the same",
+        "a value with a leading zero before another digit, such as 0042, is kept as text because it is an identifier rather than a quantity"
+      ],
+      "not_normalised": "A leading zero lost to a spreadsheet, for example an account id of 0042 read back as 42, is a real change to a real value and moves the row hash. We cannot tell that apart from someone editing the id, and we do not try.",
+      "row_hash": "4cb09da88d662623494764a60640aa9676a4242617501e26725e665a25d3751a",
+      "rows": 72
+    },
+    "manifest_file": "The manifest published beside this report carries the payload that was hashed, the list of what was removed before hashing, and the recipe. Its name is this report's file name with .manifest.json in place of the extension.",
+    "method_version": "1.0.0",
+    "serialisation": "json, sorted keys, no insignificant whitespace, utf-8"
+  },
+  "scope_id": "4ce0e89ffe3cc374",
+  "sections": {
+    "1": {
+      "audience_mode": "board",
+      "available": true,
+      "generated": false,
+      "hero": [
+        {
+          "label": "ARR lost across 18 dated endings",
+          "value": "$1.14M"
+        }
+      ],
+      "text": "Over the period analysed you lost $1.14M of ARR to churn, the loss across the 18 endings this analysis could date. Lead time is not assessed in this report; section 4 gives the reason. This report leaves 4 of its 8 sections unreported, for the reasons given in each. 2 of them (model track record, sealed forward forecast) could not be measured from the data supplied. One (what was knowable) was withheld for a reason this analysis established, not for anything missing from your data. One (how fast you reacted) did not run, and the reason the producing step recorded is stated in that section.",
+      "title": "Verdict",
+      "unreportable_data_limits": [
+        6,
+        8
+      ],
+      "unreportable_did_not_run": [
+        5
+      ],
+      "unreportable_not_assessed": [],
+      "unreportable_our_findings": [
+        4
+      ]
+    },
+    "2": {
+      "arr_provenance": {
+        "accounts_with_arr_before_refusal": 72,
+        "fabricated": 0,
+        "priced": 72,
+        "received": 0,
+        "roster": {
+          "accounts_observed": 72,
+          "with_arr": 72,
+          "without_arr": 0,
+          "without_arr_churned": 0,
+          "without_arr_not_churned": 0
+        },
+        "state": "measured",
+        "unattested": 72
+      },
+      "available": true,
+      "notes": [
+        {
+          "kind": "warning",
+          "text": "Gross revenue retention uses current account ARR as the starting book, because no point-in-time snapshot covers the period start. For accounts that churned early in the window this is the last value synced rather than the value at period start, so the figure carries that imprecision."
+        },
+        {
+          "kind": "warning",
+          "text": "Gross revenue retention is not reported. Contraction could not be measured, and the formula would enter it as zero; there is no observation of ARR at the start of the period; the book it would divide by is today's. Any one of these is enough to make the percentage wrong in a direction that flatters the result, and none of them is visible in the figure itself."
+        },
+        {
+          "kind": "warning",
+          "text": "Only 18 churn events in window, below the whole-report minimum of 100 churn events. This is a different threshold from the per-cell reportability floor section 2 states. Lead-time percentages carry confidence intervals too wide to report."
+        }
+      ],
+      "population": {
+        "state": "uncompared"
+      },
+      "reportability_floor": 20,
+      "row_collapse": {
+        "state": "unrecorded"
+      },
+      "sources": [],
+      "supplied_churn": {
+        "attempted": 18,
+        "causes": [],
+        "causes_measured": false,
+        "causes_unattributed": 0,
+        "dated": 18,
+        "failed": 0,
+        "unaccounted": 0,
+        "undated": 0,
+        "unreadable": 0,
+        "unresolved": 0,
+        "value_measured": false
+      },
+      "supplied_churn_provenance": {
+        "detail": null,
+        "export_fingerprint": null,
+        "ingested_at_display": null,
+        "source": null,
+        "state": "measured_on_this_run"
+      },
+      "title": "Data sufficiency"
+    },
+    "3": {
+      "absent": [],
+      "available": true,
+      "chart": null,
+      "churn_accounts_unpriced": 0,
+      "churn_coverage_note": null,
+      "churn_events": 18,
+      "churn_observable": true,
+      "component_caveats": [],
+      "components": [
+        {
+          "available": false,
+          "key": "involuntary",
+          "label": "Involuntary churn",
+          "note": "No payment-failure event reached this analysis, so involuntary churn could not be separated out. That is consistent with a tenant billing by invoice/ACH, where it structurally cannot occur, and equally with billing events not being connected; this analysis cannot tell those apart. It is not a finding of zero.",
+          "reason": "not_measurable",
+          "source_measurable": false
+        },
+        {
+          "available": false,
+          "key": "contraction",
+          "label": "Contraction",
+          "note": "Contraction needs an ARR value at two points in time for an account that did not churn, with both values above zero. 0 accounts in this period did not churn and carry at least one ARR value in the records we hold. Of those 0, not one carries a second value at a different date. No before-and-after comparison can be made, which is not a finding that no account downgraded.",
+          "reason": "not_measurable",
+          "source_measurable": false
+        },
+        {
+          "available": false,
+          "count": 18,
+          "key": "unclassified",
+          "label": "Unclassified",
+          "note": "18 accounts fall in this category, which is below the floor this report prints a figure at. The accounts are real; the dollar total is too thin to quote.",
+          "reason": "below_floor",
+          "source_measurable": true
+        }
+      ],
+      "dollars_visible": true,
+      "gross_dollar_churn": {
+        "available": true,
+        "book": 5448000.0,
+        "book_display": "$5.45M",
+        "churned_arr_display": "$1.14M",
+        "share": 0.2092,
+        "share_display": "20.9%",
+        "unpriced": {
+          "churn": 0,
+          "churn_display": "0",
+          "roster": 0,
+          "roster_display": "0",
+          "state": "complete"
+        },
+        "unpriced_churn_accounts": 0,
+        "unpriced_roster_accounts": 0
+      },
+      "gross_revenue_retention": {
+        "available": false,
+        "note": "Gross revenue retention is not reported. The reason is given in section 2, Data sufficiency, above.",
+        "reason": "denominator_not_observed"
+      },
+      "logo_churn_count": 18,
+      "loss_profile": {
+        "available": true,
+        "band_next_below_display": "$130,800",
+        "band_next_below_ratio_display": "91.8%",
+        "concentration": [
+          {
+            "arr_display": "$142K",
+            "n": 1,
+            "share_display": "12.5%"
+          },
+          {
+            "arr_display": "$609K",
+            "n": 5,
+            "share_display": "53.5%"
+          },
+          {
+            "arr_display": "$922K",
+            "n": 10,
+            "share_display": "80.9%"
+          }
+        ],
+        "dated_count": 18,
+        "largest_display": "$142K",
+        "largest_exact_display": "$142,500",
+        "mean_display": "$63K",
+        "median_display": "$55K",
+        "priced_arr_display": "$1.14M",
+        "priced_arr_exact_display": "$1,139,700",
+        "priced_count": 18,
+        "quarters": [
+          {
+            "arr": 0.0,
+            "arr_display": "no endings",
+            "covered": null,
+            "events": 0,
+            "label": "2025 Q1",
+            "partial": false,
+            "unpriced": 0,
+            "width_pct": 0.0
+          },
+          {
+            "arr": 0.0,
+            "arr_display": "no endings",
+            "covered": null,
+            "events": 0,
+            "label": "2025 Q2",
+            "partial": false,
+            "unpriced": 0,
+            "width_pct": 0.0
+          },
+          {
+            "arr": 0.0,
+            "arr_display": "no endings",
+            "covered": null,
+            "events": 0,
+            "label": "2025 Q3",
+            "partial": false,
+            "unpriced": 0,
+            "width_pct": 0.0
+          },
+          {
+            "arr": 0.0,
+            "arr_display": "no endings",
+            "covered": null,
+            "events": 0,
+            "label": "2025 Q4",
+            "partial": false,
+            "unpriced": 0,
+            "width_pct": 0.0
+          },
+          {
+            "arr": 1139700.0,
+            "arr_display": "$1,139,700",
+            "covered": null,
+            "events": 18,
+            "label": "2026 Q1",
+            "partial": false,
+            "unpriced": 0,
+            "width_pct": 100.0
+          },
+          {
+            "arr": 0.0,
+            "arr_display": "no endings",
+            "covered": null,
+            "events": 0,
+            "label": "2026 Q2",
+            "partial": false,
+            "unpriced": 0,
+            "width_pct": 0.0
+          },
+          {
+            "arr": 0.0,
+            "arr_display": "no endings",
+            "covered": "1 Jul 2026 to 1 Aug 2026",
+            "events": 0,
+            "label": "2026 Q3",
+            "partial": true,
+            "unpriced": 0,
+            "width_pct": 0.0
+          }
+        ],
+        "quarters_arr_total_display": "$1,139,700",
+        "quarters_events_total": 18,
+        "quarters_partial": [
+          "2026Q3"
+        ],
+        "quarters_reconcile": true,
+        "quarters_unpriced_total": 0,
+        "ranking_established": true,
+        "smallest_display": "$6K",
+        "top_accounts": [
+          {
+            "account_id": "SYN-065",
+            "arr_display": "$142K",
+            "churn_at": "2026-03-01",
+            "churn_at_display": "1 Mar 2026",
+            "share_display": "12.5%"
+          },
+          {
+            "account_id": "SYN-041",
+            "arr_display": "$142K",
+            "churn_at": "2026-03-01",
+            "churn_at_display": "1 Mar 2026",
+            "share_display": "12.4%"
+          },
+          {
+            "account_id": "SYN-017",
+            "arr_display": "$131K",
+            "churn_at": "2026-03-01",
+            "churn_at_display": "1 Mar 2026",
+            "share_display": "11.5%"
+          },
+          {
+            "account_id": "SYN-025",
+            "arr_display": "$104K",
+            "churn_at": "2026-03-01",
+            "churn_at_display": "1 Mar 2026",
+            "share_display": "9.2%"
+          },
+          {
+            "account_id": "SYN-049",
+            "arr_display": "$90K",
+            "churn_at": "2026-03-01",
+            "churn_at_display": "1 Mar 2026",
+            "share_display": "7.9%"
+          },
+          {
+            "account_id": "SYN-069",
+            "arr_display": "$74K",
+            "churn_at": "2026-03-01",
+            "churn_at_display": "1 Mar 2026",
+            "share_display": "6.5%"
+          },
+          {
+            "account_id": "SYN-037",
+            "arr_display": "$68K",
+            "churn_at": "2026-03-01",
+            "churn_at_display": "1 Mar 2026",
+            "share_display": "6.0%"
+          },
+          {
+            "account_id": "SYN-021",
+            "arr_display": "$60K",
+            "churn_at": "2026-03-01",
+            "churn_at_display": "1 Mar 2026",
+            "share_display": "5.3%"
+          },
+          {
+            "account_id": "SYN-045",
+            "arr_display": "$56K",
+            "churn_at": "2026-03-01",
+            "churn_at_display": "1 Mar 2026",
+            "share_display": "4.9%"
+          },
+          {
+            "account_id": "SYN-033",
+            "arr_display": "$55K",
+            "churn_at": "2026-03-01",
+            "churn_at_display": "1 Mar 2026",
+            "share_display": "4.8%"
+          }
+        ],
+        "top_band_accounts": [],
+        "top_band_arr_display": "$284,100",
+        "top_band_count": 2,
+        "top_band_floor_display": "$141,075",
+        "top_band_roster_cap": 25,
+        "top_band_roster_withheld": false,
+        "top_band_share_display": "24.9%",
+        "top_n_spread_display": "61.47%",
+        "unpriced_count": 0
+      },
+      "observation": {
+        "sentence": null,
+        "show": false,
+        "state": "no_events"
+      },
+      "reason_scope": "This report separates only the churn your payment records explain. It has no source for why the rest ended, so it does not guess.",
+      "starting_arr_display": "$5.45M",
+      "title": "What you lost",
+      "total_churned_arr": 1139700.0,
+      "total_churned_arr_display": "$1.14M",
+      "unmeasurable": [
+        {
+          "available": false,
+          "key": "involuntary",
+          "label": "Involuntary churn",
+          "note": "No payment-failure event reached this analysis, so involuntary churn could not be separated out. That is consistent with a tenant billing by invoice/ACH, where it structurally cannot occur, and equally with billing events not being connected; this analysis cannot tell those apart. It is not a finding of zero.",
+          "reason": "not_measurable",
+          "source_measurable": false
+        },
+        {
+          "available": false,
+          "key": "contraction",
+          "label": "Contraction",
+          "note": "Contraction needs an ARR value at two points in time for an account that did not churn, with both values above zero. 0 accounts in this period did not churn and carry at least one ARR value in the records we hold. Of those 0, not one carries a second value at a different date. No before-and-after comparison can be made, which is not a finding that no account downgraded.",
+          "reason": "not_measurable",
+          "source_measurable": false
+        },
+        {
+          "available": false,
+          "count": 18,
+          "key": "unclassified",
+          "label": "Unclassified",
+          "note": "18 accounts fall in this category, which is below the floor this report prints a figure at. The accounts are real; the dollar total is too thin to quote.",
+          "reason": "below_floor",
+          "source_measurable": true
+        }
+      ]
+    },
+    "4": {
+      "any_reportable": false,
+      "assessable": false,
+      "available": false,
+      "basis_note": "No churned account was flagged at any horizon this report could measure. The usual cause is that the scoring history begins after the churn events it would need to precede, which makes lead time unmeasurable on this data rather than zero. Check that the flagged-set origins predate the churn dates.",
+      "cells": [
+        {
+          "available": false,
+          "lead_days": 30,
+          "note": "No scoring history exists before the churn dates, so 30 days of lead time cannot be assessed at all.",
+          "reason": "unassessable"
+        },
+        {
+          "available": false,
+          "lead_days": 60,
+          "note": "No scoring history exists before the churn dates, so 60 days of lead time cannot be assessed at all.",
+          "reason": "unassessable"
+        },
+        {
+          "available": false,
+          "lead_days": 90,
+          "note": "No scoring history exists before the churn dates, so 90 days of lead time cannot be assessed at all.",
+          "reason": "unassessable"
+        }
+      ],
+      "chart": null,
+      "data_limit": false,
+      "monotonic": true,
+      "monotonic_meaningful": false,
+      "note": "This section asks how much of the churn you suffered was already flaggable 30, 60 and 90 days before it happened. Answering it requires a record of which accounts were scored as at-risk, dated, BEFORE each churn date. No churned account was flagged at any horizon this report could measure. The usual cause is that the scoring history begins after the churn events it would need to precede, which makes lead time unmeasurable on this data rather than zero. Check that the flagged-set origins predate the churn dates. Printing a number here would be a fabrication rather than an estimate, so this report prints none.",
+      "reason": "no_reportable_horizon",
+      "refusal": {
+        "absent": "No churned account was flagged at any horizon this report could measure. The usual cause is that the scoring history begins after the churn events it would need to precede, which makes lead time unmeasurable on this data rather than zero. Check that the flagged-set origins predate the churn dates.",
+        "asked": "This section asks how much of the churn you suffered was already flaggable 30, 60 and 90 days before it happened.",
+        "fabrication": "Printing a number here would be a fabrication rather than an estimate, so this report prints none.",
+        "requires": "Answering it requires a record of which accounts were scored as at-risk, dated, BEFORE each churn date."
+      },
+      "title": "What was knowable"
+    },
+    "5": {
+      "available": false,
+      "data_limit": true,
+      "did_not_run": true,
+      "note": "This section asks how quickly your team acted once an account started to go wrong, and how much of the ARR you lost was never touched at all. Answering it requires dated retention actions, who was contacted and when, joined to the churn dates. This measurement did not run. The producing step recorded: no execution data. That is the reason the step itself recorded, reported here as a fact; this analysis did not establish it as a cause and does not assert one. Nothing here is a statement about whether your team acted, or about whether your systems recorded it, and printing a response time from a measurement that did not run would be a fabrication rather than an estimate.",
+      "reason": "no_execution_data",
+      "refusal": {
+        "absent": "This measurement did not run. The producing step recorded: no execution data. That is the reason the step itself recorded, reported here as a fact; this analysis did not establish it as a cause and does not assert one.",
+        "asked": "This section asks how quickly your team acted once an account started to go wrong, and how much of the ARR you lost was never touched at all.",
+        "fabrication": "Nothing here is a statement about whether your team acted, or about whether your systems recorded it, and printing a response time from a measurement that did not run would be a fabrication rather than an estimate.",
+        "requires": "Answering it requires dated retention actions, who was contacted and when, joined to the churn dates."
+      },
+      "title": "How fast you reacted"
+    },
+    "6": {
+      "available": false,
+      "data_limit": true,
+      "note": "This section asks what this model's accuracy has actually been on your own history, measured walk-forward rather than claimed. Answering it requires enough event-dated history to place at least one fold that trains on the past and is scored on a period it never saw. No track record was computed on this run, so there is no accuracy figure to report. A fold has to rebuild an account to what it looked like on a past day, which needs values carrying the date they were true. Whether the export behind this report carries them is section 2's reconciliation of your file, not something this section measured. An accuracy figure taken from a model scored on data it was trained on would be a fabrication.",
+      "reason": "insufficient_history",
+      "refusal": {
+        "absent": "No track record was computed on this run, so there is no accuracy figure to report. A fold has to rebuild an account to what it looked like on a past day, which needs values carrying the date they were true. Whether the export behind this report carries them is section 2's reconciliation of your file, not something this section measured.",
+        "asked": "This section asks what this model's accuracy has actually been on your own history, measured walk-forward rather than claimed.",
+        "fabrication": "An accuracy figure taken from a model scored on data it was trained on would be a fabrication.",
+        "requires": "Answering it requires enough event-dated history to place at least one fold that trains on the past and is scored on a period it never saw."
+      },
+      "title": "Model track record"
+    },
+    "7": {
+      "available": true,
+      "bullets": [],
+      "closing": "Establishing causation requires a randomised design running forward: a stratified share of flagged accounts assigned to a different priority before outcomes are known. That is the only design that answers whether the intervention worked, and this report is not a substitute for it.",
+      "generated": false,
+      "no_findings_note": "This edition reports no such figure: every section that would have carried one says instead why it could not. The boundary below is stated all the same, because it is what would apply to those figures and not a caveat on anything printed here.",
+      "text": "This report establishes what your data could have revealed and when, not what would have happened had you acted. Accounts that received an intervention cannot be assumed comparable to accounts that did not: wherever a team decides which accounts to work, that decision can track how salvageable an account already looks, and no retrospective design can rule it out. This report makes no claim about how those decisions were made here. Measuring the effect of an intervention requires withholding it from a randomly chosen group, which this analysis does not do and which no retrospective analysis can do after the fact.",
+      "title": "What this does not prove"
+    },
+    "8": {
+      "available": false,
+      "committed": false,
+      "data_limit": true,
+      "horizon_days": 90,
+      "note": "No track record could be established in this backtest, so no forward forecast has been sealed.",
+      "reason": "no_track_record",
+      "scope_id": "4ce0e89ffe3cc374",
+      "scoring_date": "2026-12-23T02:30:50.226328+00:00",
+      "scoring_display": "23 Dec 2026",
+      "sealed_at": "2026-09-24T02:30:50.226328+00:00",
+      "sealed_display": "24 Sep 2026",
+      "title": "Sealed forward forecast"
+    }
+  },
+  "status": "insufficient_events",
+  "unreportable_sections": [
+    4,
+    5,
+    6,
+    8
+  ]
+}
