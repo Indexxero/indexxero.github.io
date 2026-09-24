@@ -78,7 +78,7 @@
   .step button:hover{background:var(--plane);color:var(--ink)}
   .chip{font:10px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;padding:4px 7px;border-radius:4px;width:7.2rem;text-align:center;flex-shrink:0}
   .chip.m{color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent)} .chip.u{color:var(--muted);background:var(--plane)}
-  .kv{display:flex;justify-content:space-between;gap:12px} .kv .ok{color:var(--ok)} .kv .bad{color:var(--export)}
+  .kv{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap} .mono{font-family:ui-monospace,Menlo,monospace;font-size:.78rem;word-break:break-all} .kv .ok{color:var(--ok)} .kv .bad{color:var(--export)}
   .reset{align-self:flex-end;font:12px system-ui;border:1px solid var(--border);background:var(--surface);color:var(--ink-2);padding:4px 10px;border-radius:5px;cursor:pointer}
   .reset:disabled{opacity:.4;cursor:default}
   @media (max-width:640px){ .chip{display:none} h1{font-size:1.6rem} }
@@ -127,19 +127,30 @@
 <span class="ok">PASS</span>  input rows      4cb09da88d66…
 <span class="ok">PASS</span>  document seal   186ab6fe35a0…
 <span class="ok">PASS</span>  versions        method 1.0.0
+<span class="dim">ANCHOR</span>  content_hash    c26bddd0d6df…
 <span class="ok">RESULT: PASS.</span> Every check that ran passed.
-<span class="dim">This establishes that the report was not altered and that it belongs to the named input. It does not establish that the computation from input to number is correct.</span></pre>
+<span class="dim">This establishes that the report matches its manifest and that the manifest belongs to the named input.
+It does not establish who sealed it. Anyone holding this folder can change the report and re-seal it, so compare content_hash above with the value Indexxero published for this report.
+It does not establish that the computation from input to number is correct.</span></pre>
 <h3>Run it on the tampered copy</h3>
 <pre><span class="dim">$</span> python3 verify_report.py retention_report.manifest.json --csv synthetic_input.csv --report tamper/retention_report.json
 <span class="ok">PASS</span>  input rows      4cb09da88d66…
 <span class="bad">FAIL</span>  document seal   this report seals to 66f4ad60bbfa… <b>manifest payload differs at accounts_analysed</b>
 <span class="ok">PASS</span>  versions        method 1.0.0
+<span class="dim">ANCHOR</span>  content_hash    c26bddd0d6df…
 <span class="bad">RESULT: FAIL.</span> 1 of 5 checks did not pass.
 <span class="dim">This FAIL establishes that the report does NOT match its manifest. The field that moved is accounts_analysed.</span></pre>
-<p>Those two runs are what a stranger performs. We cannot make the second one pass, and that is the point.</p>
+<p>Those two runs are what a stranger performs. We cannot make the second one pass by editing the report alone.</p>
+<div class="card">
+  <h3>The anchor, and why it matters</h3>
+  <p>The seal is a plain hash, not a signature. Anyone holding the folder can change a number and re-seal both files, and the verifier will pass. We tried it, and it passed. So a PASS means the report matches its manifest. To know the manifest is ours, compare the <code>content_hash</code> in it with the value published here.</p>
+  <div class="kv"><span>content_hash</span><span class="mono">c26bddd0d6dffe7bbd16da88ac603fcbc717e2f946fc0d91c7fcb5e8b1b77994</span></div>
+  <div class="kv"><span>document_seal</span><span class="mono">186ab6fe35a0424c5642704edcea4fcbfa80fd6814d6d8ab7799523a42c34e36</span></div>
+  <p class="muted" style="margin:0">For a real engagement the same two values go to you in the delivery note, outside the folder. Whether to sign the manifest with a key is a product decision we have not made, and this page will say so when we do.</p>
+</div>
 <div class="card">
   <h3>What this does and does not establish</h3>
-  <p>It establishes that a report was not altered after it was sealed, and that it belongs to the named input. <b>It does not establish that the computation from input to number is correct.</b> The verifier says that in its own output, on every run. The correctness of the computation is what the first demonstration and the code behind it are for.</p>
+  <p>It establishes that a report matches its manifest and that the manifest belongs to the named input. It does not establish who sealed it; the anchor above is for that. <b>It does not establish that the computation from input to number is correct.</b> The verifier says that in its own output, on every run. The correctness of the computation is what the first demonstration and the code behind it are for.</p>
 </div>
 
 <h2>4. Every figure says how it was known</h2>
@@ -148,7 +159,7 @@
 
 <h2>In progress, and not yet proved</h2>
 <div class="card">
-  <p><b>A detector for the same defect in public code.</b> We are running a scanner for outputs that print zero where nothing was measured against widely used open source reporting and analytics libraries. It has produced findings across several repositories. <b>No project is named here until its maintainers have heard from us first.</b> Counts and reproductions will follow when that is done.</p>
+  <p><b>A detector for the same defect in public code.</b> We are running a scanner for outputs that print zero where nothing was measured against widely used open source reporting and analytics libraries. So far: 18 findings across 12 public repositories, every one read by hand from the public source, none yet reproduced in a running process. The target we set ourselves is 25. <b>None reported to maintainers yet, nothing published, and no project is named here until its maintainers have heard from us first.</b></p>
   <p class="muted" style="margin:0">Last updated 24 September 2026.</p>
 </div>
 

@@ -27,10 +27,11 @@ WHAT EACH CHECK ANSWERS
 
 WHAT THIS DOES NOT PROVE, and we would rather say it than have you find it
 
-This establishes that the report was not altered and that it belongs to the
-file you sent. It does NOT establish that our computation from your file to
-the numbers is correct. Nothing you can run without our engine can establish
-that. Any tool that claims otherwise is claiming more than it has.
+This establishes that the report matches its manifest and that the manifest
+belongs to the named input. It does not establish who sealed it. Anyone
+holding this folder can change the report and re-seal it, so compare
+content_hash with the value Indexxero published for this report. It does not
+establish that the computation from input to number is correct.
 
 A check we could not run prints NOT CHECKED and is never counted as a pass.
 """
@@ -307,6 +308,8 @@ def main(argv=None):
     for result in results:
         print(result.line())
     print("")
+    print("  ANCHOR        content_hash                    {}".format(
+        manifest.get("content_hash") or "not stated"))
 
     checks = [r for r in results if r.status != NOTE]
     failed = [r for r in checks if r.status == FAIL]
@@ -333,10 +336,13 @@ def main(argv=None):
                   "not match this manifest. Read the failed check above for "
                   "the mismatch.")
     else:
-        print(manifest.get("bound") or
-              "This establishes that the report was not altered and that it "
-              "belongs to the named input. It does not establish that the "
-              "computation from input to number is correct.")
+        print("This establishes that the report matches its manifest and that "
+              "the manifest belongs to the named input.")
+        print("It does not establish who sealed it. Anyone holding this folder "
+              "can change the report and re-seal it, so compare content_hash "
+              "above with the value Indexxero published for this report.")
+        print("It does not establish that the computation from input to number "
+              "is correct.")
     print("")
     return 1 if failed else 0
 

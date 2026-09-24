@@ -26,8 +26,17 @@ python3 verify_report.py retention_report.manifest.json --csv synthetic_input.cs
 It must fail and name `accounts_analysed`. The recorded output is in
 `tamper/verification.txt`.
 
-## Bound
+## What a PASS means, and what it does not
 
-This establishes that the report was not altered and that it belongs to the
-named input. It does not establish that Indexxero's computation from input to
-number is correct.
+This establishes that the report matches its manifest and that the manifest
+belongs to the named input.
+
+It does not establish who sealed it. Anyone holding this folder can change the
+report and re-seal it, so compare `content_hash` above with the value Indexxero
+published for this report.
+
+It does not establish that the computation from input to number is correct.
+
+For this bundle, the published value is at
+`https://measure.indexxero.com/proved.html`. For your own report, compare with
+the delivery note.
