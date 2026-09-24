@@ -3,7 +3,7 @@
   "client_id": "00000000-0000-4000-8000-000000000015",
   "content_hash": "c26bddd0d6dffe7bbd16da88ac603fcbc717e2f946fc0d91c7fcb5e8b1b77994",
   "content_hash_recipe": "sha256 over the payload published in this manifest, serialised by the rule stated above. The payload travels with its hash so the check needs nothing from us.",
-  "document_seal": "de0245df77c8b0dbb61fa9468df722fc28bd0191768ad74deb5a57465225845b",
+  "document_seal": "186ab6fe35a0424c5642704edcea4fcbfa80fd6814d6d8ab7799523a42c34e36",
   "document_seal_recipe": "sha256 over the published report payload with the key document_seal removed, serialised by the rule stated above. A hash cannot cover itself, so that one key is dropped and nothing else is.",
   "engine_version": {
     "measurement": "unmeasurable",
@@ -574,7 +574,7 @@
   },
   "period_end": "2026-08-01T00:00:00+00:00",
   "period_start": "2025-01-01T00:00:00+00:00",
-  "report_generated_at": "2026-09-24T02:30:50.226539+00:00",
+  "report_generated_at": "2026-09-24T05:20:12.756371+00:00",
   "report_generated_at_note": "Clock derived, excluded from the content hash, published so a reader can tell two runs apart.",
   "scope_id": "4ce0e89ffe3cc374",
   "serialisation": "json, sorted keys, no insignificant whitespace, utf-8"

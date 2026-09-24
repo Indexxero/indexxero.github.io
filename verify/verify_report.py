@@ -320,10 +320,23 @@ def main(argv=None):
         print("Not checked: {}. A check that did not run is not a check that "
               "passed.".format(", ".join(r.name for r in skipped)))
     print("")
-    print(manifest.get("bound") or
-          "This establishes that the report was not altered and that it "
-          "belongs to the named input. It does not establish that the "
-          "computation from input to number is correct.")
+    if failed:
+        moved_field = (
+            first_payload_difference(manifest.get("payload", {}), report)
+            if report is not None else None
+        )
+        if moved_field:
+            print("This FAIL establishes that the report does NOT match its "
+                  "manifest. The field that moved is {}.".format(moved_field))
+        else:
+            print("This FAIL establishes that at least one supplied file does "
+                  "not match this manifest. Read the failed check above for "
+                  "the mismatch.")
+    else:
+        print(manifest.get("bound") or
+              "This establishes that the report was not altered and that it "
+              "belongs to the named input. It does not establish that the "
+              "computation from input to number is correct.")
     print("")
     return 1 if failed else 0
 

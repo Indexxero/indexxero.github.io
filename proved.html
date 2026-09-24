@@ -125,15 +125,17 @@
 <h3>Run it on the clean report</h3>
 <pre><span class="dim">$</span> python3 verify_report.py retention_report.manifest.json --csv synthetic_input.csv --report retention_report.json
 <span class="ok">PASS</span>  input rows      4cb09da88d66…
-<span class="ok">PASS</span>  document seal   de0245df77c8…
+<span class="ok">PASS</span>  document seal   186ab6fe35a0…
 <span class="ok">PASS</span>  versions        method 1.0.0
-<span class="ok">RESULT: PASS.</span> Every check that ran passed.</pre>
+<span class="ok">RESULT: PASS.</span> Every check that ran passed.
+<span class="dim">This establishes that the report was not altered and that it belongs to the named input. It does not establish that the computation from input to number is correct.</span></pre>
 <h3>Run it on the tampered copy</h3>
 <pre><span class="dim">$</span> python3 verify_report.py retention_report.manifest.json --csv synthetic_input.csv --report tamper/retention_report.json
 <span class="ok">PASS</span>  input rows      4cb09da88d66…
-<span class="bad">FAIL</span>  document seal   this report seals to ea25198a9147… <b>manifest payload differs at accounts_analysed</b>
+<span class="bad">FAIL</span>  document seal   this report seals to 66f4ad60bbfa… <b>manifest payload differs at accounts_analysed</b>
 <span class="ok">PASS</span>  versions        method 1.0.0
-<span class="bad">RESULT: FAIL.</span> 1 of 5 checks did not pass.</pre>
+<span class="bad">RESULT: FAIL.</span> 1 of 5 checks did not pass.
+<span class="dim">This FAIL establishes that the report does NOT match its manifest. The field that moved is accounts_analysed.</span></pre>
 <p>Those two runs are what a stranger performs. We cannot make the second one pass, and that is the point.</p>
 <div class="card">
   <h3>What this does and does not establish</h3>
