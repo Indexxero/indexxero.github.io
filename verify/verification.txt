@@ -1,13 +1,13 @@
 
 Indexxero report check
 
-  PASS          content hash                    c26bddd0d6dffe7bbd16da88ac603fcbc717e2f946fc0d91c7fcb5e8b1b77994
+  PASS          content hash                    c7dca95f30ab7c37e448458dc9b2744da29556cf062ff1c5aded1b8292717f50
   PASS          input bytes                     d21112939b2f0a75255e16192dfb5c538d50e53a4b0152c9dc59d6040005a367
   PASS          input rows                      4cb09da88d662623494764a60640aa9676a4242617501e26725e665a25d3751a
-  PASS          document seal                   186ab6fe35a0424c5642704edcea4fcbfa80fd6814d6d8ab7799523a42c34e36
+  PASS          document seal                   9082d4c82158ac2a84685602c39f32c3349a10076134c264e36d709b1fb8a9ed
   PASS          versions                        method 1.0.0, engine not recorded by this build
 
-  ANCHOR        content_hash                    c26bddd0d6dffe7bbd16da88ac603fcbc717e2f946fc0d91c7fcb5e8b1b77994
+  ANCHOR        content_hash                    c7dca95f30ab7c37e448458dc9b2744da29556cf062ff1c5aded1b8292717f50
 RESULT: PASS. Every check that ran passed.
 
 This establishes that the report matches its manifest and that the manifest belongs to the named input.
