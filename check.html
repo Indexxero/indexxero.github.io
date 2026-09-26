@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-CBRcl/GHuJLmxd4gOjEeR5W2X6h0BAguswsn4jhnoXM=' 'sha256-wQ7L4EhqRJy+ZZMfEXevyk3sRoNL2k6j1nfHKuy8Hko='; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; font-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-vTFiwYdcFWJt66rkCmcHDM93p/a8aKczQ1BWsEcRSiA=' 'sha256-PlPkfxioXHGPMEMQRi/aBnWr5Lwt73yrLqW2dMO43cg='; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; font-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; form-action 'none'; base-uri 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="A free check that runs in your browser. Drop in a subscription export and see which retention figures it can support, and why not when it cannot. Your file never leaves your browser.">
 <link rel="canonical" href="https://measure.indexxero.com/check.html">
@@ -162,6 +162,13 @@
     <h2>Warnings</h2>
     <div id="warnings"></div>
   </div>
+
+  <h2>6. Keep a note of this check</h2>
+  <p>A one page summary you can forward to an investor or advisor: the file name, the shape of the file, the verdicts above and what would fix each gap. It holds no rows, no account ids and no retention figures. Your browser builds it on this page, like everything else here.</p>
+  <div class="row">
+    <button class="btn" id="noteBtn" type="button">Download a readiness note</button>
+  </div>
+  <p id="noteStatus" class="muted" role="status" aria-live="polite"></p>
 </div>
 
 <div class="card pilot">
@@ -1725,52 +1732,73 @@ SYN-M100,2026-08,,798,active
     }
     var deletedWarn = res.warnings.some(function (w) { return w.id === 'deleted'; });
 
-    /* reasons */
+    /* reasons. Each reason also records the change to the export that would remove it.
+       With opts.counts, shares are written as counts ("12 of 2,400 rows") instead of
+       percentages and no values from the file are quoted; the readiness note uses this. */
+    var counts = !!opts.counts;
+    function part(a, b, noun) { return counts ? num(a) + ' of ' + num(b) + ' ' + noun : pct(a, b) + ' of ' + noun; }
+    var fixFor = {};
+    function why(text, key, fix) { fixFor[text] = { key: key, text: fix }; return text; }
     function rAccount() {
-      if (!acc) return 'No account id column, so rows cannot be grouped into customers.';
-      if (!U.account) return 'The account id is blank on ' + pct(F.account.missing, R) + ' of rows, so rows cannot be grouped into customers reliably.';
+      if (!acc) return why('No account id column, so rows cannot be grouped into customers.', 'account', 'include the account id column');
+      if (!U.account) return why('The account id is blank on ' + part(F.account.missing, R, 'rows') + ', so rows cannot be grouped into customers reliably.', 'account', 'fill in the account id on every row');
       return null;
     }
     function rEnd() {
       if (endSignal) return null;
-      if (placeholder) return 'Every row has a cancellation date and there is no status column, so an active account cannot be told from a churned one.';
+      if (placeholder) return why('Every row has a cancellation date and there is no status column, so an active account cannot be told from a churned one.', 'end', 'add a status column that says whether each account is active or cancelled, or leave the cancellation date blank for accounts that have not cancelled');
       if (stt && !U.status && !U.cancel) {
-        if (F.status.recognised < 0.8 * F.status.nonblank) return 'The status values are not ones we recognise as active or cancelled (for example ' + F.status.unknownValues.slice(0, 3).map(function (v) { return '"' + v + '"'; }).join(', ') + '), so a churned account cannot be told from an active one.';
-        return 'The status is blank on ' + pct(F.status.missing, R) + ' of rows, so a churned account cannot be told from an active one.';
+        if (F.status.recognised < 0.8 * F.status.nonblank) return why('The status values are not ones we recognise as active or cancelled' + (counts ? '' : ' (for example ' + F.status.unknownValues.slice(0, 3).map(function (v) { return '"' + v + '"'; }).join(', ') + ')') + ', so a churned account cannot be told from an active one.', 'end', 'write the status as plain values such as active and cancelled');
+        return why('The status is blank on ' + part(F.status.missing, R, 'rows') + ', so a churned account cannot be told from an active one.', 'end', 'fill in the status on every row');
       }
-      if (ca && caD.nonblank === 0) return 'The cancellation date column is empty on every row and there is no status, so a churned account cannot be told from an active one.';
-      if (ca && caParsedShare < 0.8) return 'Only ' + pct(caD.parsed, caD.nonblank) + ' of cancellation dates could be read as dates, and there is no usable status, so a churned account cannot be told from an active one.';
-      return 'No cancellation date or status, so a churned account cannot be told from an active one.';
+      if (ca && caD.nonblank === 0) return why('The cancellation date column is empty on every row and there is no status, so a churned account cannot be told from an active one.', 'end', 'add the cancellation date for each account that has cancelled, or a status column');
+      if (ca && caParsedShare < 0.8) return why('Only ' + part(caD.parsed, caD.nonblank, 'cancellation dates') + ' could be read as dates, and there is no usable status, so a churned account cannot be told from an active one.', 'end', 'write every cancellation date in one format, such as 2024-03-31');
+      return why('No cancellation date or status, so a churned account cannot be told from an active one.', 'end', 'add a status column, or a cancellation date for each account that has left');
     }
     function rStart() {
       if (U.start || monthly) return null;
-      if (st) return 'Only ' + pct(stD.parsed, R) + ' of rows have a start date we could read, so accounts cannot be placed in time.';
-      return 'No start date and no monthly history, so accounts cannot be placed in time or grouped into cohorts.';
+      if (st) return why('Only ' + part(stD.parsed, R, 'rows') + ' have a start date we could read, so accounts cannot be placed in time.', 'start', 'write every start date in one format, such as 2024-03-31');
+      return why('No start date and no monthly history, so accounts cannot be placed in time or grouped into cohorts.', 'start', 'add the start date of each account, or export one row per account per month');
     }
     function rHistory(minM) {
       if (!hasStartInfo) return null;
-      if (spanMonths < minM) return 'Fewer than ' + minM + ' months of history (the file covers ' + plural(spanMonths, 'month', 'months') + ').';
+      if (spanMonths < minM) return why('Fewer than ' + minM + ' months of history (the file covers ' + plural(spanMonths, 'month', 'months') + ').', 'history', 'cover at least ' + minM + ' months of history');
       return null;
     }
     function rRevenue() {
-      if (!rev) return 'No MRR or ARR column, so revenue cannot be followed at all.';
-      if (!U.revenue) return 'MRR or ARR is blank or not a number on ' + pct(R - F.revenue.numeric, R) + ' of rows.';
-      if (!monthly) return 'One revenue figure per account, not a revenue history per month, so a customer paying less or more over time cannot be seen.';
+      var monthlyRev = ['monthlyRev', 'export one row per account per month with MRR on each row'];
+      if (!rev) return why('No MRR or ARR column, so revenue cannot be followed at all.', monthly ? 'rev' : monthlyRev[0], monthly ? 'add MRR or ARR to each monthly row' : monthlyRev[1]);
+      if (!U.revenue) return why('MRR or ARR is blank or not a number on ' + part(R - F.revenue.numeric, R, 'rows') + '.', monthly ? 'revBlank' : monthlyRev[0], monthly ? 'fill in MRR or ARR as a plain number on every monthly row' : monthlyRev[1]);
+      if (!monthly) return why('One revenue figure per account, not a revenue history per month, so a customer paying less or more over time cannot be seen.', monthlyRev[0], monthlyRev[1]);
       return null;
     }
     function rPlan() {
-      if (!U.revenue || !monthly) {
-        if (!pl) return 'No plan or revenue history per month, so expansion cannot be separated from price changes.';
-        return 'One plan per account, not a plan history per month, so expansion cannot be separated from price changes.';
+      // a monthly file with unusable revenue is covered by rRevenue; it does have a plan history per month
+      if (!monthly) {
+        if (!pl) return why('No plan or revenue history per month, so expansion cannot be separated from price changes.', 'monthlyPlan', 'export one row per account per month with the plan and MRR on each row');
+        return why('One plan per account, not a plan history per month, so expansion cannot be separated from price changes.', 'monthlyPlan', 'export one row per account per month with the plan and MRR on each row');
       }
-      if (!pl) return 'No plan history per month, so expansion cannot be separated from price changes.';
-      if (!U.plan) return 'The plan is blank on ' + pct(F.plan.missing, R) + ' of rows, so expansion cannot be separated from price changes.';
+      if (!pl) return why('No plan history per month, so expansion cannot be separated from price changes.', 'plan', 'add the plan to each monthly row');
+      if (!U.plan) return why('The plan is blank on ' + part(F.plan.missing, R, 'rows') + ', so expansion cannot be separated from price changes.', 'plan', 'fill in the plan on every monthly row');
       return null;
     }
     function rCohorts() {
       if (!hasStartInfo) return null;
-      if (cohortN < 2) return 'Every account starts in the same month, so there is one cohort and nothing to compare it with.';
+      if (cohortN < 2) return why('Every account starts in the same month, so there is one cohort and nothing to compare it with.', 'cohorts', 'export the whole customer book, not only accounts that started in one month');
       return null;
+    }
+    function fixLine(uniq) {
+      var seen = {}, fx = [];
+      uniq.forEach(function (t) { var f = fixFor[t]; if (f && !seen[f.key]) { seen[f.key] = 1; fx.push(f); } });
+      // a monthly export also places every account in time, and the plan and MRR one also covers revenue
+      if (seen.monthlyPlan) fx = fx.filter(function (f) { return f.key !== 'monthlyRev'; });
+      if (seen.monthlyPlan || seen.monthlyRev) fx = fx.filter(function (f) { return f.key !== 'start'; });
+      var hist = fx.filter(function (f) { return f.key === 'history'; });
+      fx = fx.filter(function (f) { return f.key !== 'history'; }).concat(hist);
+      if (!fx.length) return null;
+      var s = fx.map(function (f) { return f.text.charAt(0).toUpperCase() + f.text.slice(1) + '.'; }).join(' ');
+      if (hist.length) s += ' If the business has been billing for less time than that, this figure needs more time rather than a different export.';
+      return s;
     }
     function row(fig, reasons, basis, affected) {
       var uniq = [];
@@ -1779,7 +1807,7 @@ SYN-M100,2026-08,,798,active
       if (r.measurable) {
         r.basis = basis;
         if (deletedWarn && affected) r.caution = 'But see the warning below. If churned accounts are missing, this figure will look better than it is.';
-      }
+      } else r.fix = fixLine(uniq);
       return r;
     }
     var endWord = endSignal === 'status' ? 'a status for every account' : endSignal === 'cancel' ? 'cancellation dates' : 'the month each account last appears';
@@ -1795,6 +1823,117 @@ SYN-M100,2026-08,,798,active
     return res;
   }
 
+
+  /* ---------- readiness note: a standalone HTML page, built as a string ----------
+     Only the shape of the file and the verdicts go in. No account ids, no values from
+     the file, and no percentages. Pass a result from analyze(..., { counts: true }). */
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function noteWarning(w) {
+    var f = w.facts;
+    if (w.id === 'deleted') return [
+      'The ' + num(f.earlyAccounts) + ' accounts that started between ' + f.from + ' and ' + f.to + ' show no cancellations at all, while the ' + num(f.laterAccounts) + ' accounts that started later show ' + num(f.laterCancelled) + '. Older customers have had longer to leave, not less.',
+      'This is what an export looks like when the system removes customers once they cancel. The early cohorts then hold only the customers who stayed, so every retention figure built on the file looks better than it is. Nobody has to falsify anything for this to happen.',
+      'Before trusting a retention figure from this file, check whether cancelled accounts are archived or deleted in the source system.'];
+    if (w.id === 'placeholder') return [
+      'There is no status column, and the cancellation date column is filled on ' + num(f.filled) + ' of ' + num(f.rows) + ' rows. A real export almost always has customers who have not cancelled, and for them this field is blank.',
+      'When every row is filled, the column is often a placeholder: a contract end date, a renewal date, or a default the system writes for everyone. Read as cancellations, it would make every customer look churned.' + (f.afterLatestStart ? ' ' + num(f.afterLatestStart) + ' of these dates fall after the most recent start date in the file, which is more typical of a contract end date than a cancellation.' : ''),
+      'Check what the column means in the source system, or add a status column, before any churn figure is built on it.'];
+    return [];
+  }
+  function note(res, meta) {
+    meta = meta || {};
+    var d = meta.generated || new Date();
+    var when = d.getDate() + ' ' + MN[d.getMonth()] + ' ' + d.getFullYear();
+    var s = res.shape, o = [];
+    function kv(k, v) { o.push('<tr><th scope="row">' + esc(k) + '</th><td>' + esc(v) + '</td></tr>'); }
+    o.push('<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n',
+      '<meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; base-uri \'none\'; form-action \'none\'">\n',
+      '<meta name="viewport" content="width=device-width, initial-scale=1">\n<title>Retention readiness note</title>\n<style>\n', NOTE_CSS, '</style>\n</head>\n<body>\n<main class="sheet">\n');
+    o.push('<p class="eyebrow">Indexxero &middot; Retention readiness check</p>\n<h1>Retention readiness note</h1>\n');
+    o.push('<table class="meta"><tbody>');
+    kv('Generated', when);
+    kv('File checked', meta.fileName || 'Not named');
+    o.push('</tbody></table>\n');
+    o.push('<p class="lede">This note records whether a subscription export has what five common retention figures need. It describes the shape of the file and the verdicts only. It holds no rows, no account ids and no retention figures, so it can be forwarded as it is. Measurable means the file has what the figure needs. It does not mean the figure is good, and this note does not produce it.</p>\n');
+
+    o.push('<h2>Shape of the export</h2>\n<table class="kv"><tbody>');
+    kv('Rows', num(s.rows));
+    kv('Distinct accounts', s.accounts == null ? 'Unknown, no account id column' : num(s.accounts));
+    kv('Grain', s.grain);
+    kv('Dates covered', s.dateRange || 'No dates');
+    kv('Months of history', s.historyMonths != null ? num(s.historyMonths) : 'Unknown, nothing places the accounts in time');
+    kv('Exact duplicate rows', num(s.duplicateRows));
+    if (s.duplicateAccountMonths != null && s.monthly) kv('Account and month pairs repeated', num(s.duplicateAccountMonths));
+    s.missing.forEach(function (m) { if (m.missing) kv(m.role + ' blank', num(m.missing) + ' of ' + num(s.rows) + ' rows'); });
+    o.push('</tbody></table>\n');
+
+    o.push('<h2>What this export can support</h2>\n<table class="figs"><thead><tr><th scope="col">Figure</th><th scope="col">Verdict</th><th scope="col">Why</th></tr></thead><tbody>');
+    res.support.forEach(function (r) {
+      o.push('<tr class="fig" data-verdict="' + (r.measurable ? 'measurable' : 'not-measurable') + '"><th scope="row">' + esc(r.figure) + '</th>',
+        '<td><span class="verdict ' + (r.measurable ? 'yes">MEASURABLE' : 'no">NOT MEASURABLE') + '</span></td><td>');
+      if (r.measurable) { o.push('<p>' + esc(r.basis) + '</p>'); if (r.caution) o.push('<p class="flag">' + esc(r.caution) + '</p>'); }
+      else r.reasons.forEach(function (x) { o.push('<p>' + esc(x) + '</p>'); });
+      o.push('</td></tr>');
+    });
+    o.push('</tbody></table>\n');
+
+    o.push('<h2>Warnings</h2>\n');
+    if (!res.warnings.length) o.push('<p>No warnings were raised for this file.</p>\n');
+    res.warnings.forEach(function (w) {
+      o.push('<div class="warn"><h3>' + esc(w.title) + '</h3>');
+      noteWarning(w).forEach(function (x) { o.push('<p>' + esc(x) + '</p>'); });
+      o.push('</div>\n');
+    });
+
+    o.push('<h2>What would fix each gap</h2>\n');
+    var gaps = res.support.filter(function (r) { return !r.measurable; });
+    if (!gaps.length) o.push('<p>Every figure above is measurable from this file, so there is no gap to fix in the export.</p>\n');
+    else {
+      o.push('<ul class="fixes">');
+      gaps.forEach(function (r) { o.push('<li class="fix"><b>' + esc(r.figure) + '.</b> ' + esc(r.fix || 'Export the columns listed in the reasons above.') + '</li>'); });
+      o.push('</ul>\n');
+    }
+    o.push('<footer><p>Generated in your browser by <a href="https://measure.indexxero.com/check.html">measure.indexxero.com/check.html</a>. The file you checked never left your computer. Indexxero rebuilds the figures themselves in a free pilot: <a href="https://indexxero.com/get-started">indexxero.com/get-started</a></p></footer>\n');
+    o.push('</main>\n</body>\n</html>\n');
+    return o.join('');
+  }
+  var NOTE_CSS = [
+    ':root{color-scheme:light}',
+    '*{box-sizing:border-box}',
+    'html{background:#f9f9f7}',
+    'body{margin:0;background:#f9f9f7;color:#0b0b0b;font:15px/1.5 system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}',
+    '.sheet{max-width:780px;margin:24px auto;background:#fff;border:1px solid #e1e0d9;border-radius:8px;padding:32px 36px}',
+    '@media (max-width:640px){.sheet{margin:0;border:0;border-radius:0;padding:24px 16px}}',
+    '.eyebrow{font:500 11px/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.08em;text-transform:uppercase;color:#2a78d6;margin:0 0 10px}',
+    'h1{font-size:1.6rem;line-height:1.2;margin:0 0 12px}',
+    'h2{font-size:1.05rem;margin:22px 0 6px;padding-bottom:4px;border-bottom:1px solid #e1e0d9}',
+    'h3{font-size:.95rem;margin:0 0 4px;color:#b8481c}',
+    'p{margin:0 0 8px}',
+    '.lede{color:#52514e}',
+    'table{width:-webkit-fill-available;width:-moz-available;width:stretch;border-collapse:collapse}',
+    'th,td{text-align:left;vertical-align:top;padding:6px 8px 6px 0;border-bottom:1px solid #eeede8}',
+    'td p{margin:0 0 4px} td p:last-child{margin:0}',
+    '.meta th,.kv th{width:15rem;font-weight:500;color:#52514e}',
+    '.meta{margin-bottom:10px}',
+    '.figs thead th{font:500 10px/1.2 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.06em;text-transform:uppercase;color:#898781}',
+    '.figs tbody th{width:11rem;font-weight:600}',
+    '.figs td:nth-child(2){width:9.5rem}',
+    '.verdict{display:inline-block;font:600 10px/1.3 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.06em;padding:3px 6px;border-radius:4px}',
+    '.verdict.yes{color:#2f7d5b;background:#e8f2ec}',
+    '.verdict.no{color:#b8481c;background:#fbeae2}',
+    '.flag{color:#b8481c}',
+    '.warn{border:1px solid #f0c3ad;background:#fdf5f1;border-radius:6px;padding:10px 12px;margin:8px 0}',
+    '.warn p:last-child{margin:0}',
+    '.fixes{margin:0;padding-left:1.1rem} .fixes li{margin:0 0 6px}',
+    'footer{margin-top:22px;padding-top:10px;border-top:1px solid #e1e0d9;font-size:.85rem;color:#52514e}',
+    'a{color:#2a78d6}',
+    '@page{margin:12mm 14mm}',
+    '@media print{html,body{background:#fff}body{font-size:9.5pt;line-height:1.35}.sheet{max-width:none;margin:0;border:0;border-radius:0;padding:0}',
+    'h1{font-size:17pt;margin-bottom:6px}h2{font-size:11pt;break-after:avoid;margin:12px 0 4px}th,td{padding:3px 8px 3px 0}p{margin:0 0 5px}',
+    '.warn{padding:6px 10px;margin:6px 0}footer{margin-top:12px;padding-top:6px}tr,.warn,li,footer{break-inside:avoid}a{color:inherit;text-decoration:none}',
+    '.verdict{border:1px solid currentColor;-webkit-print-color-adjust:exact;print-color-adjust:exact}}'
+  ].join('\n') + '\n';
+
   function run(text, opts) {
     opts = opts || {};
     var parsed = parseCSV(text);
@@ -1805,7 +1944,7 @@ SYN-M100,2026-08,,798,active
   IX.ROLES = ROLES;
   IX.parseCSV = parseCSV; IX.detectDelimiter = detectDelimiter; IX.readDate = readDate; IX.readDateColumn = readDateColumn;
   IX.readNumber = readNumber; IX.readStatus = readStatus; IX.guessRoles = guessRoles; IX.analyze = analyze; IX.run = run;
-  IX.pct = pct; IX.num = num; IX.plural = plural; IX.fmtDay = fmtDay;
+  IX.pct = pct; IX.num = num; IX.plural = plural; IX.fmtDay = fmtDay; IX.note = note;
   root.IXCheck = IX;
 })(this);
 </script>
@@ -1843,6 +1982,7 @@ SYN-M100,2026-08,,798,active
     var res = IX.analyze(state.parsed, state.mapping, { dateOrder: state.dateOrder });
     var P = state.parsed, pct = IX.pct, num = IX.num;
     $('results').hidden = false;
+    $('noteStatus').textContent = '';
     $('status').textContent = 'Checked ' + state.name + ': ' + num(res.rows) + ' rows, ' + P.headers.length + ' columns. Nothing was sent anywhere.';
 
     /* mapping */
@@ -1926,6 +2066,20 @@ SYN-M100,2026-08,,798,active
     });
     $('warnWrap').hidden = !res.warnings.length;
   }
+
+  function saveNote() {
+    if (!state) return;
+    var res = IX.analyze(state.parsed, state.mapping, { dateOrder: state.dateOrder, counts: true });
+    var now = new Date(), two = function (n) { return (n < 10 ? '0' : '') + n; };
+    var html = IX.note(res, { fileName: state.name, generated: now });
+    var url = URL.createObjectURL(new Blob([html], { type: 'text/html;charset=utf-8' }));
+    var a = doc.createElement('a');
+    a.href = url; a.download = 'retention-readiness-note-' + now.getFullYear() + '-' + two(now.getMonth() + 1) + '-' + two(now.getDate()) + '.html';
+    a.hidden = true; doc.body.appendChild(a); a.click(); doc.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
+    $('noteStatus').textContent = 'Your browser saved the note as ' + a.download + '. Open it to read or print it. Nothing was sent anywhere.';
+  }
+  $('noteBtn').addEventListener('click', saveNote);
 
   $('dateOrder').addEventListener('change', function () { if (state) { state.dateOrder = $('dateOrder').value; render(); } });
 
