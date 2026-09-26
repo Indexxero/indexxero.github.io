@@ -1,0 +1,1949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-CBRcl/GHuJLmxd4gOjEeR5W2X6h0BAguswsn4jhnoXM=' 'sha256-wQ7L4EhqRJy+ZZMfEXevyk3sRoNL2k6j1nfHKuy8Hko='; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; font-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; form-action 'none'; base-uri 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="A free check that runs in your browser. Drop in a subscription export and see which retention figures it can support, and why not when it cannot. Your file never leaves your browser.">
+<link rel="canonical" href="https://measure.indexxero.com/check.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Indexxero">
+<meta property="og:title" content="Retention readiness check: can your export support the number?">
+<meta property="og:description" content="Drop in a subscription export and see which retention figures it can support. Runs in your browser. Your file never leaves it.">
+<meta property="og:url" content="https://measure.indexxero.com/check.html">
+<meta property="og:image" content="https://measure.indexxero.com/og-indexxero.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://measure.indexxero.com/og-indexxero.png">
+<title>Retention readiness check</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAIPklEQVR4nO1X328cVxU+5947szu79v7yjzhOvHZiNw1u2tpxUFrR4uQRHgIqSh76wgO8QHlAaqmqpso2CUmpoA8gUQn4D5IHhKgQjRtZbkppqJ1UCBqRKrZDU7eJa2ft9e7O7tx7Dzp3d13HTSnlEXGk2Zm5M3O/75x7znfuIgBAAUBUAHo6gkBA0zQAxYnE1TD86NcAEb9zHMDCf2AEIBDATgLEt/dmu9ZCtLUAkJ8FAFC8HZqvViofIQC5wbnh/p7LS5V3rq1UA4FIBIBAYBUCEtGVSkjfPArlm4cB5FkA8zngEgHMX/LdOxN+/LcWqF8TD4MABCstCT+T/nj3YOeDeHZqzXk8v1JSg6lEx+5sW8oQpD0UKSUwYxHTgZAPJeLitQIkehj8DID8PPC38lt2BLH4+ZiUDxgUaSllRkqZAoJMuqsr1ZbryC1d/8BhC/6JIZAminak4jSUSdjQWrI8HwGViSJfiD2ZuJwoJBI9Rz6DxJkm+IWtW/PJWOycJ8TAqjGa59FEVNeakpmsiWeyRJai1ndiA3+MLOFgKsChTMJd86ohgFcl0o6ElROnILllMwm+5rGp3mxfOum95gs5VDZWI6ICIgJjsD2Xg7ZcDsFaRGws/R0EeLl5NLIWhlIBDKYDMEwCwCKAapFIxMUELwcDck60wN/o6+jNJdrPxaS8Z82YBjiAjQOIZDZL7bkOsLaZPoR0BwFBASedIJeVCNpa2JVOwEB7PAQigfgJCU+I+zNxea6VE87zfOfWlJ+YiEm5uwkukUC3I4q6sT9vy+bmPJfwLsGJiIQwPCU4Apz3VQCq+4hcGfzE+ABwbzqYrFvzXBKQ39OwgUQukBOPA2SL+Xw2x+BKDZcYHFAhkclIodai2snRuRs/BGNiTYetJxyIrkI14mpjr3H/wsKSteZxtLauUPCYoxdaCp6pV06VyL6QQFT8IQDIEIiB9nw5aD8/5xFn+30bwq7TUqqVqHZ6dO7DYzeHh9sIQXApSiGUNaZKuvbtbTMfVqBQQCcYLBz75hZeKRn9LQVWS0RhAEgAIAvQU9XSsxWjTwaISiBYbUlqgfahnvRoTMrRFWMsNMIepaVQt2u10yOzC0d5XqsU+xjFpEBFtloNK4fyF95+lQog8Phx63KASUyPgbd/buGVqtaPSSLjIRtFrH7TAN6TtfKxitEnPALpS2H3dbeLwJO2Yq0VgCiIdEoKb7VWOz02v3CUxsc5YjZcWTGEkABj6qth9VD/G9OvuWfHG6oqWtm4bwYiJsGRqEf1b7gHhAk+zQLYMwD+U7VyAQS9+Gh3SqY9qbUlgcBrSiYlpbdSq58anV84OjkOCqamHEBiYECBMZXi2tpjQ2+8fd6BT03xUt7dJvljAPhzX++hS0Pbf8fxm4TG2Lm+jt4ru/Jv/m3XgJ0eypuZe/rp8lA+unbvDro0sO3Hre9ZEVs6cXVkpOv63vvH+Hp6bMzbjCc2DxzoPuxqtGNo4O/Z3u2rvEIHAfRkV1dPTyz5qkL5cNUSIaIAAvZcFaPohb3zHzzH4AemXAK78uQcKN+ei5aKt5++2N/Vs29mJtqsomLjDR0+LPHsWTP78Gh/h1J/EkLe57paf1dPZzo4F1NyD8urRBBc521SyKWo9pOx2RvPnhkGv5VPl3f2/ezSju3f5WsM4xFIcagtlvjjm9tTuc0qKu4GHgTJiZTnb0HEG9NZSHf6iVdjSt5f0g155bJRAvFKsUzn318ZfTmdzh55F+oHp0C/M7jtZNb3nox56jfTO7YdHrl5s0wEiwmpHmwLsuemt27tZBJcXU3Cn/Tva2PD+WSm47yn1FBkLVVr9UvLN/5ZzfixR4qa69ytr1GIeHWlIt4rVmxOSlG25mLKF1/f3516ok16J1asjQSilEAQ1aLvWE896wkxGBMoQm3eCaPq1/ZfX7xZcCLYBP/gK2N5FSQnfKV2laJIIwqlqxUo37oFNUCLQE6gkkKIfxTL8G6xan3hhMwoACkEvP9Ib7ZPIlpNjWbDRF0vAqoJFDFrKcoo6RWj6CJde//R3wMYDgN9+MADSYon/hB43q6Sjpyc8rjhOiay3KlYBTNCiLqpP/PXj9deYs8JgNuq1AA2MtA3vbhKEZGQTm0BWf24Fh04lxOCLFlrQeCXYGc2wRrDYkHv+SYXIOwuaW0RsJEgrhk3E4XIpIRQK7VaYe/8wos89pKViaQQ3+P9AgF43LCWQ42XF1dhb1cKXAdrRIIY3LVbDjcAq2yoOY2htSFRnFdYc6W1nhnA7/MLrtRKUe3Y3vmFEyxWnMVPhqXvl61+OYnIte0aiycQlkJNlxZLDO5IOMfXneGGyDdNHLhzQ9IEX3ecJ9DsealePzYyu3CS65wV80hDGeVTYfmJFgkC0MzYF4hL1QhmFlc/IeE2meuOOcttJFDdJEZuX4Do5LVYrxdGZm848INT6xtS2khizeqX2xqR0JaAPImwXNUwc2sVrGUSbs6N+HcVIs0HAkQtzyvWHt83v3Bicny8Bb6+k9lI4mlHwvxyfTkIIk+iXg4jPbO4yltCFi93Bj4Q9fJGAkJrEZeqLe0p1e4pP6uUt1ypPN9/4eLzDH5gamoz+KdI/Chc+wEvRzuiHyB6cUDF+4KwZtSVxZLyCVVaKT+lJFdYp2ps98A1mYyfLlaj+i9qEca5bxej+szA62/9qqWOnwF+Bwm3bwjLT/w03j7vAwxFjT8xQgqA+XINYLkEe3JJRhVkoXhL3A7/zZwAVCh8qlF9nrVy7YsYti441Hw+wD/d3dT0/AtboRnVzebmHR9v3k0B943/Zv7/2/+e/QvT4yfEgl+z2QAAAABJRU5ErkJggg==">
+<style>
+  :root{
+    color-scheme:light;
+    --plane:#f9f9f7; --surface:#fcfcfb; --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+    --grid:#e1e0d9; --border:rgba(11,11,11,0.10); --asof:#2a78d6; --export:#eb6834; --ok:#2f7d5b; --soft:#eef3fb;
+    --shadow:0 1px 2px rgba(11,11,11,.05),0 8px 24px rgba(11,11,11,.04);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      color-scheme:dark; --plane:#0f0f0e; --surface:#161615; --ink:#f2f2ee; --ink-2:#c9c8c1; --muted:#8f8e87;
+      --grid:#2a2a27; --border:rgba(255,255,255,0.10); --asof:#5c9cf0; --export:#f0855a; --ok:#5fb58c; --soft:#14202f;
+      --shadow:none;
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme:dark; --plane:#0f0f0e; --surface:#161615; --ink:#f2f2ee; --ink-2:#c9c8c1; --muted:#8f8e87;
+    --grid:#2a2a27; --border:rgba(255,255,255,0.10); --asof:#5c9cf0; --export:#f0855a; --ok:#5fb58c; --soft:#14202f; --shadow:none;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--plane);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+  .wrap{max-width:860px;margin:0 auto;padding:0 16px 96px}
+  @media (min-width:640px){ .wrap{padding:0 24px 96px} }
+  header{padding:56px 0 28px;border-bottom:1px solid var(--grid)}
+  .eyebrow{font:500 12px/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--asof);margin:0 0 14px}
+  h1{font-size:2rem;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em;text-wrap:balance}
+  h2{font-size:1.3rem;margin:44px 0 10px;text-wrap:balance}
+  h3{font-size:1.02rem;margin:0 0 6px}
+  p{margin:0 0 12px;max-width:70ch}
+  .standfirst{font-size:19px;color:var(--ink-2);max-width:62ch}
+  .muted{color:var(--muted)}
+  a{color:var(--asof)}
+  code{font:.92em ui-monospace,Menlo,Consolas,monospace;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 5px;overflow-wrap:anywhere}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);padding:20px 22px;margin:18px 0}
+  .card > :last-child{margin-bottom:0}
+  .private{border-left:4px solid var(--ok)}
+  .private strong{display:block;font-size:1.08rem;margin-bottom:6px}
+  .btn{display:inline-block;background:var(--asof);color:#fff;text-decoration:none;font:600 .95rem/1.2 system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;padding:9px 14px;border-radius:6px;border:1px solid var(--asof);cursor:pointer}
+  .btn.ghost{background:transparent;color:var(--asof)}
+  .btn:focus-visible,select:focus-visible,.drop:focus-within{outline:2px solid var(--ink);outline-offset:2px}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0 6px}
+  .toggle{position:fixed;top:14px;right:16px;font:12px system-ui;border:1px solid var(--border);background:var(--surface);color:var(--ink-2);padding:6px 10px;border-radius:999px;cursor:pointer;z-index:2}
+  .drop{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;border:2px dashed var(--grid);border-radius:10px;padding:32px 16px;background:var(--surface);cursor:pointer}
+  .drop.over{border-color:var(--asof);background:var(--soft)}
+  .drop b{font-size:1.05rem}
+  .drop input{position:absolute;width:1px;height:1px;opacity:0}
+  #status{min-height:1.5em;color:var(--ink-2);margin-top:10px}
+  .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{width:100%;border-collapse:collapse;font-size:.95rem}
+  th,td{text-align:left;vertical-align:top;padding:10px 10px;border-bottom:1px solid var(--grid)}
+  thead th{font:500 11px/1.2 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  tbody th{font-weight:600}
+  td p{margin:0 0 6px} td p:last-child{margin:0}
+  td.note{color:var(--ink-2);font-size:.88rem}
+  select{font:inherit;font-size:.92rem;max-width:100%;padding:5px 8px;border:1px solid var(--border);border-radius:5px;background:var(--plane);color:var(--ink)}
+  .verdict{display:inline-block;font:600 10px/1.3 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.08em;text-transform:uppercase;padding:4px 7px;border-radius:4px}
+  .verdict.yes{color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent)}
+  .verdict.no{color:var(--export);background:color-mix(in srgb,var(--export) 12%,transparent)}
+  .flag{color:var(--export)}
+  dl{margin:0;display:flex;flex-direction:column}
+  .kvrow{display:flex;justify-content:space-between;gap:16px;padding:8px 0;border-bottom:1px solid var(--grid)}
+  .kvrow dt{color:var(--ink-2)} .kvrow dd{margin:0;text-align:right;font-variant-numeric:tabular-nums}
+  .warn{border:1px solid color-mix(in srgb,var(--export) 45%,transparent);background:color-mix(in srgb,var(--export) 7%,var(--surface));border-radius:10px;padding:18px 20px;margin:14px 0}
+  .warn h3{color:var(--export)}
+  .warn p:last-child{margin-bottom:0}
+  .pilot{background:var(--soft);border:0}
+  .pilot ul{margin:0 0 14px;padding-left:1.2rem} .pilot li{margin:4px 0}
+  .orderwrap{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0 0;font-size:.92rem;color:var(--ink-2)}
+  footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--grid);font-size:.9rem;color:var(--muted)}
+  @media (max-width:640px){
+    h1{font-size:1.6rem}
+    .support thead{display:none}
+    .support tr{display:block;padding:10px 0;border-bottom:1px solid var(--grid)}
+    .support th,.support td{display:block;border:0;padding:4px 0}
+    .kvrow{flex-direction:column;gap:2px} .kvrow dd{text-align:left}
+    .map td.note{padding-top:0}
+    .map tr{display:block;padding:8px 0;border-bottom:1px solid var(--grid)}
+    .map th,.map td{display:block;border:0;padding:3px 0}
+    .map thead{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){ *{transition:none!important} }
+</style>
+</head>
+<body>
+<button class="toggle" id="themeToggle" type="button">Dark</button>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Indexxero &middot; Retention readiness check</p>
+  <h1>Can your export support a retention number?</h1>
+  <p class="standfirst">Drop in the subscription export you would hand an investor or buyer. This page checks which retention figures the file can support, and says in plain words why when it cannot. It does not calculate any retention percentage.</p>
+  <div class="card private">
+    <strong>Your file never leaves your browser. This page has no server and cannot send data anywhere.</strong>
+    <p>The page carries a security policy (<code>connect-src 'none'</code>) that tells your browser to refuse every network request it tries to make, so there is nowhere for your file to go. If you would rather see it than take our word for it, disconnect from the internet now that the page has loaded. It still works.</p>
+  </div>
+</header>
+
+<h2>1. Choose a file</h2>
+<p>A CSV export from your billing, subscription or CRM system. One row per account, or one row per account per month. Commas or semicolons both work.</p>
+<label class="drop" id="drop" for="file">
+  <b>Drop a CSV here, or click to choose one</b>
+  <span class="muted">Read by your browser only. Nothing is uploaded.</span>
+  <input type="file" id="file" accept=".csv,.txt,text/csv">
+</label>
+<div class="row">
+  <button class="btn ghost" id="sample" type="button">Try it with our synthetic sample</button>
+</div>
+<p class="muted">The sample is invented data: a monthly subscription book of 100 made up accounts (SYN-M001 to SYN-M100) over 24 months, generated from a fixed seed. No real company is in it. Some accounts have their plan left blank on purpose, so you can see how the check reports a gap.</p>
+<p id="status" role="status" aria-live="polite"></p>
+
+<div id="results" hidden>
+  <h2>2. The columns we found</h2>
+  <p>Our guess at what each column means. If a guess is wrong, change it and everything below is checked again.</p>
+  <div class="scroll">
+    <table class="map">
+      <thead><tr><th>Role</th><th>Column in your file</th><th>What we saw</th></tr></thead>
+      <tbody id="mapBody"></tbody>
+    </table>
+  </div>
+  <div class="orderwrap" id="orderWrap" hidden>
+    <label for="dateOrder">Read dates written with slashes as</label>
+    <select id="dateOrder">
+      <option value="auto">Work it out from the file</option>
+      <option value="mdy">Month first (03/04/2024 is 4 March)</option>
+      <option value="dmy">Day first (03/04/2024 is 3 April)</option>
+    </select>
+  </div>
+
+  <h2>3. Dates</h2>
+  <div id="dates"></div>
+
+  <h2>4. The shape of the export</h2>
+  <dl id="shape"></dl>
+
+  <h2>5. What this export can support</h2>
+  <p>One row per figure a diligence team usually asks for. Measurable means the file has what the figure needs. It does not mean the figure is good, and this page does not produce it.</p>
+  <div class="scroll">
+    <table class="support">
+      <thead><tr><th>Figure</th><th>Verdict</th><th>Why</th></tr></thead>
+      <tbody id="supportBody"></tbody>
+    </table>
+  </div>
+
+  <div id="warnWrap" hidden>
+    <h2>Warnings</h2>
+    <div id="warnings"></div>
+  </div>
+</div>
+
+<div class="card pilot">
+  <h3>What a pilot adds</h3>
+  <p>This check tells you whether the file can support each figure. A pilot does the rest, on the same export:</p>
+  <ul>
+    <li>The number, rebuilt from your own export the way an investor or buyer will rebuild it.</li>
+    <li>A manifest anyone can check on their own machine, so a stranger can confirm the report matches the file it came from.</li>
+    <li>The full list of what your data could not support, each item with its reason.</li>
+  </ul>
+  <p><b>The first few pilots are free.</b> We are a two person company in Dallas with no customers yet, and we have not yet run a real company's data. What we ask for in return is the story of how it went.</p>
+  <div class="row">
+    <a class="btn" href="https://indexxero.com/get-started">Ask for a pilot</a>
+    <a class="btn ghost" href="what-we-do.html">What we do</a>
+  </div>
+</div>
+
+<footer>
+  <p>How to check the privacy claim yourself: view this page's source and read the Content Security Policy line near the top, or open your browser's network panel while you use the page. The page is one file with nothing else to load.</p>
+  <p><a href="what-we-do.html">What we do</a> &middot; <a href="proved.html">What we have proved</a> &middot; <a href="proof.html">The demonstration</a></p>
+</footer>
+
+</div>
+
+<script type="text/csv" id="synthetic-sample">
+account_id,month,plan,mrr,status
+SYN-M001,2025-09,Starter,99,active
+SYN-M001,2025-10,Starter,99,active
+SYN-M001,2025-11,Starter,99,active
+SYN-M001,2025-12,Starter,99,active
+SYN-M001,2026-01,Starter,99,active
+SYN-M001,2026-02,Starter,99,active
+SYN-M001,2026-03,Starter,99,active
+SYN-M001,2026-04,Starter,99,active
+SYN-M001,2026-05,Starter,99,active
+SYN-M001,2026-06,Starter,99,active
+SYN-M001,2026-07,Starter,99,active
+SYN-M001,2026-08,Starter,99,active
+SYN-M002,2026-01,,798,active
+SYN-M002,2026-02,,399,active
+SYN-M002,2026-03,,399,active
+SYN-M002,2026-04,,399,active
+SYN-M002,2026-05,,399,active
+SYN-M002,2026-06,,399,active
+SYN-M002,2026-07,,399,active
+SYN-M002,2026-08,,399,active
+SYN-M003,2025-07,,798,active
+SYN-M003,2025-08,,798,active
+SYN-M003,2025-09,,798,active
+SYN-M003,2025-10,,798,active
+SYN-M003,2025-11,,798,active
+SYN-M003,2025-12,,798,active
+SYN-M003,2026-01,,798,active
+SYN-M003,2026-02,,798,active
+SYN-M003,2026-03,,798,active
+SYN-M003,2026-04,,798,active
+SYN-M003,2026-05,,798,active
+SYN-M003,2026-06,,798,active
+SYN-M003,2026-07,,798,active
+SYN-M003,2026-08,,798,active
+SYN-M004,2025-11,,399,active
+SYN-M004,2025-12,,399,active
+SYN-M004,2026-01,,399,active
+SYN-M004,2026-02,,399,active
+SYN-M004,2026-03,,399,active
+SYN-M004,2026-04,,399,active
+SYN-M004,2026-05,,399,active
+SYN-M004,2026-06,,399,active
+SYN-M004,2026-07,,399,active
+SYN-M004,2026-08,,399,active
+SYN-M005,2025-01,,798,active
+SYN-M005,2025-02,,798,active
+SYN-M005,2025-03,,798,active
+SYN-M005,2025-04,,798,active
+SYN-M005,2025-05,,798,active
+SYN-M005,2025-06,,798,active
+SYN-M005,2025-07,,798,active
+SYN-M005,2025-08,,798,active
+SYN-M005,2025-09,,798,active
+SYN-M005,2025-10,,798,active
+SYN-M005,2025-11,,399,active
+SYN-M005,2025-12,,399,active
+SYN-M005,2026-01,,399,active
+SYN-M005,2026-02,,399,active
+SYN-M005,2026-03,,399,active
+SYN-M005,2026-04,,399,active
+SYN-M005,2026-05,,798,active
+SYN-M005,2026-06,,798,active
+SYN-M005,2026-07,,798,active
+SYN-M005,2026-08,,798,active
+SYN-M006,2025-10,Starter,198,active
+SYN-M006,2025-11,Starter,198,active
+SYN-M006,2025-12,Starter,198,active
+SYN-M006,2026-01,Starter,198,active
+SYN-M006,2026-02,Starter,198,active
+SYN-M006,2026-03,Starter,198,active
+SYN-M006,2026-04,Starter,198,active
+SYN-M006,2026-05,Starter,198,active
+SYN-M006,2026-06,Starter,198,active
+SYN-M006,2026-07,Starter,198,active
+SYN-M006,2026-08,Starter,198,active
+SYN-M007,2026-01,,1596,active
+SYN-M007,2026-02,,1596,churned
+SYN-M008,2026-06,Scale,1200,active
+SYN-M008,2026-07,Scale,1200,active
+SYN-M008,2026-08,Scale,1200,active
+SYN-M009,2026-01,,198,active
+SYN-M009,2026-02,,198,active
+SYN-M009,2026-03,,198,active
+SYN-M009,2026-04,,198,active
+SYN-M009,2026-05,,198,active
+SYN-M009,2026-06,,198,active
+SYN-M009,2026-07,,198,active
+SYN-M009,2026-08,,198,active
+SYN-M010,2025-04,,3600,active
+SYN-M010,2025-05,,3600,active
+SYN-M010,2025-06,,3600,active
+SYN-M010,2025-07,,3600,active
+SYN-M010,2025-08,,3600,churned
+SYN-M011,2025-10,,1200,active
+SYN-M011,2025-11,,1200,active
+SYN-M011,2025-12,,1200,active
+SYN-M011,2026-01,,1200,active
+SYN-M011,2026-02,,1200,active
+SYN-M011,2026-03,,1200,active
+SYN-M011,2026-04,,1200,active
+SYN-M011,2026-05,,1200,active
+SYN-M011,2026-06,,1200,active
+SYN-M011,2026-07,,1200,active
+SYN-M011,2026-08,,1200,active
+SYN-M012,2025-06,Scale,3600,active
+SYN-M012,2025-07,Scale,3600,active
+SYN-M012,2025-08,Scale,3600,active
+SYN-M012,2025-09,Scale,3600,active
+SYN-M012,2025-10,Scale,2400,active
+SYN-M012,2025-11,Scale,2400,active
+SYN-M012,2025-12,Scale,2400,active
+SYN-M012,2026-01,Scale,2400,active
+SYN-M012,2026-02,Scale,2400,active
+SYN-M012,2026-03,Scale,2400,active
+SYN-M012,2026-04,Scale,2400,active
+SYN-M012,2026-05,Scale,2400,active
+SYN-M012,2026-06,Scale,2400,active
+SYN-M012,2026-07,Scale,2400,active
+SYN-M012,2026-08,Scale,2400,active
+SYN-M013,2025-07,,198,active
+SYN-M013,2025-08,,198,active
+SYN-M013,2025-09,,198,active
+SYN-M013,2025-10,,198,active
+SYN-M013,2025-11,,198,active
+SYN-M013,2025-12,,198,active
+SYN-M013,2026-01,,198,active
+SYN-M013,2026-02,,198,active
+SYN-M013,2026-03,,198,active
+SYN-M013,2026-04,,198,active
+SYN-M013,2026-05,,198,active
+SYN-M013,2026-06,,798,active
+SYN-M013,2026-07,,798,active
+SYN-M013,2026-08,,798,active
+SYN-M014,2025-10,Scale,4800,active
+SYN-M014,2025-11,Scale,4800,active
+SYN-M014,2025-12,Scale,3600,active
+SYN-M014,2026-01,Scale,3600,active
+SYN-M014,2026-02,Scale,3600,active
+SYN-M014,2026-03,Scale,4800,active
+SYN-M014,2026-04,Scale,4800,active
+SYN-M014,2026-05,Scale,4800,active
+SYN-M014,2026-06,Scale,4800,active
+SYN-M014,2026-07,Scale,4800,active
+SYN-M014,2026-08,Scale,4800,active
+SYN-M015,2025-06,Starter,396,active
+SYN-M015,2025-07,Starter,396,active
+SYN-M015,2025-08,Starter,396,active
+SYN-M015,2025-09,Starter,396,active
+SYN-M015,2025-10,Starter,396,active
+SYN-M015,2025-11,Starter,396,active
+SYN-M015,2025-12,Starter,396,active
+SYN-M015,2026-01,Starter,396,active
+SYN-M015,2026-02,Starter,396,active
+SYN-M015,2026-03,Starter,396,active
+SYN-M015,2026-04,Starter,396,active
+SYN-M015,2026-05,Starter,396,active
+SYN-M015,2026-06,Starter,396,active
+SYN-M015,2026-07,Starter,396,active
+SYN-M015,2026-08,Starter,396,active
+SYN-M016,2024-10,Growth,798,active
+SYN-M016,2024-11,Growth,798,active
+SYN-M016,2024-12,Growth,798,active
+SYN-M016,2025-01,Growth,798,active
+SYN-M016,2025-02,Growth,798,active
+SYN-M016,2025-03,Growth,798,active
+SYN-M016,2025-04,Growth,798,active
+SYN-M016,2025-05,Growth,798,active
+SYN-M016,2025-06,Growth,798,active
+SYN-M016,2025-07,Growth,798,active
+SYN-M016,2025-08,Growth,798,active
+SYN-M016,2025-09,Growth,798,active
+SYN-M016,2025-10,Scale,2400,active
+SYN-M016,2025-11,Scale,2400,active
+SYN-M016,2025-12,Scale,2400,active
+SYN-M016,2026-01,Scale,2400,active
+SYN-M016,2026-02,Scale,2400,churned
+SYN-M017,2026-03,Scale,1200,active
+SYN-M017,2026-04,Scale,1200,active
+SYN-M017,2026-05,Scale,1200,active
+SYN-M017,2026-06,Scale,1200,active
+SYN-M017,2026-07,Scale,1200,active
+SYN-M017,2026-08,Scale,1200,active
+SYN-M018,2024-10,Starter,99,active
+SYN-M018,2024-11,Starter,99,active
+SYN-M018,2024-12,Starter,99,active
+SYN-M018,2025-01,Starter,99,active
+SYN-M018,2025-02,Starter,99,active
+SYN-M018,2025-03,Starter,99,active
+SYN-M018,2025-04,Starter,99,active
+SYN-M018,2025-05,Starter,99,active
+SYN-M018,2025-06,Starter,99,active
+SYN-M018,2025-07,Starter,99,active
+SYN-M018,2025-08,Starter,99,active
+SYN-M018,2025-09,Starter,99,churned
+SYN-M019,2025-05,Starter,396,active
+SYN-M019,2025-06,Starter,396,active
+SYN-M019,2025-07,Starter,396,active
+SYN-M019,2025-08,Starter,396,active
+SYN-M019,2025-09,Starter,396,active
+SYN-M019,2025-10,Starter,396,active
+SYN-M019,2025-11,Starter,396,active
+SYN-M019,2025-12,Starter,396,active
+SYN-M019,2026-01,Starter,396,active
+SYN-M019,2026-02,Starter,396,active
+SYN-M019,2026-03,Starter,396,active
+SYN-M019,2026-04,Starter,396,active
+SYN-M019,2026-05,Starter,396,active
+SYN-M019,2026-06,Starter,396,active
+SYN-M019,2026-07,Starter,396,active
+SYN-M019,2026-08,Starter,396,active
+SYN-M020,2025-09,,399,active
+SYN-M020,2025-10,,399,active
+SYN-M020,2025-11,,399,active
+SYN-M020,2025-12,,399,active
+SYN-M020,2026-01,,399,active
+SYN-M020,2026-02,,399,active
+SYN-M020,2026-03,,399,active
+SYN-M020,2026-04,,399,active
+SYN-M020,2026-05,,399,active
+SYN-M020,2026-06,,399,active
+SYN-M020,2026-07,,399,active
+SYN-M020,2026-08,,399,active
+SYN-M021,2024-11,Growth,1596,active
+SYN-M021,2024-12,Growth,1596,active
+SYN-M021,2025-01,Growth,1596,active
+SYN-M021,2025-02,Growth,1596,active
+SYN-M021,2025-03,Growth,1995,active
+SYN-M021,2025-04,Growth,1995,active
+SYN-M021,2025-05,Growth,1995,active
+SYN-M021,2025-06,Growth,1995,active
+SYN-M021,2025-07,Growth,1995,active
+SYN-M021,2025-08,Growth,1995,churned
+SYN-M022,2025-03,Scale,3600,active
+SYN-M022,2025-04,Scale,3600,active
+SYN-M022,2025-05,Scale,3600,active
+SYN-M022,2025-06,Scale,4800,active
+SYN-M022,2025-07,Scale,4800,active
+SYN-M022,2025-08,Scale,4800,active
+SYN-M022,2025-09,Scale,4800,active
+SYN-M022,2025-10,Scale,4800,active
+SYN-M022,2025-11,Scale,4800,active
+SYN-M022,2025-12,Scale,4800,active
+SYN-M022,2026-01,Scale,4800,active
+SYN-M022,2026-02,Scale,4800,active
+SYN-M022,2026-03,Scale,4800,active
+SYN-M022,2026-04,Scale,4800,active
+SYN-M022,2026-05,Scale,4800,active
+SYN-M022,2026-06,Scale,4800,active
+SYN-M022,2026-07,Scale,4800,active
+SYN-M022,2026-08,Scale,4800,active
+SYN-M023,2026-03,Scale,1200,active
+SYN-M023,2026-04,Scale,1200,active
+SYN-M023,2026-05,Scale,1200,active
+SYN-M023,2026-06,Scale,1200,active
+SYN-M023,2026-07,Scale,1200,active
+SYN-M023,2026-08,Scale,1200,active
+SYN-M024,2025-10,,1197,active
+SYN-M024,2025-11,,1197,active
+SYN-M024,2025-12,,1197,active
+SYN-M024,2026-01,,1197,active
+SYN-M024,2026-02,,1197,churned
+SYN-M025,2025-06,Scale,2400,active
+SYN-M025,2025-07,Scale,2400,active
+SYN-M025,2025-08,Scale,2400,active
+SYN-M025,2025-09,Scale,2400,churned
+SYN-M026,2025-09,Growth,399,active
+SYN-M026,2025-10,Growth,399,active
+SYN-M026,2025-11,Growth,399,active
+SYN-M026,2025-12,Growth,399,active
+SYN-M026,2026-01,Growth,399,active
+SYN-M026,2026-02,Growth,399,active
+SYN-M026,2026-03,Growth,399,active
+SYN-M026,2026-04,Growth,399,active
+SYN-M026,2026-05,Growth,399,active
+SYN-M026,2026-06,Growth,399,active
+SYN-M026,2026-07,Growth,399,active
+SYN-M026,2026-08,Growth,399,active
+SYN-M027,2025-05,Scale,1200,active
+SYN-M027,2025-06,Scale,1200,active
+SYN-M027,2025-07,Scale,1200,active
+SYN-M027,2025-08,Scale,1200,active
+SYN-M027,2025-09,Scale,1200,active
+SYN-M027,2025-10,Scale,1200,active
+SYN-M027,2025-11,Scale,1200,active
+SYN-M027,2025-12,Scale,1200,active
+SYN-M027,2026-01,Scale,1200,active
+SYN-M027,2026-02,Scale,1200,churned
+SYN-M028,2026-06,Growth,798,active
+SYN-M028,2026-07,Growth,798,active
+SYN-M028,2026-08,Growth,798,active
+SYN-M029,2025-09,,1197,active
+SYN-M029,2025-10,,1197,active
+SYN-M029,2025-11,,1197,active
+SYN-M029,2025-12,,1197,active
+SYN-M029,2026-01,,1197,active
+SYN-M029,2026-02,,1197,active
+SYN-M029,2026-03,,1197,active
+SYN-M029,2026-04,,1197,active
+SYN-M029,2026-05,,1197,active
+SYN-M029,2026-06,,1197,active
+SYN-M029,2026-07,,1197,active
+SYN-M029,2026-08,,1197,active
+SYN-M030,2025-05,Growth,1197,active
+SYN-M030,2025-06,Growth,1197,active
+SYN-M030,2025-07,Growth,1197,active
+SYN-M030,2025-08,Growth,1197,active
+SYN-M030,2025-09,Growth,1197,churned
+SYN-M031,2025-06,Growth,1596,active
+SYN-M031,2025-07,Growth,1596,active
+SYN-M031,2025-08,Growth,1596,active
+SYN-M031,2025-09,Growth,1596,active
+SYN-M031,2025-10,Growth,1596,active
+SYN-M031,2025-11,Growth,1596,active
+SYN-M031,2025-12,Growth,1596,active
+SYN-M031,2026-01,Growth,1596,active
+SYN-M031,2026-02,Growth,1596,active
+SYN-M031,2026-03,Growth,1596,active
+SYN-M031,2026-04,Growth,1596,active
+SYN-M031,2026-05,Growth,1596,churned
+SYN-M032,2026-01,Starter,396,active
+SYN-M032,2026-02,Starter,396,active
+SYN-M032,2026-03,Starter,396,active
+SYN-M032,2026-04,Starter,297,active
+SYN-M032,2026-05,Starter,297,active
+SYN-M032,2026-06,Starter,297,active
+SYN-M032,2026-07,Starter,297,active
+SYN-M032,2026-08,Starter,297,active
+SYN-M033,2025-02,Starter,99,active
+SYN-M033,2025-03,Starter,99,active
+SYN-M033,2025-04,Starter,99,active
+SYN-M033,2025-05,Starter,99,active
+SYN-M033,2025-06,Starter,99,active
+SYN-M033,2025-07,Starter,99,active
+SYN-M033,2025-08,Starter,99,active
+SYN-M033,2025-09,Starter,99,active
+SYN-M033,2025-10,Starter,99,active
+SYN-M033,2025-11,Starter,99,active
+SYN-M033,2025-12,Starter,99,active
+SYN-M033,2026-01,Starter,99,active
+SYN-M033,2026-02,Starter,99,active
+SYN-M033,2026-03,Starter,99,active
+SYN-M033,2026-04,Starter,99,active
+SYN-M033,2026-05,Starter,99,active
+SYN-M033,2026-06,Starter,99,active
+SYN-M033,2026-07,Starter,99,active
+SYN-M033,2026-08,Starter,99,active
+SYN-M034,2026-06,Growth,798,active
+SYN-M034,2026-07,Growth,798,active
+SYN-M034,2026-08,Growth,798,churned
+SYN-M035,2024-12,Growth,1596,active
+SYN-M035,2025-01,Growth,1596,active
+SYN-M035,2025-02,Growth,1596,active
+SYN-M035,2025-03,Growth,1596,active
+SYN-M035,2025-04,Growth,1596,active
+SYN-M035,2025-05,Growth,1596,churned
+SYN-M036,2026-04,,297,active
+SYN-M036,2026-05,,297,active
+SYN-M036,2026-06,,297,active
+SYN-M036,2026-07,,297,active
+SYN-M036,2026-08,,297,active
+SYN-M037,2025-07,Starter,99,active
+SYN-M037,2025-08,Starter,99,churned
+SYN-M038,2025-06,Scale,4800,active
+SYN-M038,2025-07,Scale,4800,active
+SYN-M038,2025-08,Scale,4800,active
+SYN-M038,2025-09,Scale,4800,active
+SYN-M038,2025-10,Scale,4800,active
+SYN-M038,2025-11,Scale,4800,active
+SYN-M038,2025-12,Scale,4800,active
+SYN-M038,2026-01,Scale,4800,active
+SYN-M038,2026-02,Scale,4800,active
+SYN-M038,2026-03,Scale,4800,active
+SYN-M038,2026-04,Scale,4800,active
+SYN-M038,2026-05,Scale,4800,active
+SYN-M038,2026-06,Scale,4800,active
+SYN-M038,2026-07,Scale,4800,active
+SYN-M038,2026-08,Scale,4800,active
+SYN-M039,2026-04,,99,active
+SYN-M039,2026-05,,99,active
+SYN-M039,2026-06,,99,active
+SYN-M039,2026-07,,99,active
+SYN-M039,2026-08,,99,active
+SYN-M040,2025-05,,99,active
+SYN-M040,2025-06,,99,active
+SYN-M040,2025-07,,99,active
+SYN-M040,2025-08,,99,active
+SYN-M040,2025-09,,99,active
+SYN-M040,2025-10,,99,active
+SYN-M040,2025-11,,99,active
+SYN-M040,2025-12,,99,active
+SYN-M040,2026-01,,99,active
+SYN-M040,2026-02,,99,active
+SYN-M040,2026-03,,99,active
+SYN-M040,2026-04,,99,active
+SYN-M040,2026-05,,99,active
+SYN-M040,2026-06,,99,active
+SYN-M040,2026-07,,99,active
+SYN-M040,2026-08,,99,active
+SYN-M041,2025-07,Scale,3600,active
+SYN-M041,2025-08,Scale,3600,churned
+SYN-M042,2024-12,Growth,1596,active
+SYN-M042,2025-01,Growth,1596,active
+SYN-M042,2025-02,Growth,1596,active
+SYN-M042,2025-03,Growth,1596,active
+SYN-M042,2025-04,Growth,1596,active
+SYN-M042,2025-05,Growth,1596,active
+SYN-M042,2025-06,Growth,1596,active
+SYN-M042,2025-07,Growth,1596,active
+SYN-M042,2025-08,Growth,1596,active
+SYN-M042,2025-09,Growth,1596,active
+SYN-M042,2025-10,Growth,1197,active
+SYN-M042,2025-11,Growth,1197,active
+SYN-M042,2025-12,Growth,1197,active
+SYN-M042,2026-01,Growth,1197,active
+SYN-M042,2026-02,Growth,1197,active
+SYN-M042,2026-03,Growth,1197,active
+SYN-M042,2026-04,Scale,3600,active
+SYN-M042,2026-05,Scale,3600,active
+SYN-M042,2026-06,Scale,3600,active
+SYN-M042,2026-07,Scale,3600,active
+SYN-M042,2026-08,Scale,3600,active
+SYN-M043,2025-03,Growth,399,active
+SYN-M043,2025-04,Growth,399,active
+SYN-M043,2025-05,Growth,399,active
+SYN-M043,2025-06,Growth,399,active
+SYN-M043,2025-07,Growth,399,active
+SYN-M043,2025-08,Growth,399,active
+SYN-M043,2025-09,Growth,399,active
+SYN-M043,2025-10,Growth,399,active
+SYN-M043,2025-11,Growth,399,active
+SYN-M043,2025-12,Growth,399,active
+SYN-M043,2026-01,Growth,399,active
+SYN-M043,2026-02,Growth,399,active
+SYN-M043,2026-03,Growth,399,active
+SYN-M043,2026-04,Growth,399,active
+SYN-M043,2026-05,Growth,399,active
+SYN-M043,2026-06,Growth,399,active
+SYN-M043,2026-07,Growth,399,active
+SYN-M043,2026-08,Growth,399,active
+SYN-M044,2025-12,,3600,active
+SYN-M044,2026-01,,3600,active
+SYN-M044,2026-02,,2400,active
+SYN-M044,2026-03,,2400,active
+SYN-M044,2026-04,,3600,active
+SYN-M044,2026-05,,3600,active
+SYN-M044,2026-06,,2400,active
+SYN-M044,2026-07,,2400,active
+SYN-M044,2026-08,,2400,active
+SYN-M045,2025-03,Growth,798,active
+SYN-M045,2025-04,Growth,798,active
+SYN-M045,2025-05,Growth,798,active
+SYN-M045,2025-06,Growth,798,active
+SYN-M045,2025-07,Growth,798,active
+SYN-M045,2025-08,Growth,798,active
+SYN-M045,2025-09,Growth,798,active
+SYN-M045,2025-10,Growth,798,active
+SYN-M045,2025-11,Growth,798,active
+SYN-M045,2025-12,Growth,798,active
+SYN-M045,2026-01,Growth,798,active
+SYN-M045,2026-02,Growth,798,active
+SYN-M045,2026-03,Growth,798,active
+SYN-M045,2026-04,Growth,798,active
+SYN-M045,2026-05,Growth,798,active
+SYN-M045,2026-06,Growth,798,active
+SYN-M045,2026-07,Growth,798,active
+SYN-M045,2026-08,Growth,798,active
+SYN-M046,2025-09,Starter,99,active
+SYN-M046,2025-10,Starter,99,active
+SYN-M046,2025-11,Starter,99,active
+SYN-M046,2025-12,Starter,99,active
+SYN-M046,2026-01,Starter,99,active
+SYN-M046,2026-02,Starter,99,active
+SYN-M046,2026-03,Starter,99,active
+SYN-M046,2026-04,Growth,399,active
+SYN-M046,2026-05,Growth,399,active
+SYN-M046,2026-06,Growth,399,active
+SYN-M046,2026-07,Growth,399,active
+SYN-M046,2026-08,Growth,399,active
+SYN-M047,2025-09,Scale,2400,active
+SYN-M047,2025-10,Scale,2400,active
+SYN-M047,2025-11,Scale,2400,active
+SYN-M047,2025-12,Scale,2400,active
+SYN-M047,2026-01,Scale,2400,active
+SYN-M047,2026-02,Scale,2400,active
+SYN-M047,2026-03,Scale,2400,active
+SYN-M047,2026-04,Scale,2400,active
+SYN-M047,2026-05,Scale,2400,active
+SYN-M047,2026-06,Scale,2400,active
+SYN-M047,2026-07,Scale,2400,active
+SYN-M047,2026-08,Scale,2400,active
+SYN-M048,2025-09,,4800,active
+SYN-M048,2025-10,,4800,active
+SYN-M048,2025-11,,4800,active
+SYN-M048,2025-12,,4800,active
+SYN-M048,2026-01,,4800,churned
+SYN-M049,2025-04,Starter,297,active
+SYN-M049,2025-05,Growth,1197,active
+SYN-M049,2025-06,Scale,3600,active
+SYN-M049,2025-07,Scale,3600,active
+SYN-M049,2025-08,Scale,3600,active
+SYN-M049,2025-09,Scale,3600,active
+SYN-M049,2025-10,Scale,3600,active
+SYN-M049,2025-11,Scale,3600,active
+SYN-M049,2025-12,Scale,4800,active
+SYN-M049,2026-01,Scale,4800,active
+SYN-M049,2026-02,Scale,4800,active
+SYN-M049,2026-03,Scale,4800,active
+SYN-M049,2026-04,Scale,6000,active
+SYN-M049,2026-05,Scale,6000,active
+SYN-M049,2026-06,Scale,6000,active
+SYN-M049,2026-07,Scale,6000,active
+SYN-M049,2026-08,Scale,6000,active
+SYN-M050,2024-12,Scale,3600,active
+SYN-M050,2025-01,Scale,3600,active
+SYN-M050,2025-02,Scale,3600,active
+SYN-M050,2025-03,Scale,3600,active
+SYN-M050,2025-04,Scale,3600,active
+SYN-M050,2025-05,Scale,3600,active
+SYN-M050,2025-06,Scale,3600,active
+SYN-M050,2025-07,Scale,3600,active
+SYN-M050,2025-08,Scale,3600,active
+SYN-M050,2025-09,Scale,3600,active
+SYN-M050,2025-10,Scale,3600,active
+SYN-M050,2025-11,Scale,3600,active
+SYN-M050,2025-12,Scale,3600,active
+SYN-M050,2026-01,Scale,3600,active
+SYN-M050,2026-02,Scale,3600,active
+SYN-M050,2026-03,Scale,4800,active
+SYN-M050,2026-04,Scale,4800,active
+SYN-M050,2026-05,Scale,4800,active
+SYN-M050,2026-06,Scale,4800,active
+SYN-M050,2026-07,Scale,4800,active
+SYN-M050,2026-08,Scale,4800,active
+SYN-M051,2025-09,Growth,798,active
+SYN-M051,2025-10,Growth,798,active
+SYN-M051,2025-11,Growth,798,active
+SYN-M051,2025-12,Growth,798,active
+SYN-M051,2026-01,Growth,798,churned
+SYN-M052,2026-04,,1596,active
+SYN-M052,2026-05,,1596,active
+SYN-M052,2026-06,,1995,active
+SYN-M052,2026-07,,1995,active
+SYN-M052,2026-08,,1995,active
+SYN-M053,2026-06,,1200,active
+SYN-M053,2026-07,,1200,active
+SYN-M053,2026-08,,1200,active
+SYN-M054,2026-03,Growth,1197,active
+SYN-M054,2026-04,Growth,1197,active
+SYN-M054,2026-05,Growth,798,active
+SYN-M054,2026-06,Growth,798,active
+SYN-M054,2026-07,Growth,798,active
+SYN-M054,2026-08,Growth,798,active
+SYN-M055,2025-01,,399,active
+SYN-M055,2025-02,,399,active
+SYN-M055,2025-03,,399,active
+SYN-M055,2025-04,,798,active
+SYN-M055,2025-05,,798,active
+SYN-M055,2025-06,,2400,active
+SYN-M055,2025-07,,2400,active
+SYN-M055,2025-08,,2400,active
+SYN-M055,2025-09,,2400,active
+SYN-M055,2025-10,,2400,active
+SYN-M055,2025-11,,2400,active
+SYN-M055,2025-12,,2400,churned
+SYN-M056,2026-03,,2400,active
+SYN-M056,2026-04,,2400,active
+SYN-M056,2026-05,,2400,active
+SYN-M056,2026-06,,2400,active
+SYN-M056,2026-07,,2400,active
+SYN-M056,2026-08,,2400,active
+SYN-M057,2025-03,Growth,1197,active
+SYN-M057,2025-04,Growth,1197,active
+SYN-M057,2025-05,Growth,1197,active
+SYN-M057,2025-06,Growth,1596,active
+SYN-M057,2025-07,Growth,1596,active
+SYN-M057,2025-08,Growth,1596,active
+SYN-M057,2025-09,Growth,1596,active
+SYN-M057,2025-10,Growth,1596,active
+SYN-M057,2025-11,Growth,1596,active
+SYN-M057,2025-12,Growth,1596,active
+SYN-M057,2026-01,Growth,1596,active
+SYN-M057,2026-02,Growth,1596,active
+SYN-M057,2026-03,Growth,1596,active
+SYN-M057,2026-04,Growth,1596,churned
+SYN-M058,2024-10,,198,active
+SYN-M058,2024-11,,198,active
+SYN-M058,2024-12,,198,active
+SYN-M058,2025-01,,198,active
+SYN-M058,2025-02,,198,active
+SYN-M058,2025-03,,198,active
+SYN-M058,2025-04,,198,active
+SYN-M058,2025-05,,297,active
+SYN-M058,2025-06,,297,active
+SYN-M058,2025-07,,297,active
+SYN-M058,2025-08,,297,active
+SYN-M058,2025-09,,297,active
+SYN-M058,2025-10,,297,active
+SYN-M058,2025-11,,297,active
+SYN-M058,2025-12,,297,active
+SYN-M058,2026-01,,297,active
+SYN-M058,2026-02,,297,active
+SYN-M058,2026-03,,297,active
+SYN-M058,2026-04,,297,active
+SYN-M058,2026-05,,1197,active
+SYN-M058,2026-06,,1197,active
+SYN-M058,2026-07,,1197,active
+SYN-M058,2026-08,,1197,active
+SYN-M059,2025-11,Growth,399,active
+SYN-M059,2025-12,Growth,399,active
+SYN-M059,2026-01,Growth,399,active
+SYN-M059,2026-02,Growth,399,active
+SYN-M059,2026-03,Growth,399,active
+SYN-M059,2026-04,Growth,399,active
+SYN-M059,2026-05,Growth,399,active
+SYN-M059,2026-06,Scale,1200,active
+SYN-M059,2026-07,Scale,1200,active
+SYN-M059,2026-08,Scale,1200,active
+SYN-M060,2024-09,Growth,798,active
+SYN-M060,2024-10,Growth,798,active
+SYN-M060,2024-11,Growth,798,active
+SYN-M060,2024-12,Growth,798,active
+SYN-M060,2025-01,Growth,798,active
+SYN-M060,2025-02,Growth,798,active
+SYN-M060,2025-03,Growth,798,active
+SYN-M060,2025-04,Growth,798,churned
+SYN-M061,2025-04,Scale,2400,active
+SYN-M061,2025-05,Scale,2400,active
+SYN-M061,2025-06,Scale,2400,active
+SYN-M061,2025-07,Scale,2400,active
+SYN-M061,2025-08,Scale,2400,active
+SYN-M061,2025-09,Scale,2400,active
+SYN-M061,2025-10,Scale,2400,active
+SYN-M061,2025-11,Scale,2400,active
+SYN-M061,2025-12,Scale,2400,active
+SYN-M061,2026-01,Scale,2400,active
+SYN-M061,2026-02,Scale,2400,active
+SYN-M061,2026-03,Scale,2400,active
+SYN-M061,2026-04,Scale,2400,active
+SYN-M061,2026-05,Scale,2400,active
+SYN-M061,2026-06,Scale,3600,active
+SYN-M061,2026-07,Scale,3600,active
+SYN-M061,2026-08,Scale,3600,active
+SYN-M062,2026-04,Starter,198,active
+SYN-M062,2026-05,Starter,198,active
+SYN-M062,2026-06,Starter,198,active
+SYN-M062,2026-07,Starter,198,active
+SYN-M062,2026-08,Starter,198,churned
+SYN-M063,2026-04,,396,active
+SYN-M063,2026-05,,396,active
+SYN-M063,2026-06,,396,active
+SYN-M063,2026-07,,396,active
+SYN-M063,2026-08,,396,active
+SYN-M064,2026-04,,396,active
+SYN-M064,2026-05,,396,active
+SYN-M064,2026-06,,396,active
+SYN-M064,2026-07,,396,active
+SYN-M064,2026-08,,396,active
+SYN-M065,2025-05,,396,active
+SYN-M065,2025-06,,396,active
+SYN-M065,2025-07,,396,active
+SYN-M065,2025-08,,396,active
+SYN-M065,2025-09,,396,active
+SYN-M065,2025-10,,495,churned
+SYN-M066,2025-04,Starter,297,active
+SYN-M066,2025-05,Starter,297,active
+SYN-M066,2025-06,Starter,297,active
+SYN-M066,2025-07,Growth,1197,active
+SYN-M066,2025-08,Growth,1197,active
+SYN-M066,2025-09,Growth,1197,active
+SYN-M066,2025-10,Scale,3600,active
+SYN-M066,2025-11,Scale,3600,active
+SYN-M066,2025-12,Scale,3600,active
+SYN-M066,2026-01,Scale,2400,active
+SYN-M066,2026-02,Scale,2400,active
+SYN-M066,2026-03,Scale,2400,active
+SYN-M066,2026-04,Scale,1200,active
+SYN-M066,2026-05,Scale,2400,active
+SYN-M066,2026-06,Scale,2400,active
+SYN-M066,2026-07,Scale,2400,active
+SYN-M066,2026-08,Scale,2400,active
+SYN-M067,2025-07,Scale,1200,active
+SYN-M067,2025-08,Scale,1200,active
+SYN-M067,2025-09,Scale,1200,active
+SYN-M067,2025-10,Scale,1200,active
+SYN-M067,2025-11,Scale,1200,active
+SYN-M067,2025-12,Scale,1200,active
+SYN-M067,2026-01,Scale,1200,active
+SYN-M067,2026-02,Scale,1200,active
+SYN-M067,2026-03,Scale,1200,active
+SYN-M067,2026-04,Scale,1200,active
+SYN-M067,2026-05,Scale,1200,active
+SYN-M067,2026-06,Scale,1200,active
+SYN-M067,2026-07,Scale,1200,active
+SYN-M067,2026-08,Scale,1200,active
+SYN-M068,2024-12,,1200,active
+SYN-M068,2025-01,,1200,active
+SYN-M068,2025-02,,1200,active
+SYN-M068,2025-03,,1200,active
+SYN-M068,2025-04,,1200,active
+SYN-M068,2025-05,,1200,active
+SYN-M068,2025-06,,1200,active
+SYN-M068,2025-07,,1200,active
+SYN-M068,2025-08,,1200,active
+SYN-M068,2025-09,,1200,active
+SYN-M068,2025-10,,1200,active
+SYN-M068,2025-11,,1200,active
+SYN-M068,2025-12,,1200,active
+SYN-M068,2026-01,,1200,active
+SYN-M068,2026-02,,1200,active
+SYN-M068,2026-03,,1200,active
+SYN-M068,2026-04,,1200,active
+SYN-M068,2026-05,,1200,active
+SYN-M068,2026-06,,1200,active
+SYN-M068,2026-07,,1200,active
+SYN-M068,2026-08,,1200,active
+SYN-M069,2025-02,Starter,99,active
+SYN-M069,2025-03,Starter,99,active
+SYN-M069,2025-04,Starter,198,active
+SYN-M069,2025-05,Starter,198,active
+SYN-M069,2025-06,Starter,198,active
+SYN-M069,2025-07,Starter,198,active
+SYN-M069,2025-08,Starter,198,active
+SYN-M069,2025-09,Starter,198,active
+SYN-M069,2025-10,Starter,198,active
+SYN-M069,2025-11,Starter,198,active
+SYN-M069,2025-12,Starter,198,active
+SYN-M069,2026-01,Starter,198,active
+SYN-M069,2026-02,Starter,198,active
+SYN-M069,2026-03,Starter,198,active
+SYN-M069,2026-04,Starter,198,active
+SYN-M069,2026-05,Starter,198,active
+SYN-M069,2026-06,Starter,198,active
+SYN-M069,2026-07,Starter,198,active
+SYN-M069,2026-08,Starter,198,active
+SYN-M070,2024-09,Scale,1200,active
+SYN-M070,2024-10,Scale,1200,active
+SYN-M070,2024-11,Scale,1200,active
+SYN-M070,2024-12,Scale,1200,active
+SYN-M070,2025-01,Scale,1200,active
+SYN-M070,2025-02,Scale,1200,active
+SYN-M070,2025-03,Scale,1200,active
+SYN-M070,2025-04,Scale,1200,active
+SYN-M070,2025-05,Scale,1200,active
+SYN-M070,2025-06,Scale,1200,active
+SYN-M070,2025-07,Scale,1200,active
+SYN-M070,2025-08,Scale,1200,active
+SYN-M070,2025-09,Scale,1200,active
+SYN-M070,2025-10,Scale,1200,active
+SYN-M070,2025-11,Scale,1200,active
+SYN-M070,2025-12,Scale,1200,active
+SYN-M070,2026-01,Scale,1200,active
+SYN-M070,2026-02,Scale,1200,active
+SYN-M070,2026-03,Scale,1200,active
+SYN-M070,2026-04,Scale,1200,active
+SYN-M070,2026-05,Scale,1200,active
+SYN-M070,2026-06,Scale,1200,active
+SYN-M070,2026-07,Scale,1200,active
+SYN-M070,2026-08,Scale,1200,active
+SYN-M071,2026-06,,297,active
+SYN-M071,2026-07,,297,active
+SYN-M071,2026-08,,297,active
+SYN-M072,2026-04,Scale,4800,active
+SYN-M072,2026-05,Scale,6000,active
+SYN-M072,2026-06,Scale,6000,active
+SYN-M072,2026-07,Scale,6000,active
+SYN-M072,2026-08,Scale,6000,active
+SYN-M073,2025-05,Scale,1200,active
+SYN-M073,2025-06,Scale,1200,active
+SYN-M073,2025-07,Scale,1200,churned
+SYN-M074,2025-01,,1200,active
+SYN-M074,2025-02,,1200,active
+SYN-M074,2025-03,,1200,active
+SYN-M074,2025-04,,1200,active
+SYN-M074,2025-05,,1200,active
+SYN-M074,2025-06,,1200,active
+SYN-M074,2025-07,,1200,active
+SYN-M074,2025-08,,1200,active
+SYN-M074,2025-09,,1200,active
+SYN-M074,2025-10,,1200,active
+SYN-M074,2025-11,,1200,active
+SYN-M074,2025-12,,1200,active
+SYN-M074,2026-01,,1200,active
+SYN-M074,2026-02,,1200,active
+SYN-M074,2026-03,,1200,churned
+SYN-M075,2024-12,Starter,396,active
+SYN-M075,2025-01,Starter,396,active
+SYN-M075,2025-02,Starter,396,active
+SYN-M075,2025-03,Starter,396,active
+SYN-M075,2025-04,Starter,396,active
+SYN-M075,2025-05,Starter,396,active
+SYN-M075,2025-06,Starter,396,active
+SYN-M075,2025-07,Starter,396,active
+SYN-M075,2025-08,Starter,396,active
+SYN-M075,2025-09,Starter,396,active
+SYN-M075,2025-10,Starter,396,active
+SYN-M075,2025-11,Starter,396,active
+SYN-M075,2025-12,Starter,396,active
+SYN-M075,2026-01,Starter,396,active
+SYN-M075,2026-02,Starter,396,active
+SYN-M075,2026-03,Starter,396,active
+SYN-M075,2026-04,Starter,396,active
+SYN-M075,2026-05,Starter,396,active
+SYN-M075,2026-06,Starter,396,active
+SYN-M075,2026-07,Starter,396,active
+SYN-M075,2026-08,Starter,396,active
+SYN-M076,2025-10,Starter,99,active
+SYN-M076,2025-11,Starter,99,active
+SYN-M076,2025-12,Starter,99,active
+SYN-M076,2026-01,Starter,99,active
+SYN-M076,2026-02,Starter,99,active
+SYN-M076,2026-03,Starter,99,active
+SYN-M076,2026-04,Starter,99,active
+SYN-M076,2026-05,Starter,99,active
+SYN-M076,2026-06,Starter,99,active
+SYN-M076,2026-07,Starter,99,active
+SYN-M076,2026-08,Starter,99,active
+SYN-M077,2024-10,Growth,1596,active
+SYN-M077,2024-11,Growth,1596,active
+SYN-M077,2024-12,Growth,1596,active
+SYN-M077,2025-01,Growth,1596,active
+SYN-M077,2025-02,Growth,1596,active
+SYN-M077,2025-03,Growth,1596,active
+SYN-M077,2025-04,Growth,1596,active
+SYN-M077,2025-05,Growth,1596,active
+SYN-M077,2025-06,Growth,1596,active
+SYN-M077,2025-07,Growth,1596,active
+SYN-M077,2025-08,Growth,1596,active
+SYN-M077,2025-09,Growth,1596,active
+SYN-M077,2025-10,Growth,1596,active
+SYN-M077,2025-11,Growth,1596,active
+SYN-M077,2025-12,Growth,1596,active
+SYN-M077,2026-01,Growth,1596,active
+SYN-M077,2026-02,Growth,1596,active
+SYN-M077,2026-03,Growth,1596,active
+SYN-M077,2026-04,Growth,1596,active
+SYN-M077,2026-05,Scale,4800,active
+SYN-M077,2026-06,Scale,6000,active
+SYN-M077,2026-07,Scale,4800,active
+SYN-M077,2026-08,Scale,4800,active
+SYN-M078,2026-03,Scale,1200,active
+SYN-M078,2026-04,Scale,1200,active
+SYN-M078,2026-05,Scale,1200,active
+SYN-M078,2026-06,Scale,1200,active
+SYN-M078,2026-07,Scale,1200,active
+SYN-M078,2026-08,Scale,1200,active
+SYN-M079,2024-12,Scale,1200,active
+SYN-M079,2025-01,Scale,1200,active
+SYN-M079,2025-02,Scale,1200,active
+SYN-M079,2025-03,Scale,1200,active
+SYN-M079,2025-04,Scale,1200,active
+SYN-M079,2025-05,Scale,1200,active
+SYN-M079,2025-06,Scale,1200,active
+SYN-M079,2025-07,Scale,1200,active
+SYN-M079,2025-08,Scale,1200,active
+SYN-M079,2025-09,Scale,1200,active
+SYN-M079,2025-10,Scale,1200,active
+SYN-M079,2025-11,Scale,1200,active
+SYN-M079,2025-12,Scale,1200,active
+SYN-M079,2026-01,Scale,1200,active
+SYN-M079,2026-02,Scale,1200,active
+SYN-M079,2026-03,Scale,1200,active
+SYN-M079,2026-04,Scale,1200,active
+SYN-M079,2026-05,Scale,1200,active
+SYN-M079,2026-06,Scale,1200,active
+SYN-M079,2026-07,Scale,1200,active
+SYN-M079,2026-08,Scale,2400,active
+SYN-M080,2024-10,Scale,3600,active
+SYN-M080,2024-11,Scale,3600,active
+SYN-M080,2024-12,Scale,3600,active
+SYN-M080,2025-01,Scale,3600,active
+SYN-M080,2025-02,Scale,3600,active
+SYN-M080,2025-03,Scale,3600,active
+SYN-M080,2025-04,Scale,3600,active
+SYN-M080,2025-05,Scale,3600,active
+SYN-M080,2025-06,Scale,3600,active
+SYN-M080,2025-07,Scale,4800,active
+SYN-M080,2025-08,Scale,4800,active
+SYN-M080,2025-09,Scale,4800,active
+SYN-M080,2025-10,Scale,4800,active
+SYN-M080,2025-11,Scale,4800,active
+SYN-M080,2025-12,Scale,4800,active
+SYN-M080,2026-01,Scale,4800,active
+SYN-M080,2026-02,Scale,4800,active
+SYN-M080,2026-03,Scale,4800,active
+SYN-M080,2026-04,Scale,4800,active
+SYN-M080,2026-05,Scale,4800,active
+SYN-M080,2026-06,Scale,4800,active
+SYN-M080,2026-07,Scale,4800,active
+SYN-M080,2026-08,Scale,4800,active
+SYN-M081,2026-01,Scale,3600,active
+SYN-M081,2026-02,Scale,3600,active
+SYN-M081,2026-03,Scale,3600,active
+SYN-M081,2026-04,Scale,4800,active
+SYN-M081,2026-05,Scale,4800,active
+SYN-M081,2026-06,Scale,4800,active
+SYN-M081,2026-07,Scale,4800,active
+SYN-M081,2026-08,Scale,4800,active
+SYN-M082,2025-08,Scale,4800,active
+SYN-M082,2025-09,Scale,4800,active
+SYN-M082,2025-10,Scale,4800,active
+SYN-M082,2025-11,Scale,4800,active
+SYN-M082,2025-12,Scale,4800,active
+SYN-M082,2026-01,Scale,4800,active
+SYN-M082,2026-02,Scale,4800,active
+SYN-M082,2026-03,Scale,4800,active
+SYN-M082,2026-04,Scale,4800,active
+SYN-M082,2026-05,Scale,4800,active
+SYN-M082,2026-06,Scale,4800,active
+SYN-M082,2026-07,Scale,4800,active
+SYN-M082,2026-08,Scale,4800,active
+SYN-M083,2024-10,Starter,396,active
+SYN-M083,2024-11,Starter,396,active
+SYN-M083,2024-12,Starter,396,active
+SYN-M083,2025-01,Starter,396,active
+SYN-M083,2025-02,Starter,396,active
+SYN-M083,2025-03,Starter,396,active
+SYN-M083,2025-04,Starter,396,active
+SYN-M083,2025-05,Starter,396,active
+SYN-M083,2025-06,Starter,396,active
+SYN-M083,2025-07,Starter,396,active
+SYN-M083,2025-08,Starter,396,active
+SYN-M083,2025-09,Starter,396,active
+SYN-M083,2025-10,Starter,396,active
+SYN-M083,2025-11,Starter,396,active
+SYN-M083,2025-12,Starter,396,active
+SYN-M083,2026-01,Starter,396,active
+SYN-M083,2026-02,Starter,396,churned
+SYN-M084,2025-12,Growth,399,active
+SYN-M084,2026-01,Growth,399,active
+SYN-M084,2026-02,Growth,399,active
+SYN-M084,2026-03,Growth,399,active
+SYN-M084,2026-04,Growth,399,active
+SYN-M084,2026-05,Growth,399,active
+SYN-M084,2026-06,Growth,399,active
+SYN-M084,2026-07,Growth,399,active
+SYN-M084,2026-08,Growth,399,active
+SYN-M085,2025-04,Starter,396,active
+SYN-M085,2025-05,Starter,396,active
+SYN-M085,2025-06,Starter,396,active
+SYN-M085,2025-07,Starter,396,active
+SYN-M085,2025-08,Starter,396,active
+SYN-M085,2025-09,Starter,396,active
+SYN-M085,2025-10,Starter,396,active
+SYN-M085,2025-11,Starter,396,churned
+SYN-M086,2026-03,Growth,1596,active
+SYN-M086,2026-04,Growth,1596,active
+SYN-M086,2026-05,Growth,1596,active
+SYN-M086,2026-06,Growth,1596,active
+SYN-M086,2026-07,Growth,1596,active
+SYN-M086,2026-08,Growth,1596,active
+SYN-M087,2026-06,,399,active
+SYN-M087,2026-07,,399,active
+SYN-M087,2026-08,,1200,active
+SYN-M088,2026-04,Starter,396,active
+SYN-M088,2026-05,Starter,396,active
+SYN-M088,2026-06,Starter,396,active
+SYN-M088,2026-07,Starter,396,active
+SYN-M088,2026-08,Starter,396,active
+SYN-M089,2025-07,Growth,798,active
+SYN-M089,2025-08,Growth,798,active
+SYN-M089,2025-09,Growth,399,active
+SYN-M089,2025-10,Growth,399,active
+SYN-M089,2025-11,Growth,399,active
+SYN-M089,2025-12,Growth,399,active
+SYN-M089,2026-01,Growth,399,active
+SYN-M089,2026-02,Growth,399,active
+SYN-M089,2026-03,Growth,399,active
+SYN-M089,2026-04,Growth,399,active
+SYN-M089,2026-05,Growth,399,active
+SYN-M089,2026-06,Growth,399,active
+SYN-M089,2026-07,Growth,399,active
+SYN-M089,2026-08,Growth,399,active
+SYN-M090,2026-04,Scale,3600,active
+SYN-M090,2026-05,Scale,3600,active
+SYN-M090,2026-06,Scale,3600,active
+SYN-M090,2026-07,Scale,3600,active
+SYN-M090,2026-08,Scale,3600,active
+SYN-M091,2025-06,Scale,2400,active
+SYN-M091,2025-07,Scale,2400,active
+SYN-M091,2025-08,Scale,2400,active
+SYN-M091,2025-09,Scale,2400,active
+SYN-M091,2025-10,Scale,2400,churned
+SYN-M092,2025-06,Scale,2400,active
+SYN-M092,2025-07,Scale,2400,active
+SYN-M092,2025-08,Scale,2400,active
+SYN-M092,2025-09,Scale,2400,active
+SYN-M092,2025-10,Scale,2400,churned
+SYN-M093,2024-12,Growth,798,active
+SYN-M093,2025-01,Growth,798,active
+SYN-M093,2025-02,Growth,798,active
+SYN-M093,2025-03,Growth,798,active
+SYN-M093,2025-04,Growth,798,active
+SYN-M093,2025-05,Growth,798,active
+SYN-M093,2025-06,Growth,798,active
+SYN-M093,2025-07,Growth,798,active
+SYN-M093,2025-08,Growth,798,active
+SYN-M093,2025-09,Growth,798,active
+SYN-M093,2025-10,Growth,798,active
+SYN-M093,2025-11,Growth,798,active
+SYN-M093,2025-12,Growth,798,active
+SYN-M093,2026-01,Growth,798,active
+SYN-M093,2026-02,Growth,798,active
+SYN-M093,2026-03,Growth,798,active
+SYN-M093,2026-04,Growth,798,active
+SYN-M093,2026-05,Growth,798,active
+SYN-M093,2026-06,Growth,798,active
+SYN-M093,2026-07,Growth,798,active
+SYN-M093,2026-08,Growth,798,active
+SYN-M094,2025-12,,1200,active
+SYN-M094,2026-01,,1200,active
+SYN-M094,2026-02,,1200,active
+SYN-M094,2026-03,,1200,active
+SYN-M094,2026-04,,1200,active
+SYN-M094,2026-05,,1200,active
+SYN-M094,2026-06,,1200,active
+SYN-M094,2026-07,,1200,churned
+SYN-M095,2025-05,Starter,198,active
+SYN-M095,2025-06,Starter,198,active
+SYN-M095,2025-07,Starter,198,active
+SYN-M095,2025-08,Starter,198,active
+SYN-M095,2025-09,Starter,198,active
+SYN-M095,2025-10,Starter,198,active
+SYN-M095,2025-11,Starter,198,active
+SYN-M095,2025-12,Starter,198,active
+SYN-M095,2026-01,Starter,198,active
+SYN-M095,2026-02,Starter,198,active
+SYN-M095,2026-03,Starter,198,active
+SYN-M095,2026-04,Starter,198,active
+SYN-M095,2026-05,Starter,198,active
+SYN-M095,2026-06,Starter,198,active
+SYN-M095,2026-07,Starter,198,active
+SYN-M095,2026-08,Starter,198,active
+SYN-M096,2025-12,Scale,1200,churned
+SYN-M097,2025-04,,198,active
+SYN-M097,2025-05,,198,active
+SYN-M097,2025-06,,198,active
+SYN-M097,2025-07,,297,active
+SYN-M097,2025-08,,297,active
+SYN-M097,2025-09,,297,active
+SYN-M097,2025-10,,297,active
+SYN-M097,2025-11,,297,active
+SYN-M097,2025-12,,297,active
+SYN-M097,2026-01,,297,active
+SYN-M097,2026-02,,297,active
+SYN-M097,2026-03,,297,active
+SYN-M097,2026-04,,297,active
+SYN-M097,2026-05,,297,active
+SYN-M097,2026-06,,297,active
+SYN-M097,2026-07,,297,active
+SYN-M097,2026-08,,297,active
+SYN-M098,2025-01,Scale,1200,churned
+SYN-M099,2025-08,,99,active
+SYN-M099,2025-09,,99,active
+SYN-M099,2025-10,,198,active
+SYN-M099,2025-11,,198,active
+SYN-M099,2025-12,,198,active
+SYN-M099,2026-01,,198,active
+SYN-M099,2026-02,,198,active
+SYN-M099,2026-03,,198,active
+SYN-M099,2026-04,,198,active
+SYN-M099,2026-05,,198,active
+SYN-M099,2026-06,,198,active
+SYN-M099,2026-07,,198,active
+SYN-M099,2026-08,,198,active
+SYN-M100,2025-12,,798,active
+SYN-M100,2026-01,,798,active
+SYN-M100,2026-02,,798,active
+SYN-M100,2026-03,,798,active
+SYN-M100,2026-04,,798,active
+SYN-M100,2026-05,,798,active
+SYN-M100,2026-06,,798,active
+SYN-M100,2026-07,,798,active
+SYN-M100,2026-08,,798,active
+</script>
+<script id="logic">
+(function (root) {
+  'use strict';
+  var IX = {};
+
+  /* ---------- CSV ---------- */
+  function stripBOM(s) { return s && s.charCodeAt(0) === 0xFEFF ? s.slice(1) : s; }
+
+  function countOutsideQuotes(line, ch) {
+    var n = 0, q = false;
+    for (var i = 0; i < line.length; i++) {
+      var c = line[i];
+      if (c === '"') q = !q;
+      else if (c === ch && !q) n++;
+    }
+    return n;
+  }
+
+  function detectDelimiter(text) {
+    var lines = [], cur = '', q = false;
+    for (var i = 0; i < text.length && lines.length < 12; i++) {
+      var c = text[i];
+      if (c === '"') q = !q;
+      if ((c === '\n' || c === '\r') && !q) {
+        if (cur.trim() !== '') lines.push(cur);
+        cur = '';
+        if (c === '\r' && text[i + 1] === '\n') i++;
+      } else cur += c;
+    }
+    if (cur.trim() !== '' && lines.length < 12) lines.push(cur);
+    if (!lines.length) return ',';
+    var cands = [',', ';', '\t', '|'], best = ',', bestScore = -1;
+    cands.forEach(function (d) {
+      var counts = lines.map(function (l) { return countOutsideQuotes(l, d); });
+      var first = counts[0], same = counts.every(function (n) { return n === first; });
+      var score = first === 0 ? 0 : (same ? 1000 + first : first);
+      if (score > bestScore) { bestScore = score; best = d; }
+    });
+    return best;
+  }
+
+  function parseCSV(text, delim) {
+    text = stripBOM(String(text || ''));
+    if (!delim) delim = detectDelimiter(text);
+    var rows = [], row = [], field = '', q = false, i = 0, n = text.length;
+    while (i < n) {
+      var c = text[i];
+      if (q) {
+        if (c === '"') {
+          if (text[i + 1] === '"') { field += '"'; i += 2; continue; }
+          q = false; i++; continue;
+        }
+        field += c; i++; continue;
+      }
+      if (c === '"' && field.trim() === '') { field = ''; q = true; i++; continue; }
+      if (c === delim) { row.push(field); field = ''; i++; continue; }
+      if (c === '\r' || c === '\n') {
+        row.push(field); field = '';
+        rows.push(row); row = [];
+        if (c === '\r' && text[i + 1] === '\n') i++;
+        i++; continue;
+      }
+      field += c; i++;
+    }
+    if (field !== '' || row.length) { row.push(field); rows.push(row); }
+    rows = rows.filter(function (r) { return r.some(function (f) { return f.trim() !== ''; }); });
+    if (!rows.length) return { delimiter: delim, headers: [], rows: [], ragged: 0 };
+    var seen = {};
+    var headers = rows[0].map(function (h, idx) {
+      var name = h.trim() || ('column ' + (idx + 1));
+      if (seen[name]) { seen[name]++; name = name + ' (' + seen[name] + ')'; } else seen[name] = 1;
+      return name;
+    });
+    var ragged = 0, w = headers.length;
+    var body = rows.slice(1).map(function (r) {
+      if (r.length !== w) ragged++;
+      var out = r.slice(0, w).map(function (f) { return f.trim(); });
+      while (out.length < w) out.push('');
+      return out;
+    });
+    return { delimiter: delim, headers: headers, rows: body, ragged: ragged };
+  }
+
+  /* ---------- dates ---------- */
+  var MONTHS = { jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6, jul: 7, aug: 8, sep: 9, sept: 9, oct: 10, nov: 11, dec: 12,
+    january: 1, february: 2, march: 3, april: 4, june: 6, july: 7, august: 8, september: 9, october: 10, november: 11, december: 12 };
+  var MN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  function dnum(y, m, d) {
+    if (!(m >= 1 && m <= 12 && d >= 1 && d <= 31 && y >= 1900 && y <= 2200)) return null;
+    var t = Date.UTC(y, m - 1, d), dt = new Date(t);
+    if (dt.getUTCMonth() !== m - 1 || dt.getUTCDate() !== d) return null;
+    return Math.floor(t / 864e5);
+  }
+  function fullYear(y) { y = +y; if (y < 100) return y < 70 ? 2000 + y : 1900 + y; return y; }
+  function monthNum(s) { return MONTHS[String(s).toLowerCase().replace(/\.$/, '')] || null; }
+
+  // order is 'mdy' or 'dmy'. Returns {day, kind} or null.
+  function readDate(raw, order) {
+    var s = String(raw == null ? '' : raw).trim();
+    if (!s) return null;
+    var m;
+    function wrap(day, kind) { return day == null ? null : { day: day, kind: kind }; }
+    if ((m = /^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})(?:[T ].*)?$/.exec(s))) return wrap(dnum(+m[1], +m[2], +m[3]), 'ymd');
+    if ((m = /^(\d{4})[-\/.](\d{1,2})$/.exec(s))) return wrap(dnum(+m[1], +m[2], 1), 'ym');
+    if ((m = /^(\d{4})(\d{2})(\d{2})$/.exec(s)) && +m[1] >= 1900 && +m[1] <= 2200) return wrap(dnum(+m[1], +m[2], +m[3]), 'ymd');
+    if ((m = /^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{2}|\d{4})(?:[T ,].*)?$/.exec(s))) {
+      var a = +m[1], b = +m[2], y = fullYear(m[3]), r;
+      if (order === 'dmy') r = dnum(y, b, a) != null ? dnum(y, b, a) : dnum(y, a, b);
+      else r = dnum(y, a, b) != null ? dnum(y, a, b) : dnum(y, b, a);
+      var o = wrap(r, 'ab'); if (o) { o.a = a; o.b = b; } return o;
+    }
+    if ((m = /^(\d{1,2})[-\/.](\d{4})$/.exec(s))) return wrap(dnum(+m[2], +m[1], 1), 'ym');
+    if ((m = /^([a-z]{3,9})\.?[ -](\d{1,2})(?:st|nd|rd|th)?,? (\d{4})(?:[ T,].*)?$/i.exec(s)) && monthNum(m[1])) return wrap(dnum(+m[3], monthNum(m[1]), +m[2]), 'name');
+    if ((m = /^(\d{1,2})(?:st|nd|rd|th)?[ -]([a-z]{3,9})\.?[ ,-]+(\d{2}|\d{4})(?:[ T].*)?$/i.exec(s)) && monthNum(m[2])) return wrap(dnum(fullYear(m[3]), monthNum(m[2]), +m[1]), 'name');
+    if ((m = /^([a-z]{3,9})\.?[ '-](\d{2}|\d{4})$/i.exec(s)) && monthNum(m[1])) return wrap(dnum(fullYear(m[2]), monthNum(m[1]), 1), 'ym');
+    if (/^\d+(\.\d+)?$/.test(s)) {
+      var n = parseFloat(s);
+      if (n >= 20000 && n <= 80000) return wrap(Math.floor(n) - 25569, 'serial');
+      if (/^\d{10}$/.test(s)) return wrap(Math.floor(n / 86400), 'epoch');
+      if (/^\d{13}$/.test(s)) return wrap(Math.floor(n / 864e5), 'epoch');
+    }
+    return null;
+  }
+
+  // pref: 'auto', 'mdy' or 'dmy'
+  function readDateColumn(values, pref) {
+    var aOver = 0, bOver = 0, abCount = 0;
+    values.forEach(function (v) {
+      var r = readDate(v, 'mdy');
+      if (r && r.kind === 'ab') { abCount++; if (r.a > 12) aOver++; if (r.b > 12) bOver++; }
+    });
+    var order = 'mdy', status = 'none';
+    if (abCount) {
+      if (aOver && bOver) { status = 'mixed'; order = aOver >= bOver ? 'dmy' : 'mdy'; }
+      else if (aOver) { status = 'dmy'; order = 'dmy'; }
+      else if (bOver) { status = 'mdy'; order = 'mdy'; }
+      else { status = 'ambiguous'; order = 'mdy'; }
+    }
+    if (pref === 'mdy' || pref === 'dmy') order = pref;
+    var days = [], nonblank = 0, parsed = 0, bad = [], kinds = {};
+    values.forEach(function (v) {
+      var s = String(v == null ? '' : v).trim();
+      if (!s) { days.push(null); return; }
+      nonblank++;
+      var r = readDate(s, order);
+      if (r) { parsed++; days.push(r.day); kinds[r.kind] = (kinds[r.kind] || 0) + 1; }
+      else { days.push(null); if (bad.length < 4 && bad.indexOf(s) < 0) bad.push(s); }
+    });
+    return { days: days, nonblank: nonblank, parsed: parsed, bad: bad, kinds: kinds, slashCount: abCount, slashStatus: status, order: order };
+  }
+
+  function dayToMonth(day) { var d = new Date(day * 864e5); return d.getUTCFullYear() * 12 + d.getUTCMonth(); }
+  function fmtDay(day) { var d = new Date(day * 864e5); return d.getUTCDate() + ' ' + MN[d.getUTCMonth()] + ' ' + d.getUTCFullYear(); }
+  function fmtQuarter(q) { return 'Q' + (q % 4 + 1) + ' ' + Math.floor(q / 4); }
+
+  /* ---------- numbers ---------- */
+  function readNumber(raw) {
+    var s = String(raw == null ? '' : raw).trim();
+    if (!s) return null;
+    var neg = false;
+    if (/^\(.*\)$/.test(s)) { neg = true; s = s.slice(1, -1); }
+    s = s.replace(/usd|eur|gbp|cad|aud|inr/ig, '').replace(/[\s$€£¥₹' ]/g, '');
+    if (/^-/.test(s)) { neg = !neg; s = s.slice(1); }
+    if (/^\d{1,3}(,\d{3})+(\.\d+)?$/.test(s)) s = s.replace(/,/g, '');
+    else if (/^\d{1,3}(\.\d{3})+(,\d+)?$/.test(s)) s = s.replace(/\./g, '').replace(',', '.');
+    else if (/^\d+,\d+$/.test(s)) s = s.replace(',', '.');
+    else if (!/^\d+(\.\d+)?$/.test(s) && !/^\.\d+$/.test(s)) return null;
+    var n = parseFloat(s);
+    return isFinite(n) ? (neg ? -n : n) : null;
+  }
+
+  /* ---------- status ---------- */
+  var ACTIVE_RE = /^(active|activated|live|current|paying|paid|trial|trialing|trialling|in_trial|past_due|pastdue|unpaid|renewing|renewed|open|customer|won|closed_won|enabled|retained|non_renewing|nonrenewing|incomplete)$/;
+  var CHURN_RE = /^(churn|churned|cancel|canceled|cancelled|inactive|closed|terminated|ended|expired|lost|closed_lost|lapsed|deleted|disabled|former|former_customer|incomplete_expired)$/;
+  function normHeader(h) { return String(h).toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, ''); }
+  function readStatus(raw, header) {
+    var s = String(raw == null ? '' : raw).trim().toLowerCase().replace(/[\s\-]+/g, '_');
+    if (!s) return null;
+    if (ACTIVE_RE.test(s)) return 'active';
+    if (CHURN_RE.test(s)) return 'churned';
+    var h = normHeader(header || '');
+    var t = /^(true|yes|y|1|t)$/.test(s), f = /^(false|no|n|0|f)$/.test(s);
+    if (t || f) {
+      if (/churn|cancel/.test(h)) return t ? 'churned' : 'active';
+      if (/active/.test(h)) return t ? 'active' : 'churned';
+    }
+    return 'unknown';
+  }
+
+  /* ---------- column roles ---------- */
+  var ROLES = [
+    { key: 'account', label: 'Account id', type: 'id', pats: [
+      /^(account|acct|customer|cust|client|company|organi[sz]ation|org|tenant|workspace)_?(id|no|num|number|key|code|ref)?$/,
+      /(account|acct|customer|client|tenant|company|org).*(id|key|code|number|no)$/,
+      /^(id|uid|external_id)$/,
+      /(account|customer|client|company)/] },
+    { key: 'start', label: 'Start date', type: 'date', pats: [
+      /^(start|started|start_date|started_at|started_on|start_at|signup|signup_date|signed_up|signed_up_at|created|created_at|created_on|created_date|creation_date|date_created|subscribed_at|subscription_start|subscription_start_date|contract_start|contract_start_date|activation_date|activated_at|customer_since|first_payment|first_payment_date|first_paid_at|first_invoice_date|join_date|joined|joined_at|won_date)$/,
+      /(start|signup|sign_up|created|activat|since|joined|onboard|first_pa|first_inv)/] },
+    { key: 'cancel', label: 'Cancellation date', type: 'date', pats: [
+      /^(cancel|canceled|cancelled|cancel_date|canceled_at|cancelled_at|canceled_on|cancelled_on|cancellation_date|cancellation|churn_date|churned_at|churned_on|churn_at|end_date|ended_at|ended_on|ends_at|termination_date|terminated_at|closed_at|close_date|lost_date|subscription_end|subscription_end_date|contract_end|contract_end_date)$/,
+      /(cancel|churn.*(date|_at|_on)|terminat|ended|end_date|ends_at|closed_at|lost_date)/] },
+    { key: 'status', label: 'Status', type: 'status', pats: [
+      /^(status|state|subscription_status|account_status|customer_status|lifecycle_stage|lifecycle|stage|is_active|active|churned|is_churned|has_churned)$/,
+      /(status|state|is_active|churned|lifecycle)/] },
+    { key: 'revenue', label: 'MRR or ARR', type: 'number', pats: [
+      /^(mrr|arr|mrr_usd|arr_usd|usd_mrr|usd_arr|monthly_recurring_revenue|annual_recurring_revenue|revenue|amount|acv|arr_amount|mrr_amount|monthly_revenue|annual_revenue|contract_value|price|billing_amount|subscription_amount|total_mrr|total_arr|current_mrr|current_arr|recurring_revenue|mrr_cents|arr_cents)$/,
+      /(^|_)(mrr|arr|acv)(_|$)|revenue|amount|price|billing|contract_value/] },
+    { key: 'plan', label: 'Plan', type: 'text', pats: [
+      /^(plan|plan_name|plan_id|tier|plan_tier|pricing_plan|package|product|product_name|sku|edition|subscription_plan|price_plan|pricing_tier)$/,
+      /(plan|tier|package|product|edition|sku)/] },
+    { key: 'period', label: 'Month or period', type: 'date', pats: [
+      /^(month|period|billing_month|billing_period|snapshot_month|snapshot_date|as_of|as_of_date|asof|report_month|reporting_month|reporting_period|revenue_month|invoice_month|period_start|period_end|month_start|month_end|date|mrr_month)$/,
+      /(month|period|snapshot|as_of|asof)/] }
+  ];
+
+  function columnFits(role, values, header) {
+    var sample = values.filter(function (v) { return v !== ''; }).slice(0, 400);
+    if (!sample.length) return role.key === 'cancel' ? 0.5 : 0;
+    var ok = 0;
+    if (role.type === 'date') {
+      sample.forEach(function (v) { if (readDate(v, 'mdy')) ok++; });
+      return ok / sample.length >= 0.6 ? 1 : 0;
+    }
+    if (role.type === 'number') {
+      sample.forEach(function (v) { if (readNumber(v) != null) ok++; });
+      return ok / sample.length >= 0.8 ? 1 : 0;
+    }
+    if (role.type === 'status') {
+      var distinct = {}, dates = 0;
+      sample.forEach(function (v) { distinct[v.toLowerCase()] = 1; if (readStatus(v, header) !== 'unknown') ok++; if (readDate(v, 'mdy')) dates++; });
+      if (Object.keys(distinct).length > 25 || dates > sample.length / 2) return 0;
+      return ok / sample.length >= 0.5 ? 1 : 0.4;
+    }
+    if (role.type === 'text') {
+      var d2 = {}; sample.forEach(function (v) { d2[v] = 1; });
+      return Object.keys(d2).length <= Math.max(40, sample.length * 0.2) ? 1 : 0.3;
+    }
+    return 1;
+  }
+
+  function guessRoles(parsed) {
+    var cands = [];
+    parsed.headers.forEach(function (h, ci) {
+      var nh = normHeader(h), col = null;
+      ROLES.forEach(function (role, ri) {
+        for (var p = 0; p < role.pats.length; p++) {
+          if (role.pats[p].test(nh)) {
+            if (!col) col = parsed.rows.map(function (r) { return r[ci]; });
+            var fit = columnFits(role, col, h);
+            if (fit > 0) cands.push({ role: role.key, col: ci, score: (role.pats.length - p) * 10 * fit - ri * 0.01 });
+            break;
+          }
+        }
+      });
+    });
+    cands.sort(function (a, b) { return b.score - a.score; });
+    var mapping = {}, used = {};
+    ROLES.forEach(function (r) { mapping[r.key] = -1; });
+    cands.forEach(function (c) {
+      if (mapping[c.role] === -1 && !used[c.col]) { mapping[c.role] = c.col; used[c.col] = 1; }
+    });
+    return mapping;
+  }
+
+  /* ---------- analysis ---------- */
+  function pct(a, b) {
+    if (!b) return '0%';
+    var p = 100 * a / b;
+    if (p === 0 || p === 100) return p + '%';
+    if (p > 99.9) return '99.9%';
+    if (p < 0.1) return '0.1%';
+    return (Math.round(p * 10) / 10) + '%';
+  }
+  function num(n) { return Number(n).toLocaleString('en-US'); }
+  function plural(n, one, many) { return num(n) + ' ' + (n === 1 ? one : many); }
+
+  function analyze(parsed, mapping, opts) {
+    opts = opts || {};
+    var today = opts.today ? Math.floor(new Date(opts.today).getTime() / 864e5) : Math.floor(Date.now() / 864e5);
+    var rows = parsed.rows, R = rows.length, H = parsed.headers;
+    function col(key) { var c = mapping[key]; return c == null || c < 0 || c >= H.length ? null : rows.map(function (r) { return r[c]; }); }
+    function hname(key) { return mapping[key] >= 0 ? H[mapping[key]] : null; }
+    var res = { rows: R, headers: H, mapping: mapping, delimiter: parsed.delimiter, ragged: parsed.ragged, fields: {}, warnings: [], support: [] };
+
+    var acc = col('account'), st = col('start'), ca = col('cancel'), stt = col('status'), rev = col('revenue'), pl = col('plan'), per = col('period');
+    var dateOrder = opts.dateOrder || 'auto';
+    var F = res.fields;
+    function blanks(v) { var n = 0; v.forEach(function (x) { if (x === '') n++; }); return n; }
+    ROLES.forEach(function (r) { var v = col(r.key); F[r.key] = v ? { mapped: true, header: hname(r.key), missing: blanks(v) } : { mapped: false }; });
+
+    var stD = st ? readDateColumn(st, dateOrder) : null;
+    var caD = ca ? readDateColumn(ca, dateOrder) : null;
+    var peD = per ? readDateColumn(per, dateOrder) : null;
+    if (stD) F.start.date = stD;
+    if (caD) F.cancel.date = caD;
+    if (peD) F.period.date = peD;
+
+    // share of rows whose mapped dates all parsed
+    var pairs = [[st, stD], [ca, caD], [per, peD]].filter(function (p) { return p[0]; });
+    var rowsWithDate = 0, rowsDateOK = 0;
+    for (var i = 0; i < R; i++) {
+      var any = false, ok = true;
+      for (var k = 0; k < pairs.length; k++) {
+        if (pairs[k][0][i] !== '') { any = true; if (pairs[k][1].days[i] == null) ok = false; }
+      }
+      if (any) { rowsWithDate++; if (ok) rowsDateOK++; }
+    }
+    var dcols = pairs.map(function (p) { return p[1]; });
+    res.dates = {
+      columns: dcols.length, rowsWithDate: rowsWithDate, rowsParsed: rowsDateOK,
+      ambiguous: dcols.some(function (d) { return d.slashStatus === 'ambiguous'; }),
+      mixed: dcols.some(function (d) { return d.slashStatus === 'mixed'; }),
+      hasSlash: dcols.some(function (d) { return d.slashCount > 0; }),
+      order: dcols.length ? dcols[0].order : 'mdy', pref: dateOrder
+    };
+
+    var revN = rev ? rev.map(readNumber) : null;
+    if (rev) F.revenue.numeric = revN.filter(function (x) { return x != null; }).length;
+    var stS = stt ? stt.map(function (v) { return readStatus(v, hname('status')); }) : null;
+    if (stt) {
+      var unk = {}, rec = 0, nb = 0, dv = {};
+      stS.forEach(function (s, j) { if (s) { nb++; dv[stt[j]] = 1; if (s !== 'unknown') rec++; else unk[stt[j]] = 1; } });
+      F.status.recognised = rec; F.status.nonblank = nb; F.status.unknownValues = Object.keys(unk).slice(0, 5); F.status.distinct = Object.keys(dv).length;
+    }
+    if (pl) { var dp = {}; pl.forEach(function (v) { if (v !== '') dp[v] = 1; }); F.plan.distinct = Object.keys(dp).length; }
+    if (acc) { var da = {}; acc.forEach(function (v) { if (v !== '') da[v] = 1; }); F.account.distinct = Object.keys(da).length; }
+
+    /* which fields are usable */
+    var U = {};
+    U.account = !!(acc && R > 0 && (R - F.account.missing) >= 0.95 * R);
+    U.start = !!(stD && stD.parsed >= 0.8 * R);
+    U.period = !!(peD && peD.parsed >= 0.9 * R);
+    U.revenue = !!(revN && F.revenue.numeric >= 0.8 * R);
+    U.plan = !!(pl && (R - F.plan.missing) >= 0.8 * R);
+    U.status = !!(stS && F.status.nonblank >= 0.8 * R && F.status.recognised >= 0.8 * F.status.nonblank);
+    var caFilled = ca ? R - F.cancel.missing : 0;
+    var caParsedShare = caD && caD.nonblank ? caD.parsed / caD.nonblank : 0;
+    var placeholder = !!(ca && !stt && R > 0 && caFilled >= 0.99 * R);
+    U.cancel = !!(ca && caD.nonblank > 0 && caParsedShare >= 0.8 && !placeholder);
+    res.usable = U;
+
+    /* shape */
+    var shape = res.shape = { rows: R };
+    var seenRow = {}, dupRows = 0;
+    rows.forEach(function (r) { var key = r.join('\u0001'); if (seenRow[key]) dupRows++; else seenRow[key] = 1; });
+    shape.duplicateRows = dupRows;
+    var distinctFilled = 0, seen2 = {};
+    if (acc) rows.forEach(function (r, j) { if (acc[j] === '') return; var key = r.join('\u0001'); if (!seen2[key]) { seen2[key] = 1; distinctFilled++; } });
+    var accounts = {}, accList = [];
+    if (acc) {
+      acc.forEach(function (a, j) {
+        if (a === '') return;
+        var o = accounts[a];
+        if (!o) { o = accounts[a] = { id: a, rows: [] }; accList.push(o); }
+        o.rows.push(j);
+      });
+    }
+    shape.accounts = acc ? accList.length : null;
+    var months = {}, monthsN = 0, keyDup = 0;
+    if (U.period) {
+      var seenKey = {};
+      peD.days.forEach(function (d, j) {
+        if (d == null) return;
+        var mi = dayToMonth(d);
+        if (!months[mi]) { months[mi] = 1; monthsN++; }
+        if (acc) { var key = acc[j] + '\u0001' + mi; if (seenKey[key]) keyDup++; else seenKey[key] = 1; }
+      });
+    }
+    shape.periodMonths = monthsN;
+    shape.duplicateAccountMonths = U.period && acc ? keyDup : null;
+    var monthly = !!(U.account && U.period && monthsN >= 2 && accList.length < R);
+    shape.monthly = monthly;
+    if (!acc) shape.grain = 'Cannot tell, because no account id column is mapped.';
+    else if (monthly) shape.grain = 'One row per account per month (' + plural(monthsN, 'distinct month', 'distinct months') + ').';
+    else if (accList.length === R - F.account.missing) shape.grain = 'One row per account.';
+    else if (accList.length === distinctFilled) shape.grain = 'One row per account, apart from exact duplicate rows.';
+    else if (U.period) shape.grain = 'Several rows per account, but the period column does not separate them into months.';
+    else shape.grain = 'Several rows per account, with no period column to put them in order.';
+
+    var minD = null, maxD = null, asOf = null, maxCore = null;
+    function see(d, core) {
+      if (d == null) return;
+      if (minD == null || d < minD) minD = d;
+      if (maxD == null || d > maxD) maxD = d;
+      if (d <= today && (asOf == null || d > asOf)) asOf = d;
+      if (core && (maxCore == null || d > maxCore)) maxCore = d;
+    }
+    if (stD) stD.days.forEach(function (d) { see(d, true); });
+    if (peD) peD.days.forEach(function (d) { see(d, true); });
+    if (caD) caD.days.forEach(function (d) { see(d, false); });
+    shape.dateRange = minD != null ? fmtDay(minD) + ' to ' + fmtDay(maxD) : null;
+    shape.missing = ROLES.filter(function (r) { return F[r.key].mapped; }).map(function (r) {
+      return { key: r.key, role: r.label, header: F[r.key].header, missing: F[r.key].missing };
+    });
+
+    /* per account */
+    var endSignal = U.status ? 'status' : U.cancel ? 'cancel' : monthly ? 'history' : null;
+    res.endSignal = endSignal;
+    var maxMonth = null, minMonth = null;
+    if (monthly) Object.keys(months).forEach(function (m) { m = +m; if (maxMonth == null || m > maxMonth) maxMonth = m; if (minMonth == null || m < minMonth) minMonth = m; });
+    accList.forEach(function (o) {
+      var s = null, c = null, fm = null, lm = null, lastRow = o.rows[o.rows.length - 1];
+      o.rows.forEach(function (j) {
+        if (U.start && stD.days[j] != null && (s == null || stD.days[j] < s)) s = stD.days[j];
+        if (caD && caD.days[j] != null && (c == null || caD.days[j] > c)) c = caD.days[j];
+        if (monthly && peD.days[j] != null) {
+          var mi = dayToMonth(peD.days[j]);
+          if (fm == null || mi < fm) fm = mi;
+          if (lm == null || mi >= lm) { lm = mi; lastRow = j; }
+        }
+      });
+      o.startMonth = s != null ? dayToMonth(s) : fm;
+      var churned = false;
+      if (endSignal === 'status') churned = stS[lastRow] === 'churned';
+      else if (endSignal === 'cancel') churned = c != null && asOf != null && c <= asOf;
+      else if (endSignal === 'history') churned = lm != null && lm < maxMonth;
+      o.churned = churned;
+    });
+
+    /* history */
+    var hasStartInfo = !!(U.account && (U.start || monthly));
+    var spanMonths = 0;
+    if (monthly) spanMonths = maxMonth - minMonth;
+    else if (U.start && asOf != null) {
+      var first = null; stD.days.forEach(function (d) { if (d != null && (first == null || d < first)) first = d; });
+      if (first != null) spanMonths = Math.max(0, dayToMonth(asOf) - dayToMonth(first));
+    }
+    shape.historyMonths = hasStartInfo ? spanMonths : null;
+    var cohorts = {}; accList.forEach(function (o) { if (o.startMonth != null) cohorts[o.startMonth] = 1; });
+    var cohortN = Object.keys(cohorts).length;
+    res.cohorts = cohortN;
+
+    /* warnings */
+    if (U.account && hasStartInfo && endSignal) {
+      var q = {};
+      accList.forEach(function (o) {
+        if (o.startMonth == null) return;
+        var qi = Math.floor(o.startMonth / 3);
+        if (!q[qi]) q[qi] = { n: 0, c: 0 };
+        q[qi].n++; if (o.churned) q[qi].c++;
+      });
+      var qs = Object.keys(q).map(Number).sort(function (a, b) { return a - b; });
+      var run = 0, nEarly = 0;
+      while (run < qs.length && q[qs[run]].c === 0) { nEarly += q[qs[run]].n; run++; }
+      if (run > 0 && run < qs.length) {
+        var spanQ = qs[run - 1] - qs[0] + 1, nLate = 0, cLate = 0;
+        for (var j = run; j < qs.length; j++) { nLate += q[qs[j]].n; cLate += q[qs[j]].c; }
+        var expected = nLate ? nEarly * cLate / nLate : 0;
+        if (spanQ >= 4 && expected >= 5) {
+          res.warnings.push({ id: 'deleted', title: 'Churned accounts may have been deleted',
+            facts: { earlyAccounts: nEarly, from: fmtQuarter(qs[0]), to: fmtQuarter(qs[run - 1]), quarters: spanQ, laterAccounts: nLate, laterCancelled: cLate } });
+        }
+      }
+    }
+    if (placeholder) {
+      var later = 0, future = 0;
+      caD.days.forEach(function (d) { if (d == null) return; if (maxCore != null && d > maxCore) later++; if (d > today) future++; });
+      res.warnings.push({ id: 'placeholder', title: 'Every row has a cancellation date', facts: { filled: caFilled, rows: R, afterLatestStart: later, future: future } });
+    }
+    var deletedWarn = res.warnings.some(function (w) { return w.id === 'deleted'; });
+
+    /* reasons */
+    function rAccount() {
+      if (!acc) return 'No account id column, so rows cannot be grouped into customers.';
+      if (!U.account) return 'The account id is blank on ' + pct(F.account.missing, R) + ' of rows, so rows cannot be grouped into customers reliably.';
+      return null;
+    }
+    function rEnd() {
+      if (endSignal) return null;
+      if (placeholder) return 'Every row has a cancellation date and there is no status column, so an active account cannot be told from a churned one.';
+      if (stt && !U.status && !U.cancel) {
+        if (F.status.recognised < 0.8 * F.status.nonblank) return 'The status values are not ones we recognise as active or cancelled (for example ' + F.status.unknownValues.slice(0, 3).map(function (v) { return '"' + v + '"'; }).join(', ') + '), so a churned account cannot be told from an active one.';
+        return 'The status is blank on ' + pct(F.status.missing, R) + ' of rows, so a churned account cannot be told from an active one.';
+      }
+      if (ca && caD.nonblank === 0) return 'The cancellation date column is empty on every row and there is no status, so a churned account cannot be told from an active one.';
+      if (ca && caParsedShare < 0.8) return 'Only ' + pct(caD.parsed, caD.nonblank) + ' of cancellation dates could be read as dates, and there is no usable status, so a churned account cannot be told from an active one.';
+      return 'No cancellation date or status, so a churned account cannot be told from an active one.';
+    }
+    function rStart() {
+      if (U.start || monthly) return null;
+      if (st) return 'Only ' + pct(stD.parsed, R) + ' of rows have a start date we could read, so accounts cannot be placed in time.';
+      return 'No start date and no monthly history, so accounts cannot be placed in time or grouped into cohorts.';
+    }
+    function rHistory(minM) {
+      if (!hasStartInfo) return null;
+      if (spanMonths < minM) return 'Fewer than ' + minM + ' months of history (the file covers ' + plural(spanMonths, 'month', 'months') + ').';
+      return null;
+    }
+    function rRevenue() {
+      if (!rev) return 'No MRR or ARR column, so revenue cannot be followed at all.';
+      if (!U.revenue) return 'MRR or ARR is blank or not a number on ' + pct(R - F.revenue.numeric, R) + ' of rows.';
+      if (!monthly) return 'One revenue figure per account, not a revenue history per month, so a customer paying less or more over time cannot be seen.';
+      return null;
+    }
+    function rPlan() {
+      if (!U.revenue || !monthly) {
+        if (!pl) return 'No plan or revenue history per month, so expansion cannot be separated from price changes.';
+        return 'One plan per account, not a plan history per month, so expansion cannot be separated from price changes.';
+      }
+      if (!pl) return 'No plan history per month, so expansion cannot be separated from price changes.';
+      if (!U.plan) return 'The plan is blank on ' + pct(F.plan.missing, R) + ' of rows, so expansion cannot be separated from price changes.';
+      return null;
+    }
+    function rCohorts() {
+      if (!hasStartInfo) return null;
+      if (cohortN < 2) return 'Every account starts in the same month, so there is one cohort and nothing to compare it with.';
+      return null;
+    }
+    function row(fig, reasons, basis, affected) {
+      var uniq = [];
+      reasons.forEach(function (r) { if (r && uniq.indexOf(r) < 0) uniq.push(r); });
+      var r = { figure: fig, measurable: uniq.length === 0, reasons: uniq };
+      if (r.measurable) {
+        r.basis = basis;
+        if (deletedWarn && affected) r.caution = 'But see the warning below. If churned accounts are missing, this figure will look better than it is.';
+      }
+      return r;
+    }
+    var endWord = endSignal === 'status' ? 'a status for every account' : endSignal === 'cancel' ? 'cancellation dates' : 'the month each account last appears';
+    var revBasis = 'Revenue per account per month across ' + plural(spanMonths, 'month', 'months') + ', so lost, shrinking and growing accounts can each be seen.';
+    res.support.push(row('Gross revenue retention', [rAccount(), rRevenue(), rHistory(12)], revBasis, true));
+    res.support.push(row('Net revenue retention', [rAccount(), rRevenue(), rHistory(12)], revBasis, true));
+    res.support.push(row('Logo churn over 12 months', [rAccount(), rEnd(), rStart(), rHistory(12)],
+      'Account ids, ' + (U.start ? 'start dates' : 'monthly history') + ' and ' + endWord + ', across ' + plural(spanMonths, 'month', 'months') + '.', true));
+    res.support.push(row('Expansion by cohort', [rAccount(), rStart(), rRevenue(), rPlan(), rCohorts(), rHistory(12)],
+      'Revenue and plan per account per month, in ' + plural(cohortN, 'start cohort', 'start cohorts') + ' across ' + plural(spanMonths, 'month', 'months') + '.', false));
+    res.support.push(row('Cohort retention curve', [rAccount(), rEnd(), rStart(), rCohorts(), rHistory(6)],
+      plural(cohortN, 'monthly start cohort', 'monthly start cohorts') + ', with ' + endWord + ' to show when each account left.', true));
+    return res;
+  }
+
+  function run(text, opts) {
+    opts = opts || {};
+    var parsed = parseCSV(text);
+    var mapping = opts.mapping || guessRoles(parsed);
+    return { parsed: parsed, mapping: mapping, result: analyze(parsed, mapping, opts) };
+  }
+
+  IX.ROLES = ROLES;
+  IX.parseCSV = parseCSV; IX.detectDelimiter = detectDelimiter; IX.readDate = readDate; IX.readDateColumn = readDateColumn;
+  IX.readNumber = readNumber; IX.readStatus = readStatus; IX.guessRoles = guessRoles; IX.analyze = analyze; IX.run = run;
+  IX.pct = pct; IX.num = num; IX.plural = plural; IX.fmtDay = fmtDay;
+  root.IXCheck = IX;
+})(this);
+</script>
+<script id="ui">
+(function () {
+  'use strict';
+  var IX = window.IXCheck, doc = document;
+  var $ = function (id) { return doc.getElementById(id); };
+
+  // theme toggle, same as proved.html
+  var t = $('themeToggle'), root = doc.documentElement;
+  function isDark() { return root.getAttribute('data-theme') === 'dark' || (!root.getAttribute('data-theme') && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches); }
+  function label() { t.textContent = isDark() ? 'Light' : 'Dark'; }
+  t.addEventListener('click', function () { root.setAttribute('data-theme', isDark() ? 'light' : 'dark'); label(); });
+  if (window.matchMedia) { var mq = matchMedia('(prefers-color-scheme: dark)'); if (mq.addEventListener) mq.addEventListener('change', label); }
+  label();
+
+  var state = null;
+
+  function el(tag, cls, text) { var e = doc.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function clear(node) { while (node.firstChild) node.removeChild(node.firstChild); }
+  function kv(dl, k, v) { var d = el('div', 'kvrow'); d.appendChild(el('dt', null, k)); d.appendChild(el('dd', null, v)); dl.appendChild(d); }
+
+  function load(text, name) {
+    var parsed = IX.parseCSV(text);
+    if (!parsed.headers.length || !parsed.rows.length) {
+      $('status').textContent = 'That file has no rows we could read. It needs a header row and at least one data row.';
+      $('results').hidden = true; return;
+    }
+    state = { parsed: parsed, name: name, mapping: IX.guessRoles(parsed), dateOrder: 'auto' };
+    render();
+  }
+
+  function render() {
+    var res = IX.analyze(state.parsed, state.mapping, { dateOrder: state.dateOrder });
+    var P = state.parsed, pct = IX.pct, num = IX.num;
+    $('results').hidden = false;
+    $('status').textContent = 'Checked ' + state.name + ': ' + num(res.rows) + ' rows, ' + P.headers.length + ' columns. Nothing was sent anywhere.';
+
+    /* mapping */
+    var mt = $('mapBody'); clear(mt);
+    IX.ROLES.forEach(function (role) {
+      var tr = el('tr'), f = res.fields[role.key];
+      tr.appendChild(el('th', null, role.label));
+      var td = el('td'), sel = el('select');
+      sel.setAttribute('aria-label', 'Column for ' + role.label);
+      var none = el('option', null, 'Not in this file'); none.value = '-1'; sel.appendChild(none);
+      P.headers.forEach(function (h, i) { var o = el('option', null, h); o.value = String(i); sel.appendChild(o); });
+      sel.value = String(state.mapping[role.key]);
+      sel.addEventListener('change', function () { state.mapping[role.key] = +sel.value; render(); });
+      td.appendChild(sel); tr.appendChild(td);
+      var note = '';
+      if (!f.mapped) note = 'Not found. Pick a column if your file has one.';
+      else if (role.type === 'date') note = num(f.date.parsed) + ' of ' + num(f.date.nonblank) + ' filled values read as dates' + (f.date.bad.length ? '. Could not read: ' + f.date.bad.slice(0, 2).join(', ') : '');
+      else if (role.key === 'revenue') note = 'A number on ' + pct(f.numeric, res.rows) + ' of rows';
+      else if (role.key === 'status') note = num(f.distinct) + ' distinct values, ' + num(f.recognised) + ' of ' + num(f.nonblank) + ' recognised' + (f.unknownValues.length ? '. Not recognised: ' + f.unknownValues.slice(0, 3).join(', ') : '');
+      else if (role.key === 'plan') note = num(f.distinct) + ' distinct values';
+      else if (role.key === 'account') note = num(f.distinct) + ' distinct values';
+      tr.appendChild(el('td', 'note', note));
+      mt.appendChild(tr);
+    });
+    var ow = $('orderWrap');
+    ow.hidden = !res.dates.hasSlash;
+    $('dateOrder').value = state.dateOrder;
+
+    /* dates */
+    var dd = $('dates'); clear(dd);
+    if (!res.dates.columns) dd.appendChild(el('p', null, 'No date column is mapped, so there is nothing to place in time.'));
+    else {
+      dd.appendChild(el('p', null, 'Dates parsed on ' + pct(res.dates.rowsParsed, res.dates.rowsWithDate) + ' of rows that have a date (' + num(res.dates.rowsParsed) + ' of ' + num(res.dates.rowsWithDate) + ').'));
+      if (res.dates.ambiguous && state.dateOrder === 'auto') dd.appendChild(el('p', 'flag', 'Some dates are written like 03/04/2024, which could be 4 March or 3 April, and nothing in the file settles it. We read them month first. If your system writes the day first, change it above.'));
+      if (res.dates.mixed) dd.appendChild(el('p', 'flag', 'Some slash dates only make sense month first and others only day first, so the file mixes two formats. Dates that fit the other order were read that way, but check the source.'));
+    }
+
+    /* shape */
+    var sh = $('shape'); clear(sh);
+    var s = res.shape;
+    kv(sh, 'Rows', num(s.rows));
+    kv(sh, 'Distinct accounts', s.accounts == null ? 'Unknown, no account id mapped' : num(s.accounts));
+    kv(sh, 'Grain', s.grain);
+    kv(sh, 'Exact duplicate rows', num(s.duplicateRows));
+    if (s.duplicateAccountMonths != null && s.monthly) kv(sh, 'Account and month pairs repeated', num(s.duplicateAccountMonths));
+    kv(sh, 'Dates covered', s.dateRange || 'No dates');
+    if (s.historyMonths != null) kv(sh, 'Months of history', num(s.historyMonths));
+    if (P.ragged) kv(sh, 'Rows with a different number of fields than the header', num(P.ragged));
+    s.missing.forEach(function (m) { kv(sh, m.role + ' blank (column \u201c' + m.header + '\u201d)', pct(m.missing, s.rows) + ' of rows'); });
+
+    /* support */
+    var sb = $('supportBody'); clear(sb);
+    res.support.forEach(function (r) {
+      var tr = el('tr');
+      tr.appendChild(el('th', null, r.figure));
+      var v = el('td'); v.appendChild(el('span', 'verdict ' + (r.measurable ? 'yes' : 'no'), r.measurable ? 'Measurable' : 'Not measurable from this file'));
+      tr.appendChild(v);
+      var why = el('td');
+      if (r.measurable) { why.appendChild(el('p', null, r.basis)); if (r.caution) why.appendChild(el('p', 'flag', r.caution)); }
+      else r.reasons.forEach(function (x) { why.appendChild(el('p', null, x)); });
+      tr.appendChild(why);
+      sb.appendChild(tr);
+    });
+
+    /* warnings */
+    var wb = $('warnings'); clear(wb);
+    res.warnings.forEach(function (w) {
+      var box = el('div', 'warn'); box.appendChild(el('h3', null, w.title));
+      var f = w.facts;
+      if (w.id === 'deleted') {
+        box.appendChild(el('p', null, 'The ' + num(f.earlyAccounts) + ' accounts that started between ' + f.from + ' and ' + f.to + ' show no cancellations at all, while the ' + num(f.laterAccounts) + ' accounts that started later show ' + num(f.laterCancelled) + '. Older customers have had longer to leave, not less.'));
+        box.appendChild(el('p', null, 'This is what an export looks like when the system removes customers once they cancel. The early cohorts then hold only the customers who stayed, so their retention curve runs flat at 100 percent for months and every retention figure built on the file looks better than it is. Nobody has to falsify anything for this to happen.'));
+        var p = el('p'); p.appendChild(doc.createTextNode('Before trusting a retention figure from this file, check whether cancelled accounts are archived or deleted in the source system. The flat line effect is shown step by step in '));
+        var a = el('a', null, 'the demonstration'); a.href = 'proof.html'; p.appendChild(a); p.appendChild(doc.createTextNode('.')); box.appendChild(p);
+      } else if (w.id === 'placeholder') {
+        box.appendChild(el('p', null, 'There is no status column, and the cancellation date column is filled on ' + num(f.filled) + ' of ' + num(f.rows) + ' rows. A real export almost always has customers who have not cancelled, and for them this field is blank.'));
+        box.appendChild(el('p', null, 'When every row is filled, the column is often a placeholder: a contract end date, a renewal date, or a default the system writes for everyone. Read as cancellations, it would make every customer look churned.' + (f.afterLatestStart ? ' ' + num(f.afterLatestStart) + ' of these dates fall after the most recent start date in the file, which is more typical of a contract end date than a cancellation.' : '')));
+        box.appendChild(el('p', null, 'Check what the column means in the source system, or add a status column, before any churn figure is built on it.'));
+      }
+      wb.appendChild(box);
+    });
+    $('warnWrap').hidden = !res.warnings.length;
+  }
+
+  $('dateOrder').addEventListener('change', function () { if (state) { state.dateOrder = $('dateOrder').value; render(); } });
+
+  function readFile(file) {
+    if (!file) return;
+    $('status').textContent = 'Reading ' + file.name + ' in your browser.';
+    var fr = new FileReader();
+    fr.onload = function () { load(String(fr.result), file.name); };
+    fr.onerror = function () { $('status').textContent = 'Your browser could not read that file.'; };
+    fr.readAsText(file);
+  }
+  $('file').addEventListener('change', function (e) { readFile(e.target.files[0]); });
+  var dz = $('drop');
+  ['dragenter', 'dragover'].forEach(function (ev) { dz.addEventListener(ev, function (e) { e.preventDefault(); dz.classList.add('over'); }); });
+  ['dragleave', 'drop'].forEach(function (ev) { dz.addEventListener(ev, function (e) { e.preventDefault(); dz.classList.remove('over'); }); });
+  dz.addEventListener('drop', function (e) { if (e.dataTransfer && e.dataTransfer.files.length) readFile(e.dataTransfer.files[0]); });
+  $('sample').addEventListener('click', function () { load($('synthetic-sample').textContent.replace(/^\n/, ''), 'the synthetic sample (invented data)'); });
+})();
+</script>
+</body>
+</html>
