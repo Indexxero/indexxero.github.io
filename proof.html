@@ -172,39 +172,38 @@
 <header>
   <p class="eyebrow">Indexxero &middot; Demonstration</p>
   <h1>The same customers, measured two ways</h1>
-  <p class="standfirst">One book of 2,000 accounts. One set of churn events. Two analyses that differ in exactly one respect: when the field values were read. The gap between them is not a rounding error.</p>
+  <p class="standfirst">One synthetic book of 2,000 accounts. One set of churn events. Two measurements that differ in exactly one respect: whether the book is read from today's export or rebuilt as it stood on each day. No model is involved, and the gap between them is not a rounding error.</p>
 </header>
 
 <hr class="rule">
 
-<h2>The worklist</h2>
-<p class="lede">A retention model is validated, and it reports that 31 of the 100 highest-risk accounts will churn in the next six months. The team staffs against that number.</p>
-<p class="lede">Rerun on data that only knows what was knowable on the day, the same model finds 9.</p>
+<h2>The headline number</h2>
+<p class="lede">Take one synthetic book of 2,000 accounts and ask the question a board asks: of the customers who were there three years ago, what share are still customers today?</p>
 
 <div class="card">
   <div class="hero">
     <div class="hero-cell">
-      <div class="hero-num export">31</div>
-      <div class="hero-cap"><b>Backtest on the current export</b>accounts in the top 100 that churn</div>
+      <div class="hero-num export">91.6%</div>
+      <div class="hero-cap"><b>Read from today's export</b>three year retention, synthetic book</div>
     </div>
     <div class="hero-vs">versus</div>
     <div class="hero-cell">
-      <div class="hero-num asof">9</div>
-      <div class="hero-cap"><b>Backtest reconstructed as of the day</b>accounts in the top 100 that churn</div>
+      <div class="hero-num asof">80.8%</div>
+      <div class="hero-cap"><b>Rebuilt as of each day</b>three year retention, synthetic book</div>
     </div>
   </div>
 </div>
 
-<p>Both figures come from the same model specification, the same accounts, the same churn events and the same train and test split. The team was not staffed for a list that is three and a half times weaker than the one they were shown.</p>
+<p>Both figures come from the same invented accounts and the same churn events. Nothing is predicted and no model is fitted. The only difference is whether the book was read as it stands today or rebuilt, point in time, as it stood on each day. The first answer is about ten points higher than the second.</p>
 
 <h2>The retention curve</h2>
-<p class="lede">The same distortion turns up before any model is built, in the number a board sees.</p>
+<p class="lede">Here is where the gap comes from.</p>
 <p>Rebuild a three year cohort from the customer table as it stands today and the accounts that were purged under an ordinary data-retention policy are simply absent from the denominator. They were customers. They left. The table no longer holds them, so the cohort appears to have been made of survivors from the beginning.</p>
 
 <div class="card">
   <div class="card-head">
     <h3>Share of the opening cohort still a customer</h3>
-    <p>2,000 accounts opened. 1,772 still on file today. Churned accounts are deleted 12 months after they leave. One run is plotted here. The spread table below reports all 25 runs, which is why this curve ends at 81.2 where the table reports 80.8.</p>
+    <p>Synthetic data. 2,000 accounts opened. 1,772 still on file today. Churned accounts are deleted 12 months after they leave. One run is plotted here. The spread table below reports all 25 runs, which is why this curve ends at 81.2 where the table reports 80.8.</p>
   </div>
   <div class="legend">
     <span><i class="swatch" style="background:var(--export)"></i> Rebuilt from today's customer table</span>
@@ -224,45 +223,23 @@
 
 <p>That flat segment is not a data error and nobody falsified anything. It is what happens when the only accounts you can still see are the ones that stayed.</p>
 
-<h2>Model quality, and how much of it was real</h2>
-<p class="lede">Two standard measures, same rows, same labels, same split. The only difference is where the five account fields were read from.</p>
-
-<div class="two">
-  <div class="card">
-    <div class="card-head">
-      <h3>Area under the ROC curve</h3>
-      <p>Test period, months 24 to 35</p>
-    </div>
-    <svg id="bars1" viewBox="0 0 320 200" role="img" aria-label="Bar chart. AUC from the current export is 0.92. AUC reconstructed as of the day is 0.69."></svg>
-  </div>
-  <div class="card">
-    <div class="card-head">
-      <h3>Precision in the top decile</h3>
-      <p>Share of the flagged list that churns</p>
-    </div>
-    <svg id="bars2" viewBox="0 0 320 200" role="img" aria-label="Bar chart. Precision from the current export is 30.9 percent. Precision reconstructed as of the day is 8.9 percent. The base rate is 3.9 percent."></svg>
-  </div>
-</div>
-
-<p>An AUC of 0.92 is the kind of figure that ends the discussion in a model review. It is also, here, mostly an artifact. The honest figure of 0.69 is a real model doing real work, and it is a different conversation about what the team should expect.</p>
-
 <h2>What was actually different</h2>
-<p class="lede">Five account fields. None of them is a bug, and none of the writes below is unusual. Every one of them puts information from after the prediction date into a field that carries no history.</p>
+<p class="lede">Five ordinary writes separate today's export from the book as it stood. None of them is a bug, and none is unusual. Each one records what happened later in a place that keeps no history. The last one, deleting churned accounts, is what moves the retention figure. The other four change anything else you read from those fields.</p>
 
 <div class="card">
   <ul class="mech">
     <li><b>Seats set to zero on offboarding</b><span>Deprovisioning is the correct operational response to a cancellation. The field records the outcome, and there is no record of what it held last March.</span></li>
-    <li><b>Owner unassigned when the account closes</b><span>An empty owner field is a near perfect churn predictor, and it is empty because they already left.</span></li>
-    <li><b>Plan moved to a closed tier</b><span>Billing hygiene. The tier as of the prediction date is gone.</span></li>
-    <li><b>Usage and ticket counts frozen at the last live value</b><span>The final month of a departing customer looks nothing like the month you were trying to predict from.</span></li>
+    <li><b>Owner unassigned when the account closes</b><span>The field is empty because the customer already left. Read later, it looks like a warning sign that was there all along.</span></li>
+    <li><b>Plan moved to a closed tier</b><span>Billing hygiene. The tier the account was on at the time is gone.</span></li>
+    <li><b>Usage and ticket counts frozen at the last live value</b><span>The export keeps the final month of a departing customer, not the months before it.</span></li>
     <li><b>Churned accounts deleted after 12 months</b><span>A retention policy, often a contractual obligation. It removes rows from the denominator of every historical rate.</span></li>
   </ul>
 </div>
 
-<p>Any single one of these is recoverable. Together they are why a retention model that reviewed well does not reproduce in production, and why a retention figure in a diligence pack is not the figure the business actually ran.</p>
+<p>Any single one of these is recoverable. Together they are why a retention figure in a diligence pack can differ from the figure the business actually ran.</p>
 
-<h2>The spread, across 25 independent runs</h2>
-<p class="lede">One dataset could be a lucky draw. The entire world generation and both analyses were rerun under 25 independent seeds. The ranges below are the observed minimum and maximum, not confidence intervals.</p>
+<h2>The spread, across 25 independent runs of the synthetic book</h2>
+<p class="lede">One dataset could be a lucky draw. The whole synthetic book and both measurements were rebuilt under 25 independent seeds. The ranges below are the observed minimum and maximum, not confidence intervals.</p>
 
 <div class="card">
   <table>
@@ -270,56 +247,36 @@
       <tr><th>Measure</th><th>Current export</th><th>As of the day</th><th>Gap</th></tr>
     </thead>
     <tbody>
-      <tr><td>Precision, top decile</td><td>30.9%<br><span class="tick">23.4 to 35.8</span></td><td>8.9%<br><span class="tick">5.1 to 11.5</span></td><td>3.5&times;</td></tr>
-      <tr><td>Area under ROC</td><td>0.922<br><span class="tick">0.892 to 0.951</span></td><td>0.688<br><span class="tick">0.623 to 0.731</span></td><td>0.23</td></tr>
       <tr><td>Three year logo retention</td><td>91.6%<br><span class="tick">90.9 to 93.7</span></td><td>80.8%<br><span class="tick">79.5 to 82.8</span></td><td>10.8 pts</td></tr>
       <tr><td>Three year ARR retention</td><td>92.4%<br><span class="tick">90.4 to 94.3</span></td><td>81.9%<br><span class="tick">79.7 to 84.1</span></td><td>10.4 pts</td></tr>
     </tbody>
   </table>
 </div>
 
-<p>The ranges do not overlap on any of the four measures. The effect is a property of the mechanism, not of one draw.</p> <p><b>One more thing the number depends on.</b> Everything above dates a churn to the month it happened. Most CRMs date it to the month it was recognised and written down, which is later. Applying a recognition lag to both arms and re-measuring, the gap is 10.8 points at zero lag and 9.2 points at three months. It narrows, and it never closes or changes sign. So the honest way to state it is about ten points, and between nine and eleven depending on which date convention your book uses.</p>
+<p>The ranges do not overlap on either measure. The effect is a property of the mechanism, not of one draw.</p> <p><b>One more thing the number depends on.</b> Everything above dates a churn to the month it happened. Most CRMs date it to the month it was recognised and written down, which is later. Applying a recognition lag to both arms and re-measuring, the gap is 10.8 points at zero lag and 9.2 points at three months. It narrows, and it never closes or changes sign. So the honest way to state it is about ten points, and between nine and eleven depending on which date convention your book uses.</p>
 
 <h2>Reproduce it</h2>
-<p class="lede">The generative process is written before either analysis, and neither analysis can see it. Roughly 200 lines, numpy and scikit-learn, about seven seconds for all 25 runs.</p>
+<p class="lede">The process that generates the book is written before either measurement, and neither measurement can see it. It is a short Python script, and all 25 runs take a few seconds.</p>
 
 <div class="card">
   <details open>
-    <summary>The only difference between the two analyses</summary>
-<pre><code>def features_as_of(w, acc, mon):
-    """Point-in-time fields: the value each field held on the prediction date."""
-    return np.column_stack(_history_features(w, acc, mon) + [
-        w["usage"][acc, mon], w["tickets"][acc, mon], w["seats"][acc, mon],
-        np.ones(len(acc)), w["plan"][acc].astype(float),
-    ])
-
-
-def features_from_today(w, crm, acc, mon):
-    """The same five fields, read from the current export instead.
-    Identical rows, identical labels, identical trend features."""
-    return np.column_stack(_history_features(w, acc, mon) + [
-        crm["usage"][acc], crm["tickets"][acc], crm["seats"][acc],
-        crm["csm"][acc], crm["plan"][acc],
-    ])</code></pre>
-  </details>
-  <details>
-    <summary>The post-churn writes, in full</summary>
+    <summary>The writes that make today's export differ, in full</summary>
 <pre><code># Ordinary operational hygiene. None of it malicious. All of it writes the
 # future into fields that carry no history.
 cur["seats"] = np.where(churned &amp; (RNG.random(n) &lt; 0.72), 0.0, cur["seats"])
 cur["csm"]   = np.where(churned &amp; (RNG.random(n) &lt; 0.66), 0.0, cur["csm"])
 cur["plan"]  = np.where(churned &amp; (RNG.random(n) &lt; 0.58), 0.0, cur["plan"])
 
-months_since = np.where(churned, (N_MONTHS - 1) - cm, -1)
+months_since = np.where(churned, (N_MONTHS-1)-cm, -1)
 cur["purged"] = churned &amp; (months_since &gt; PURGE_AFTER_MONTHS)</code></pre>
   </details>
 </div>
 
-<p class="note"><b>Every figure on this page is synthetic.</b> No customer data of any kind was used. The point of generating the book rather than using a real one is that the truth is known in advance, so the gap between the two analyses is measured rather than estimated. Run it against your own export and the gap will be different. It will not be zero.</p>
+<p class="note"><b>Every figure on this page is synthetic.</b> No customer data of any kind was used. The point of generating the book rather than using a real one is that the truth is known in advance, so the gap between the two measurements is known exactly rather than estimated. Run it against your own export and the gap will be different. It will not be zero.</p>
 
 <h2>Why this is the whole problem</h2>
-<p>Every retention figure in a board pack, a diligence file or a model review was produced by someone who already knew which customers churned. That is not an accusation. It is the default condition of any analysis run against a live system, because live systems overwrite state and delete rows, and doing both is correct behaviour.</p>
-<p>Indexxero reconstructs what was knowable on each historical date and reruns the analysis against that. Where the data cannot support the reconstruction, it reports that instead of producing a number. Two of the eight sections in a typical report come back empty, with an explanation of what would fill them.</p>
+<p>Every retention figure in a board pack or a diligence file was produced by someone who already knew which customers churned. That is not an accusation. It is the default condition of any analysis run against a live system, because live systems overwrite state and delete rows, and doing both is correct behaviour.</p>
+<p>Indexxero reconstructs what was knowable on each historical date and measures retention against that. Where the data cannot support the reconstruction, it reports that instead of producing a number. Two of the eight sections in a typical report come back empty, with an explanation of what would fill them.</p>
 
 <footer>
   <p><b>Indexxero</b> &middot; Retention measurement for software investors and operators.</p>
@@ -418,49 +375,8 @@ function drawCurve() {
   });
 }
 
-/* ---------------- paired bars ---------------- */
-function drawBars(id, rows, fmt, maxV, footnote) {
-  const svg = document.getElementById(id);
-  svg.textContent = '';
-  const W = 320, H = 200, L = 8, R = 8, T = 10, B = footnote ? 44 : 28;
-  const iw = W - L - R, ih = H - T - B;
-  const bw = 78, gap = 46;
-  const x0 = L + (iw - (bw * 2 + gap)) / 2;
-
-  rows.forEach((r, i) => {
-    const bx = x0 + i * (bw + gap);
-    const h = Math.max(2, (r.v / maxV) * ih);
-    svg.appendChild(el('rect', {
-      x: bx, y: T + ih - h, width: bw, height: h, rx: 4, fill: r.c
-    }));
-    const t = el('text', { class: 'dlabel', x: bx + bw / 2, y: T + ih - h - 10, 'text-anchor': 'middle' });
-    t.textContent = fmt(r.v); svg.appendChild(t);
-    const s = el('text', { class: 'dlabel-sub', x: bx + bw / 2, y: T + ih + 16, 'text-anchor': 'middle' });
-    s.textContent = r.l; svg.appendChild(s);
-
-    const hit = el('rect', { x: bx - 6, y: T, width: bw + 12, height: ih, fill: 'transparent' });
-    svg.appendChild(hit);
-    hit.addEventListener('pointermove', ev => showTip(
-      `<div class="tr"><i class="swatch" style="background:${r.c}"></i>${r.full} <b>${fmt(r.v)}</b></div>`, ev));
-    hit.addEventListener('pointerleave', hideTip);
-  });
-  svg.appendChild(el('line', { class: 'axis-line', x1: L, x2: W - R, y1: T + ih, y2: T + ih }));
-  if (footnote) {
-    const f = el('text', { class: 'dlabel-sub', x: W / 2, y: H - 8, 'text-anchor': 'middle' });
-    f.textContent = footnote; svg.appendChild(f);
-  }
-}
-
 function drawAll() {
   drawCurve();
-  drawBars('bars1', [
-    { v: 0.922, l: 'Current export', full: 'Backtest on the current export', c: css('--export') },
-    { v: 0.688, l: 'As of the day',  full: 'Reconstructed as of the day',    c: css('--asof') }
-  ], v => v.toFixed(2), 1.0, '1.00 is perfect, 0.50 is a coin flip');
-  drawBars('bars2', [
-    { v: 0.309, l: 'Current export', full: 'Backtest on the current export', c: css('--export') },
-    { v: 0.089, l: 'As of the day',  full: 'Reconstructed as of the day',    c: css('--asof') }
-  ], v => (v * 100).toFixed(1) + '%', 0.40, 'Base rate in the period is 3.9%');
 }
 
 /* table view */
