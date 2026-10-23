@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Larkspur revenue evidence pack, a synthetic example from Indexxero</title>
+<meta name="description" content="A fictional SaaS company's customer ARR schedule set beside what its invoice lines support, account by account. Synthetic data, no real company involved.">
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://measure.indexxero.com/example">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Indexxero">
+<meta property="og:title" content="Revenue evidence pack, synthetic example">
+<meta property="og:description" content="A customer ARR schedule set beside what the invoice lines support, account by account. Fictional company, planted exceptions, run on a laptop.">
+<meta property="og:url" content="https://measure.indexxero.com/example">
+<meta property="og:image" content="https://measure.indexxero.com/og-example.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Revenue evidence pack, synthetic example">
+<meta name="twitter:description" content="A customer ARR schedule set beside what the invoice lines support, account by account. Fictional company, planted exceptions, run on a laptop.">
+<meta name="twitter:image" content="https://measure.indexxero.com/og-example.png">
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single reading column like a workpaper; wide tables scroll in their own frame; a banner states the synthetic nature on every screen. */
+:root{
+  --bg:#F3F6F8; --paper:#FFFFFF; --fg:#16222B; --muted:#5A6B77; --line:#CFD9E0; --accent:#0E5A6B; --accent-soft:#DCEEF2;
+  --ok:#2C7A4B; --warn:#A8481C; --flag:#8A6A12;
+  --display:"IBM Plex Serif",Georgia,"Times New Roman",serif; --body:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif; --mono:"IBM Plex Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#0E151A; --paper:#151F26; --fg:#E3EAEE; --muted:#9AAAB5; --line:#2A3A44; --accent:#6EC2D4; --accent-soft:#163743; --ok:#6CC08F; --warn:#E08A5C; --flag:#D4B34A; color-scheme:dark } }
+:root[data-theme="dark"]{ --bg:#0E151A; --paper:#151F26; --fg:#E3EAEE; --muted:#9AAAB5; --line:#2A3A44; --accent:#6EC2D4; --accent-soft:#163743; --ok:#6CC08F; --warn:#E08A5C; --flag:#D4B34A; color-scheme:dark }
+body{background:var(--bg);color:var(--fg);font-family:var(--body);line-height:1.5;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+.banner{background:var(--accent);color:#fff;font-size:13px;letter-spacing:.04em;text-transform:uppercase;text-align:center;padding:8px 12px;margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px))) 0 calc(-1 * max(16px,env(safe-area-inset-right,0px)))}
+.banner span{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:block}
+.wrap{max-width:860px;margin:0 auto}
+header{padding:40px 0 24px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(28px,4.5vw,40px);line-height:1.15;margin:0 0 12px;text-wrap:balance}
+h2{font-family:var(--display);font-weight:600;font-size:22px;margin:40px 0 12px;text-wrap:balance}
+h3{font-size:15px;font-weight:600;margin:24px 0 8px}
+p{max-width:68ch;margin:0 0 12px}
+.meta{font-family:var(--mono);font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 20px;margin-top:12px}
+.lead{font-size:17px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:20px 0}
+.tile{background:var(--paper);border:1px solid var(--line);padding:14px 16px;min-width:0}
+.tile .k{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tile .v{font-family:var(--mono);font-size:24px;font-weight:500;margin-top:4px;font-variant-numeric:tabular-nums}
+.tile .s{font-size:12.5px;color:var(--muted);margin-top:4px}
+.scroll{overflow-x:auto;border:1px solid var(--line);background:var(--paper);margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:640px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600;white-space:nowrap}
+td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.total td{font-weight:600;border-top:2px solid var(--fg);border-bottom:none}
+.pill{display:inline-block;font-size:11.5px;font-family:var(--mono);padding:2px 7px;border:1px solid var(--line);border-radius:3px;white-space:nowrap}
+.pill.excl{border-color:var(--warn);color:var(--warn)}
+.pill.flag{border-color:var(--flag);color:var(--flag)}
+.pill.ok{border-color:var(--ok);color:var(--ok)}
+.pill.na{color:var(--muted)}
+.note{background:var(--accent-soft);border-left:3px solid var(--accent);padding:12px 14px;margin:16px 0;max-width:72ch}
+.note p:last-child{margin:0}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 18px;max-width:72ch;margin:0}
+dt{font-family:var(--mono);font-size:13px;color:var(--muted)}
+dd{margin:0}
+code{font-family:var(--mono);font-size:12.5px;background:var(--accent-soft);padding:1px 5px;border-radius:3px}
+pre{font-family:var(--mono);font-size:12.5px;background:var(--paper);border:1px solid var(--line);padding:12px;overflow-x:auto;margin:8px 0 16px}
+footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+@media (max-width:520px){ dl{grid-template-columns:1fr} h2{margin-top:32px} }
+</style>
+</head>
+<body>
+
+
+<div class="banner"><span>Illustrative synthetic example. Not a customer result. No real company's data was used.</span></div>
+
+<div class="wrap">
+<header>
+  <p class="eyebrow">Revenue evidence pack, second pass on the customer ARR schedule</p>
+  <h1>Larkspur Metrics, a fictional SaaS company, as of October 2025</h1>
+  <p class="lead">The customer ARR schedule the company reports, set beside what its invoice lines support, account by account. Where the two disagree, the cause and the amount. Where the evidence cannot settle it, the amount is excluded from verified ARR rather than explained away.</p>
+  <div class="meta">
+    <span>schedule.csv · 521 rows · sha256 65e36e49…</span>
+    <span>invoices.csv · 511 lines · sha256 0c50583d…</span>
+    <span>window 2024-10 to 2025-10</span>
+    <span>run locally, nothing uploaded</span>
+  </div>
+</header>
+
+<h2>Reported against verified</h2>
+<div class="tiles">
+  <div class="tile"><div class="k">Reported ARR, per schedule</div><div class="v">$868,800</div><div class="s">37 accounts carrying ARR in October 2025</div></div>
+  <div class="tile"><div class="k">Supported by invoices</div><div class="v">$834,000</div><div class="s">96.0 percent of reported</div></div>
+  <div class="tile"><div class="k">Excluded from verified ARR</div><div class="v">$34,800</div><div class="s">4.0 percent, two accounts, unresolved from these two files</div></div>
+  <div class="tile"><div class="k">Accounts with an exception</div><div class="v">10 of 38</div><div class="s">in the last twelve months, any cause</div></div>
+</div>
+<div class="note">
+  <p>Three legs are usually tested in diligence: the schedule against invoices, against deferred revenue, and against cash. This pack covers the first leg only. The cash and deferred revenue legs are marked not covered in every table below, not filled in.</p>
+</div>
+
+<h2>Exception register, October 2025</h2>
+<p>One row per account with an exception in the trailing twelve months. Amounts are annualised. Status is one of: supported, flagged (the amount stands, the cause is on record), or excluded (the invoices do not support it, so it is removed from verified ARR until a document resolves it). The 28 accounts with no exception are in the workbook.</p>
+<div class="scroll">
+<table>
+  <thead><tr>
+    <th>Account</th><th class="n">ARR per schedule</th><th class="n">ARR implied by invoices</th><th class="n">ARR implied by cash</th><th class="n">Variance</th><th>Cause</th><th class="n">Months affected</th><th>Status</th>
+  </tr></thead>
+  <tbody>
+    <tr><td>Silent Partner Inc</td><td class="n">25,200</td><td class="n">0</td><td class="n"><span class="pill na">not covered</span></td><td class="n">25,200</td><td>No invoices found for this account in the whole window</td><td class="n">12</td><td><span class="pill excl">excluded</span></td></tr>
+    <tr><td>Granite Peak Software</td><td class="n">60,000</td><td class="n">50,400</td><td class="n"><span class="pill na">not covered</span></td><td class="n">9,600</td><td>Schedule carries 5,000 a month, invoices show 4,200, every month</td><td class="n">12</td><td><span class="pill excl">excluded 9,600</span></td></tr>
+    <tr><td>Quiet Creek Software</td><td class="n">12,000</td><td class="n">15,600</td><td class="n"><span class="pill na">not covered</span></td><td class="n">(3,600)</td><td>Invoices bill 1,300 a month against a schedule of 1,000; schedule likely stale</td><td class="n">12</td><td><span class="pill flag">flagged</span></td></tr>
+    <tr><td>Orphan Billing LLC</td><td class="n">0</td><td class="n">11,400</td><td class="n"><span class="pill na">not covered</span></td><td class="n">(11,400)</td><td>Billed since February 2025, absent from the schedule</td><td class="n">9</td><td><span class="pill flag">flagged, not on schedule</span></td></tr>
+    <tr><td>Juniper Ridge Labs</td><td class="n">96,000</td><td class="n">96,000</td><td class="n"><span class="pill na">not covered</span></td><td class="n">0</td><td>First three months billed at 4,000 against a schedule of 8,000: ramp or proration</td><td class="n">3</td><td><span class="pill flag">flagged, ramp</span></td></tr>
+    <tr><td>Lantern Field Co</td><td class="n">0</td><td class="n">16,800</td><td class="n"><span class="pill na">not covered</span></td><td class="n">(16,800)</td><td>Schedule shows churn in August 2025; invoices continue through October</td><td class="n">2</td><td><span class="pill flag">flagged, billed after churn</span></td></tr>
+    <tr><td>Cedar Loop Systems</td><td class="n">36,000</td><td class="n">36,000</td><td class="n"><span class="pill na">not covered</span></td><td class="n">0</td><td>June 2025: credit memo of 3,000 and a rebill for the same period</td><td class="n">1</td><td><span class="pill flag">flagged, credit and rebill</span></td></tr>
+    <tr><td>Northwind Dynamics</td><td class="n">28,800</td><td class="n">28,800</td><td class="n"><span class="pill na">not covered</span></td><td class="n">0</td><td>Billed in arrears with no service period on the lines; May step up lands a month late</td><td class="n">1</td><td><span class="pill flag">flagged, timing</span></td></tr>
+    <tr><td>Maple Street Health</td><td class="n">31,200</td><td class="n">31,200</td><td class="n"><span class="pill na">not covered</span></td><td class="n">0</td><td>An untyped 15,000 line in March 2025 sits beside the subscription; kept out of ARR, needs a type</td><td class="n">1</td><td><span class="pill flag">flagged, classification</span></td></tr>
+    <tr><td>Harbor Light Media</td><td class="n">20,400</td><td class="n">20,400</td><td class="n"><span class="pill na">not covered</span></td><td class="n">0</td><td>Invoice id DUP-202504 appears twice</td><td class="n">1</td><td><span class="pill flag">flagged, duplicate</span></td></tr>
+    <tr class="total"><td>All 38 accounts</td><td class="n">868,800</td><td class="n">865,800</td><td class="n"><span class="pill na">not covered</span></td><td class="n">3,000</td><td>Verified ARR 834,000 after exclusions</td><td class="n"></td><td></td></tr>
+  </tbody>
+</table>
+</div>
+<p>The total variance (3,000) is far smaller than the excluded amount (34,800) because three accounts bill more than the schedule shows and nearly cancel the two that bill less. Verified ARR never counts invoice amounts the schedule does not claim; it only removes what the schedule claims and the invoices do not support.</p>
+
+<h2>Exceptions by cause</h2>
+<div class="scroll">
+<table>
+  <thead><tr><th>Cause</th><th class="n">Accounts</th><th class="n">Excluded ARR</th><th>What it means here</th></tr></thead>
+  <tbody>
+    <tr><td>No invoices found</td><td class="n">1</td><td class="n">25,200</td><td>Either the invoices sit in another system or the account is not real. A document resolves it; the kit cannot.</td></tr>
+    <tr><td>Over stated</td><td class="n">1</td><td class="n">9,600</td><td>Schedule above invoices for twelve months. A contract amendment the billing never caught, or a schedule error.</td></tr>
+    <tr><td>Under stated</td><td class="n">2</td><td class="n">0</td><td>Invoices above the schedule, or billing after a recorded churn. Not added to verified ARR; flagged for the finance lead.</td></tr>
+    <tr><td>Not on schedule</td><td class="n">1</td><td class="n">0</td><td>A billed customer the schedule does not list. Possibly a reseller child or a new logo not yet entered.</td></tr>
+    <tr><td>Ramp or proration</td><td class="n">1</td><td class="n">0</td><td>First months bill below the schedule. If the contract ramps, the schedule should show the ramp.</td></tr>
+    <tr><td>Credit or rebill</td><td class="n">1</td><td class="n">0</td><td>A credit memo and a rebill for the same period. Nets to zero here; the reason for the credit is the question.</td></tr>
+    <tr><td>Timing</td><td class="n">1</td><td class="n">0</td><td>Invoice lines without service periods, billed in arrears. Harmless in steady state, visible at every price change.</td></tr>
+    <tr><td>Classification</td><td class="n">1</td><td class="n">0</td><td>A one off line with no type. Kept out of recurring revenue until typed.</td></tr>
+    <tr><td>Duplicate invoice</td><td class="n">1</td><td class="n">0</td><td>Same invoice id twice. A double bill or an export artefact.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>Retention, three ways</h2>
+<p>Gross and net revenue retention over the twelve months to October 2025, computed from the schedule the company reports, from the invoice lines alone, and from the supported figures (the schedule wherever the invoices back it, the invoice figure where they do not).</p>
+<div class="scroll">
+<table>
+  <thead><tr><th>Basis</th><th class="n">Starting book MRR</th><th class="n">Accounts</th><th class="n">Ending MRR, same accounts</th><th class="n">Churned</th><th class="n">GRR</th><th class="n">NRR</th></tr></thead>
+  <tbody>
+    <tr><td>Schedule</td><td class="n">75,800</td><td class="n">41</td><td class="n">64,400</td><td class="n">5</td><td class="n">84.2%</td><td class="n">85.0%</td></tr>
+    <tr><td>Invoices</td><td class="n">69,400</td><td class="n">38</td><td class="n">58,800</td><td class="n">4</td><td class="n">84.7%</td><td class="n">84.7%</td></tr>
+    <tr><td>Supported</td><td class="n">69,100</td><td class="n">38</td><td class="n">57,100</td><td class="n">5</td><td class="n">82.6%</td><td class="n">82.6%</td></tr>
+  </tbody>
+</table>
+</div>
+<p>The 2024 Q4 cohort retains 85.0 percent of its revenue at twelve months on the schedule and 89.0 percent on the supported basis, because the supported basis never counted the account with no invoices. Same definitions as the product: GRR takes the lower of start and end MRR per account; NRR takes the end MRR of the starting accounts.</p>
+
+<h2>Questions this pack raises for the finance lead</h2>
+<p>The kit does not answer these. It makes them specific.</p>
+<dl>
+  <dt>Silent Partner</dt><dd>Where are the invoices? If they exist in another system, the second leg (deferred revenue) will show them.</dd>
+  <dt>Granite Peak</dt><dd>Is there a contract amendment the billing has not caught up with, or should the schedule read 4,200?</dd>
+  <dt>Lantern Field</dt><dd>Billing continued two months after the recorded churn date. Which date is right?</dd>
+  <dt>Orphan Billing</dt><dd>Billed nine months, never on the schedule. New logo, reseller child, or a test account?</dd>
+  <dt>Cedar Loop</dt><dd>What caused the June credit memo, and was the rebill for the same service?</dd>
+  <dt>Maple Street</dt><dd>Is the 15,000 March line implementation services or a recurring charge?</dd>
+</dl>
+
+<h2>How the numbers were made</h2>
+<dl>
+  <dt>Matching</dt><dd>Customer id first; normalised name second (one match, Acme Corp to ACME Corporation, shown in the match table); anything else by hand. Unmatched on either side is a finding, not an error.</dd>
+  <dt>Invoice MRR</dt><dd>Recurring lines spread over their service period. Whole months split evenly, so an annual prepay is the same every month. Part months by days. A line with no service period lands in its invoice month and is flagged.</dd>
+  <dt>Credits</dt><dd>Netted into the month they belong to. Non recurring lines kept out of MRR and listed. Untyped lines flagged, not guessed.</dd>
+  <dt>Supported MRR</dt><dd>The schedule figure where the invoices back it within tolerance (1 percent or 5 units, whichever is larger); the lower of the two where they do not.</dd>
+  <dt>Tolerance</dt><dd>Set in the mapping file. Shown here at the default.</dd>
+  <dt>Reproducing</dt><dd>Same two files, same mapping, same command, same output. Hashes above identify the inputs.</dd>
+</dl>
+
+<h3>What the files could not settle</h3>
+<p>Invoice lines with no type: 1. Lines with no service period: 14, thirteen for one account billed in arrears and the untyped line. Mapping warnings: 0. The kit does not read contracts, order forms, the general ledger or bank records. Where the schedule and the invoices disagree, it shows the disagreement and the lines behind it. Which figure is right is a question for the finance lead, and in a transaction, for the diligence team. Nothing here is an accounting opinion.</p>
+
+<h3>Running it</h3>
+<pre>python3 pilot.py --schedule schedule.csv --invoices invoices.csv --map mapping.json --asof 2025-10 --out out</pre>
+<p>Runs on a laptop. Python and pandas. No network. Thirteen output files, including the full workbook and the per customer per month comparison. The files stay where they are run; nothing is uploaded anywhere.</p>
+
+<footer>Larkspur Metrics does not exist. Every row above was generated by a seeded script with twelve planted situations, so that each cause the kit can report appears at least once. Indexxero, Dallas, Texas. October 2026.</footer>
+</div>
+</body>
+</html>
