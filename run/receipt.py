@@ -55,16 +55,26 @@ def parameters(out, map_path):
     return p
 
 
+def optional_inputs(args, inputs):
+    """The ledger balance file and the answers file change outputs, so when a run used them
+    they are inputs and the receipt names them."""
+    for role, attr in (("deferred_gl", "deferred_gl"), ("answers", "answers")):
+        path = getattr(args, attr, None)
+        if path and os.path.exists(path):
+            inputs[role] = entry(path)
+    return inputs
+
+
 def build(args):
     pilot = os.path.join(HERE, "pilot.py")
     outputs = sorted(f for f in os.listdir(args.out)
                      if os.path.isfile(os.path.join(args.out, f)) and f != "receipt.json")
     return {
-        "inputs": {
+        "inputs": optional_inputs(args, {
             "schedule": entry(args.schedule),
             "invoices": entry(args.invoices),
             "mapping": entry(args.map),
-        },
+        }),
         "kit_version": kit_version(pilot),
         "made_utc": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S"),
         "outputs": [entry(os.path.join(args.out, f)) for f in outputs],
@@ -102,8 +112,8 @@ def verify(args):
             failed += 1
             print(f"MISMATCH  {label}  expected {a}  actual {b}")
 
-    for k in ("schedule", "invoices", "mapping"):
-        check(f"input {k}", old["inputs"][k]["sha256"], new["inputs"][k]["sha256"])
+    for k in sorted(set(old["inputs"]) | set(new["inputs"])):
+        check(f"input {k}", old["inputs"].get(k, {}).get("sha256", "missing"), new["inputs"].get(k, {}).get("sha256", "missing"))
     check("pilot.py", old.get("pilot_sha256"), new.get("pilot_sha256"))
     check("kit_version", old.get("kit_version"), new.get("kit_version"))
     old_out = {o["file"]: o["sha256"] for o in old.get("outputs", [])}
@@ -121,6 +131,8 @@ def main():
     ap.add_argument("--schedule", required=True)
     ap.add_argument("--invoices", required=True)
     ap.add_argument("--map", required=True)
+    ap.add_argument("--deferred-gl", default=None, help="the ledger balance file, if the run used one")
+    ap.add_argument("--answers", default=None, help="the answers file, if the run used one")
     args = ap.parse_args()
     sys.exit(make(args) if args.command == "make" else verify(args))
 
