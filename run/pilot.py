@@ -28,7 +28,7 @@ try:
 except ImportError:
     HAVE_OPENPYXL = False
 
-KIT_VERSION = "2026-10-24"
+KIT_VERSION = "2026-10-25"
 
 
 # ---------- helpers ----------
@@ -841,7 +841,7 @@ def money(x):
     return f"{x:,.0f}"
 
 
-def write_report(out, man, cmp, acc, ret, coh, match, lines_df, asof, rules, answered=None, bridge_df=None, roll=None, dacc=None, gl_given=False):
+def write_report(out, man, cmp, acc, ret, coh, match, lines_df, asof, rules, answered=None, bridge_df=None, roll=None, dacc=None, gl_given=False, journal=None):
     cur = cmp[cmp["month"] == asof]
     reported = float(cur["sched_mrr"].sum()) * 12
     supported = float(cur["supported_mrr"].sum()) * 12
@@ -905,9 +905,13 @@ def write_report(out, man, cmp, acc, ret, coh, match, lines_df, asof, rules, ans
         for _, r in roll.iterrows():
             L.append(f"| {r['month']} | {money(r['opening'])} | {money(r['billings'])} | {money(r['recognised'])} | {money(r['closing'])} | {money(r['closing_deferred'])} | {money(r['closing_unbilled'])} |")
         L += ["", f"Opening plus billings minus recognised equals closing in every month above; the kit asserts it and does not report these figures if it fails.", ""]
-        L += [f"Release for {asof}: debit deferred revenue {money(def_side)}, credit subscription revenue {money(def_side)}.", ""]
+        if journal is not None:
+            jm = journal[journal["month"] == asof]
+            to_def = float(jm[jm["credit_account"] == "Deferred revenue"]["amount"].sum())
+            from_def = float(jm[jm["debit_account"] == "Deferred revenue"]["amount"].sum())
+            L += [f"Journal for {asof}: {len(jm)} lines, see journal.csv. Credited to deferred revenue {money(to_def)}, released from deferred revenue {money(from_def)}.", ""]
         if unb_side > 0:
-            L += [f"And the other side, where recognition ran ahead of billing: debit unbilled revenue {money(unb_side)}, credit subscription revenue {money(unb_side)}.", ""]
+            L += [f"Recognition ran ahead of billing for some accounts: unbilled revenue at {asof} is {money(unb_side)}, reported apart from the deferred side.", ""]
         if gl_given and "gl_balance" in roll.columns:
             g = at["gl_balance"].iloc[0] if len(at) else roll["gl_balance"].iloc[-1]
             d = at["difference"].iloc[0] if len(at) else roll["difference"].iloc[-1]
@@ -970,6 +974,85 @@ def supported_export(cmp, out, asof):
 
 
 # ---------- main ----------
+def write_closepack(args, man, cmp, acc, ret, coh, bridge_df, roll, gl_given):
+    """closepack.md: the one page a fractional CFO attaches to the board deck or hands a buyer.
+    Every figure comes from a file this run already wrote. With --before <previous out folder>
+    it adds what changed since that run, using diff_runs.py's logic (imported, not copied)."""
+    out, asof = args.out, args.asof
+    cur = cmp[cmp["month"] == asof]
+    reported = float(cur["sched_mrr"].sum()) * 12
+    supported = float(cur["supported_mrr"].sum()) * 12
+    L = [f"# Revenue close pack, as of {asof}", "",
+         f"Inputs: `{man['inputs']['schedule']['file']}` ({man['inputs']['schedule']['rows']} rows), `{man['inputs']['invoices']['file']}` ({man['inputs']['invoices']['rows']} lines). Kit {KIT_VERSION}. Every figure below is in a file beside this one; nothing here is an accounting opinion.", ""]
+    L += ["## 1. Reported against supported", "", "| | ARR |", "|---|---:|",
+          f"| Reported on the schedule | {money(reported)} |", f"| Supported by invoices | {money(supported)} |", f"| Excluded from verified ARR | {money(reported - supported)} |",
+          f"| Accounts on the schedule | {int((cur['sched_mrr'] > 0).sum())} |", ""]
+    if bridge_df is not None and len(bridge_df):
+        months = sorted(bridge_df["month"].unique())
+        window = bridge_df.groupby("basis", as_index=False)[BRIDGE_COLUMNS[1:-1]].sum()
+        window["start"] = window["basis"].map(bridge_df[bridge_df["month"] == months[0]].set_index("basis")["start"])
+        window["end"] = window["basis"].map(bridge_df[bridge_df["month"] == months[-1]].set_index("basis")["end"])
+        L += [f"## 2. ARR bridge, {months[0]} to {months[-1]}", "", "| basis | start | new | reactivation | expansion | contraction | churn | end |", "|---|---:|---:|---:|---:|---:|---:|---:|"]
+        for basis in ("schedule", "supported", "difference"):
+            r = window[window["basis"] == basis]
+            if len(r):
+                r = r.iloc[0]
+                L.append("| " + basis + " | " + " | ".join(money(r[c] * 12) for c in BRIDGE_COLUMNS) + " |")
+        L.append("")
+    L += ["## 3. Retention, three ways", "", "| basis | GRR | NRR | starting book ARR | accounts |", "|---|---:|---:|---:|---:|"]
+    for _, r in ret.iterrows():
+        L.append(f"| {r['basis']} | {r['GRR']} | {r['NRR']} | {money(float(r['starting_book_mrr']) * 12)} | {r['starting_accounts']} |")
+    L.append("")
+    if coh is not None and len(coh):
+        L += ["## 4. Cohorts, revenue retained at twelve months", "", "| cohort | accounts | schedule | supported |", "|---|---:|---:|---:|"]
+        for _, r in coh.iterrows():
+            L.append(f"| {r['cohort']} | {r['accounts']} | {r['revenue_retained_12m_schedule_pct']} | {r['revenue_retained_12m_supported_pct']} |")
+        L.append("")
+    sup = cur[cur["supported_mrr"] > 0].sort_values("supported_mrr", ascending=False)
+    tot = float(sup["supported_mrr"].sum())
+    if tot > 0:
+        top5 = float(sup["supported_mrr"].head(5).sum())
+        largest = sup.iloc[0]
+        L += ["## 5. Concentration, supported basis", "",
+              f"Top five accounts: {top5 / tot * 100:.1f} percent of supported ARR. Largest single account: {str(largest['cname'] or largest['cid'])}, {float(largest['supported_mrr']) / tot * 100:.1f} percent.", ""]
+    bad = acc[acc["dominant_cause"] != "supported"].sort_values("asof_unresolved_mrr", ascending=False)
+    L += [f"## 6. Exception register, {len(bad)} accounts, ten largest by unresolved ARR", "", "| account | cause | unresolved ARR | months not supported |", "|---|---|---:|---:|"]
+    for _, r in bad.head(10).iterrows():
+        L.append(f"| {r['customer_name'] or r['customer_id'] or r['key']} | {r['dominant_cause']} | {money(float(r['asof_unresolved_mrr']) * 12)} | {r['months_not_supported']} |")
+    L.append("")
+    if roll is not None and len(roll):
+        last = roll.iloc[-1]
+        L += ["## 7. Deferred revenue implied by the invoices", "",
+              f"At {asof}: deferred {money(last['closing_deferred'])}, unbilled {money(last['closing_unbilled'])}, reported apart."]
+        if gl_given and "gl_balance" in roll.columns and not pd.isna(last.get("gl_balance")):
+            L.append(f"Per the general ledger: {money(last['gl_balance'])}. Difference: {money(last['difference'])}.")
+        else:
+            L.append("Per the general ledger: not provided.")
+        L.append("")
+    L += ["## 8. Since the previous run", ""]
+    before = getattr(args, "before", None)
+    if before and os.path.exists(os.path.join(before, "accounts.csv")):
+        try:
+            sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+            import diff_runs
+            b, a = diff_runs.load(before), diff_runs.load(out)
+            rows = diff_runs.classify(b, a)
+            counts = rows["status"].value_counts().to_dict()
+            L += [f"Before: `{before}`. New {counts.get('new', 0)}, changed {counts.get('changed', 0)}, persisted {counts.get('persisted', 0)}, resolved {counts.get('resolved', 0)}."]
+            for st, col in (("new", "after_unresolved_mrr"), ("resolved", "before_unresolved_mrr")):
+                sub = rows[rows["status"] == st].sort_values(col, ascending=False).head(3)
+                if len(sub):
+                    L.append(f"Largest {st}: " + "; ".join(f"{r['customer_name']} ({money(float(r[col]) * 12)} ARR)" for _, r in sub.iterrows()) + ".")
+            L.append("")
+        except Exception as e:
+            L += [f"Comparison not made ({type(e).__name__}: {e}).", ""]
+    else:
+        L += ["First run, no comparison. Pass `--before <previous out folder>` next month.", ""]
+    L += ["## 9. The run that made this", "",
+          f"Kit {KIT_VERSION}. Schedule sha256 {man['inputs']['schedule']['sha256'][:16]}, invoices sha256 {man['inputs']['invoices']['sha256'][:16]}. Full hashes of every input and output in receipt.json; `python3 receipt.py verify` recomputes them.", ""]
+    open(os.path.join(out, "closepack.md"), "w").write("\n".join(L))
+
+
 def write_receipt(args):
     """receipt.json: sha256 of inputs, mapping, this file and every output. receipt.py sits beside pilot.py; imported, never a subprocess, so it also runs in a browser runtime. Never fatal."""
     try:
@@ -990,6 +1073,7 @@ def main():
                          "gl_balance and difference; absent, the report says so rather than guessing.")
     ap.add_argument("--profile", action="store_true", help="stop after the manifest and the profile; no numbers computed")
     ap.add_argument("--answers", help="optional finance-lead answers JSON")
+    ap.add_argument("--before", default=None, help="optional: the previous run's out folder, for the close pack's month over month section")
     args = ap.parse_args()
     os.makedirs(args.out, exist_ok=True)
     answers = load_answers(args.answers) if args.answers else None
@@ -1048,8 +1132,9 @@ def main():
     dacc.to_csv(os.path.join(args.out, "deferred_accounts.csv"), index=False)
     journal.to_csv(os.path.join(args.out, "journal.csv"), index=False)
     write_report(args.out, man, cmp, acc, ret, coh, match, lines_df, args.asof, rules, answered, bridge_df,
-                 roll=roll, dacc=dacc, gl_given=gl is not None)
+                 roll=roll, dacc=dacc, gl_given=gl is not None, journal=journal)
     supported_export(cmp, args.out, args.asof)
+    write_closepack(args, man, cmp, acc, ret, coh, bridge_df, roll, gl is not None)
     write_receipt(args)
     print("done:", ", ".join(sorted(os.listdir(args.out))))
     for w in man["mapping_warnings"]:

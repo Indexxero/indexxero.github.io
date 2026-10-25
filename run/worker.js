@@ -16,6 +16,7 @@ import { loadPyodide } from './vendor/pyodide/pyodide.mjs';
 let pyodide = null;
 let pilotBytes = null;
 let receiptBytes = null;
+let diffBytes = null;
 const say = (stage, detail) => postMessage({ type: 'progress', stage, detail });
 
 async function boot() {
@@ -49,6 +50,10 @@ async function boot() {
   // second implementation of the same file, which had already drifted from the
   // verifier once (a list where receipt.py keys by role). One implementation now.
   receiptBytes = new Uint8Array(await (await fetch('./receipt.py')).arrayBuffer());
+  // diff_runs.py, imported by the close pack only when --before is given. The
+  // page passes no --before, so it is not imported today; it ships beside
+  // pilot.py anyway so the folder is the kit's folder and not a subset of it.
+  diffBytes = new Uint8Array(await (await fetch('./diff_runs.py')).arrayBuffer());
   return pyodide;
 }
 
@@ -62,7 +67,7 @@ onmessage = async (e) => {
     catch (err) { postMessage({ type: 'error', message: String(err && err.message || err) }); }
     return;
   }
-  const { schedule, invoices, mapping, asof, scheduleName, invoicesName } = e.data;
+  const { schedule, invoices, mapping, asof, scheduleName, invoicesName, gl } = e.data;
   try {
     const py = await boot();
     const FS = py.FS;
@@ -72,6 +77,7 @@ onmessage = async (e) => {
 
     FS.writeFile('/work/pilot.py', pilotBytes);
     FS.writeFile('/work/receipt.py', receiptBytes);
+    FS.writeFile('/work/diff_runs.py', diffBytes);
     FS.writeFile('/work/in/' + scheduleName, new Uint8Array(schedule));
     FS.writeFile('/work/in/' + invoicesName, new Uint8Array(invoices));
     const mappingBytes = new TextEncoder().encode(mapping);
@@ -81,13 +87,25 @@ onmessage = async (e) => {
     // receipt's outputs and the folder's files, so a file added to the zip after
     // the receipt was made would read as a mismatch on every laptop.
     FS.writeFile('/work/out/mapping-used.json', mappingBytes);
+    // The ledger balance, optional, passed as --deferred-gl (Cowork 06:10).
+    // A copy goes in the output folder before the run, for the same reason as
+    // the mapping: the run's `difference` column depends on it, and receipt.py
+    // at 2e0165e does not hash it as an input, so without the copy the zip
+    // would carry a figure whose source nobody could recompute.
+    const hasGl = !!(gl && gl.byteLength);
+    if (hasGl) {
+      FS.writeFile('/work/in/deferred_gl.csv', new Uint8Array(gl));
+      FS.writeFile('/work/out/deferred-gl-used.csv', new Uint8Array(gl));
+    } else {
+      try { FS.unlink('/work/in/deferred_gl.csv'); } catch {}
+    }
 
     say('Running the comparison', 'pilot.py, unchanged');
     const t0 = Date.now();
     py.runPython(`
 import sys, runpy, io, contextlib
 sys.argv = ['pilot.py', '--schedule', '/work/in/${scheduleName}', '--invoices', '/work/in/${invoicesName}',
-            '--map', '/work/in/mapping.json', '--asof', '${asof}', '--out', '/work/out']
+            '--map', '/work/in/mapping.json', '--asof', '${asof}', '--out', '/work/out']${hasGl ? " + ['--deferred-gl', '/work/in/deferred_gl.csv']" : ''}
 _buf = io.StringIO()
 with contextlib.redirect_stdout(_buf):
     runpy.run_path('/work/pilot.py', run_name='__main__')

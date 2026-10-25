@@ -65,7 +65,13 @@
         <input type="file" id="invoices" accept=".csv,.xlsx,.xls">
         <div class="name" id="invoicesName"></div>
       </div>
+      <div class="filebox">
+        <label class="file" for="glfile">Optional: the deferred revenue balance from the ledger (csv with columns month and balance)</label>
+        <input type="file" id="glfile" accept=".csv">
+        <div class="name" id="glName"></div>
+      </div>
     </div>
+    <p class="h">With the ledger balance, the deferred roll forward shows the company's own figure beside the one the invoices imply, and the difference. Without it, the report says the ledger was not provided.</p>
     <p class="h" style="margin-top:12px">No file of your own to hand? <button id="example" type="button">Try it on the Larkspur example</button>
       <button id="exampleQb" type="button">Try it on a QuickBooks export</button> &nbsp;A fictional company, so you can see the output in a minute.</p>
   </div>

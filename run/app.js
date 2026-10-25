@@ -57,7 +57,25 @@ const kitVersionFromReport = (files) =>
 
 let template = null;      // mapping.example.json, as loaded
 let worker = null;
-let picked = { schedule: null, invoices: null };
+let picked = { schedule: null, invoices: null, gl: null };
+/**
+ * Whether the data files in `picked` came from an example button.
+ *
+ * MEASURED DEFECT, checkGL.mjs: click the Larkspur example, then choose your
+ * own schedule and invoices, and the run still used the example's fictional
+ * ledger. The report said "Per the general ledger: 800. Difference: -800"
+ * against the partner's own data. The same carry-over held for an example
+ * schedule or invoice file when only one of the two was replaced. So choosing
+ * ANY file of your own drops every data file an example loaded, and the run
+ * is either all example or all yours, never a mix.
+ */
+let fromExample = false;
+function leaveExample() {
+  if (!fromExample) return;
+  picked.schedule = null; picked.invoices = null; picked.gl = null;
+  $('scheduleName').textContent = ''; $('invoicesName').textContent = ''; $('glName').textContent = '';
+  fromExample = false;
+}
 let pilotSha = null;          // from the worker, hashed there, fetched once
 let ticker = null;            // the elapsed-seconds ticker, see startTicker
 
@@ -243,12 +261,14 @@ async function run() {
   setStatus('Reading the files', 'in this tab');
   picked.scheduleBytes = new Uint8Array(await picked.schedule.arrayBuffer());
   picked.invoicesBytes = new Uint8Array(await picked.invoices.arrayBuffer());
+  picked.glBytes = picked.gl ? new Uint8Array(await picked.gl.arrayBuffer()) : null;
   const mb = (n) => (n / 1048576).toFixed(1);
   startTicker(`${mb(picked.scheduleBytes.length + picked.invoicesBytes.length)} MB of exports`);
   ensureWorker().postMessage({
     schedule: picked.scheduleBytes.slice().buffer, invoices: picked.invoicesBytes.slice().buffer,
     scheduleName: picked.schedule.name, invoicesName: picked.invoices.name,
     mapping: mappingFromForm(), asof: $('asof').value,
+    gl: picked.glBytes ? picked.glBytes.slice().buffer : null,
   });
 }
 
@@ -263,8 +283,10 @@ async function run() {
  * in arr-check's gen_quickbooks.py. Both are fictional.
  */
 const EXAMPLES = {
-  larkspur: { dir: './example', label: 'the Larkspur example', asof: '2025-10' },
-  quickbooks: { dir: './example-quickbooks', label: 'the QuickBooks example', asof: '2025-10' },
+  // Larkspur carries the fictional ledger, so the page shows the -800 the
+  // published example shows. QuickBooks has none, and says so.
+  larkspur: { dir: './example', label: 'the Larkspur example', asof: '2025-10', gl: 'deferred_gl.csv' },
+  quickbooks: { dir: './example-quickbooks', label: 'the QuickBooks example', asof: '2025-10', gl: null },
 };
 
 async function loadExample(which) {
@@ -275,11 +297,17 @@ async function loadExample(which) {
   picked.invoices = await grab('invoices.csv');
   $('scheduleName').textContent = `schedule.csv (${ex.label})`;
   $('invoicesName').textContent = `invoices.csv (${ex.label})`;
+  picked.gl = ex.gl ? await grab(ex.gl) : null;
+  $('glName').textContent = ex.gl ? `${ex.gl} (${ex.label})` : '';
+  $('glfile').value = '';
   // Its own mapping, rules included. Loading only the column names is the
   // defect B found: every run then used the example's rules.
   template = await (await fetch(`${ex.dir}/mapping.json`)).json();
   buildMappingForm(template); renderRules();
   $('asof').value = ex.asof;
+  fromExample = true;
+  // Clear the inputs' own values too, so a file chosen next always fires a change.
+  $('schedule').value = ''; $('invoices').value = '';
   setStatus(`${ex.label[0].toUpperCase()}${ex.label.slice(1)} loaded. Press Produce the findings.`, '');
 }
 
@@ -318,8 +346,9 @@ async function loadExample(which) {
       $('error').textContent = `That mapping could not be read: ${err.message}. Nothing was changed, and the fields below are still the ones you can see.`;
     }
   };
-  $('schedule').onchange = (e) => { picked.schedule = e.target.files[0]; $('scheduleName').textContent = picked.schedule?.name ?? ''; };
-  $('invoices').onchange = (e) => { picked.invoices = e.target.files[0]; $('invoicesName').textContent = picked.invoices?.name ?? ''; };
+  $('schedule').onchange = (e) => { leaveExample(); picked.schedule = e.target.files[0]; $('scheduleName').textContent = picked.schedule?.name ?? ''; };
+  $('glfile').onchange = (e) => { leaveExample(); picked.gl = e.target.files[0] || null; $('glName').textContent = picked.gl?.name ?? ''; };
+  $('invoices').onchange = (e) => { leaveExample(); picked.invoices = e.target.files[0]; $('invoicesName').textContent = picked.invoices?.name ?? ''; };
   $('run').onclick = run;
   $('example').onclick = () => loadExample('larkspur');
   $('exampleQb').onclick = () => loadExample('quickbooks');
