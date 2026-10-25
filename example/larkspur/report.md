@@ -1,6 +1,6 @@
 # Pilot findings, as of 2025-10
 
-Inputs: schedule `schedule.csv` (521 rows), invoices `invoices.csv` (511 lines). Hashes in manifest.json. Kit 2026-10-22.
+Inputs: schedule `schedule.csv` (521 rows), invoices `invoices.csv` (511 lines). Hashes in manifest.json. Kit 2026-10-24.
 
 ## Totals
 
@@ -44,6 +44,30 @@ Schedule is what the company reports. Invoices is what the billing lines support
 |---|---:|---:|---:|
 | 2024Q4 | 41 | 85.0 | 89.0 |
 
+## ARR bridge, three ways
+
+Schedule is what the company reports. Invoices is what the billing lines show on their own. Supported keeps the schedule figure where the invoices back it. Difference is schedule minus supported. Figures are ARR (MRR times 12). Every movement traces to its accounts in bridge_accounts.csv.
+
+### As of 2025-10
+
+| basis | start | new | reactivation | expansion | contraction | churn | end |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| schedule | 868,800 | 0 | 0 | 0 | 0 | 0 | 868,800 |
+| invoices | 865,800 | 0 | 0 | 0 | 0 | 0 | 865,800 |
+| supported | 834,000 | 0 | 0 | 0 | 0 | 0 | 834,000 |
+| difference | 34,800 | 0 | 0 | 0 | 0 | 0 | 34,800 |
+
+### Window 2024-11 to 2025-10, movements summed
+
+| basis | start | new | reactivation | expansion | contraction | churn | end |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| schedule | 909,600 | 96,000 | 0 | 7,200 | 4,800 | 139,200 | 868,800 |
+| invoices | 832,800 | 105,000 | 0 | 75,600 | 25,200 | 122,400 | 865,800 |
+| supported | 829,200 | 93,600 | 0 | 55,200 | 4,800 | 139,200 | 834,000 |
+| difference | 80,400 | 2,400 | 0 | -48,000 | 0 | 0 | 34,800 |
+
+The largest difference between the two bases over the window is in expansion: 48,000 ARR. The schedule and the invoices disagree most about that movement.
+
 ## Accounts to review first
 
 | account | schedule MRR | invoice MRR | unresolved MRR | cause | months not supported |
@@ -58,6 +82,46 @@ Schedule is what the company reports. Invoices is what the billing lines support
 | Northwind Dynamics | 2,400 | 2,400 | 0 | timing | 1 |
 | Maple Street Health | 2,600 | 2,600 | 0 | classification | 1 |
 | Harbor Light Media | 1,700 | 1,700 | 0 | duplicate_invoice | 1 |
+## Deferred revenue implied by the invoices
+
+Billed is the invoice line in the month it was raised. Recognised is the share the kit spreads into each month of the service period. The difference, carried forward, is deferred revenue where the billing runs ahead and unbilled revenue where the recognition does. **The two sides are reported apart and never netted**, because a book with money on both sides would otherwise read as nil.
+
+| month | opening | billings | recognised | closing | of which deferred | of which unbilled |
+|---|---:|---:|---:|---:|---:|---:|
+| 2024-11 | 0 | 95,200 | 73,200 | 22,000 | 22,000 | 0 |
+| 2024-12 | 22,000 | 71,200 | 73,200 | 20,000 | 20,000 | 0 |
+| 2025-01 | 20,000 | 75,200 | 77,200 | 18,000 | 18,000 | 0 |
+| 2025-02 | 18,000 | 76,150 | 78,150 | 16,000 | 16,000 | 0 |
+| 2025-03 | 16,000 | 76,150 | 78,150 | 14,000 | 14,000 | 0 |
+| 2025-04 | 14,000 | 77,850 | 79,850 | 12,000 | 12,000 | 0 |
+| 2025-05 | 12,000 | 76,150 | 78,150 | 10,000 | 10,000 | 0 |
+| 2025-06 | 10,000 | 70,250 | 75,250 | 5,000 | 8,000 | 3,000 |
+| 2025-07 | 5,000 | 73,150 | 72,150 | 6,000 | 6,000 | 0 |
+| 2025-08 | 6,000 | 70,150 | 72,150 | 4,000 | 4,000 | 0 |
+| 2025-09 | 4,000 | 70,150 | 72,150 | 2,000 | 2,000 | 0 |
+| 2025-10 | 2,000 | 70,150 | 72,150 | 0 | 0 | 0 |
+
+Opening plus billings minus recognised equals closing in every month above; the kit asserts it and does not report these figures if it fails.
+
+Release for 2025-10: debit deferred revenue 0, credit subscription revenue 0.
+
+Deferred revenue implied by the invoices at 2025-10: 0. Per the general ledger: 800. Difference: -800.
+
+This is a schedule a controller can post from, in `journal.csv`, with the accounts named in plain words. It is not a posting, not a chart of accounts and not an opinion on revenue recognition policy.
+
+| account | closing deferred | closing unbilled | months of cover |
+|---|---:|---:|---:|
+| Blue Harbor Analytics | 0 | 0 |  |
+| Granite Peak Software | 0 | 0 |  |
+| Cedar Loop Systems | 0 | 0 |  |
+| Northwind Dynamics | 0 | 0 |  |
+| Juniper Ridge Labs | 0 | 0 |  |
+| Maple Street Health | 0 | 0 |  |
+| Lantern Field Co | 0 | 0 |  |
+| Copperline Freight | 0 | 0 |  |
+| Harbor Light Media | 0 | 0 |  |
+| Quiet Creek Software | 0 | 0 |  |
+
 
 ## Matching
 

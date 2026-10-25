@@ -10,14 +10,14 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Indexxero">
 <meta property="og:title" content="Revenue evidence pack, synthetic example">
-<meta property="og:description" content="A customer ARR schedule set beside what the invoice lines support, account by account. Fictional company, planted exceptions, run on a laptop.">
+<meta property="og:description" content="A customer ARR schedule set beside what the invoice lines support, the ARR bridge three ways, the deferred revenue roll forward and the month end journal, from two files. Fictional company, run on a laptop.">
 <meta property="og:url" content="https://measure.indexxero.com/example">
 <meta property="og:image" content="https://measure.indexxero.com/og-example.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Revenue evidence pack, synthetic example">
-<meta name="twitter:description" content="A customer ARR schedule set beside what the invoice lines support, account by account. Fictional company, planted exceptions, run on a laptop.">
+<meta name="twitter:description" content="A customer ARR schedule set beside what the invoice lines support, the ARR bridge three ways, the deferred revenue roll forward and the month end journal, from two files. Fictional company, run on a laptop.">
 <meta name="twitter:image" content="https://measure.indexxero.com/og-example.png">
 <link rel="icon" href="/favicon.ico">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -78,7 +78,7 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);font-si
 <header>
   <p class="eyebrow">Revenue evidence pack, second pass on the customer ARR schedule</p>
   <h1>Larkspur Metrics, a fictional SaaS company, as of October 2025</h1>
-  <p class="lead">The customer ARR schedule the company reports, set beside what its invoice lines support, account by account. Where the two disagree, the cause and the amount. Where the evidence cannot settle it, the amount is excluded from verified ARR rather than explained away.</p>
+  <p class="lead">The customer ARR schedule the company reports, set beside what its invoice lines support, account by account. Where the two disagree, the cause and the amount. Where the evidence cannot settle it, the amount is excluded from verified ARR rather than explained away. From the same two files: the ARR bridge three ways, the deferred revenue roll forward and the month end journal.</p>
   <div class="meta">
     <span>schedule.csv · 521 rows · sha256 65e36e49…</span>
     <span>invoices.csv · 511 lines · sha256 0c50583d…</span>
@@ -95,7 +95,7 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);font-si
   <div class="tile"><div class="k">Accounts with an exception</div><div class="v">10 of 38</div><div class="s">in the last twelve months, any cause</div></div>
 </div>
 <div class="note">
-  <p>Three legs are usually tested in diligence: the schedule against invoices, against deferred revenue, and against cash. This pack covers the first leg only. The cash and deferred revenue legs are marked not covered in every table below, not filled in.</p>
+  <p>Three legs are usually tested in diligence: the schedule against invoices, against deferred revenue, and against cash. This pack covers the first two. The deferred revenue the invoices imply is rolled forward month by month below and compared with the balance the ledger carries. The cash leg is marked not covered in every table, not filled in.</p>
 </div>
 
 <h2>Exception register, October 2025</h2>
@@ -154,6 +154,44 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);font-si
 </div>
 <p>The 2024 Q4 cohort retains 85.0 percent of its revenue at twelve months on the schedule and 89.0 percent on the supported basis, because the supported basis never counted the account with no invoices. Same definitions as the product: GRR takes the lower of start and end MRR per account; NRR takes the end MRR of the starting accounts.</p>
 
+<h2>ARR bridge, three ways</h2>
+<p>The movement a board deck carries, start to end over the twelve months to October 2025, computed three times from the same customer months: from the schedule the company reports, from the invoice lines on their own, and from the supported figure. The difference row is schedule minus supported. Every movement traces to its accounts in the workbook.</p>
+<div class="scroll">
+<table>
+  <thead><tr><th>Basis</th><th class="n">Start</th><th class="n">New</th><th class="n">Expansion</th><th class="n">Contraction</th><th class="n">Churn</th><th class="n">End</th></tr></thead>
+  <tbody>
+    <tr><td>Schedule</td><td class="n">909,600</td><td class="n">96,000</td><td class="n">7,200</td><td class="n">(4,800)</td><td class="n">(139,200)</td><td class="n">868,800</td></tr>
+    <tr><td>Invoices</td><td class="n">832,800</td><td class="n">105,000</td><td class="n">75,600</td><td class="n">(25,200)</td><td class="n">(122,400)</td><td class="n">865,800</td></tr>
+    <tr><td>Supported</td><td class="n">829,200</td><td class="n">93,600</td><td class="n">55,200</td><td class="n">(4,800)</td><td class="n">(139,200)</td><td class="n">834,000</td></tr>
+    <tr class="total"><td>Difference, schedule less supported</td><td class="n">80,400</td><td class="n">2,400</td><td class="n">(48,000)</td><td class="n">0</td><td class="n">0</td><td class="n">34,800</td></tr>
+  </tbody>
+</table>
+</div>
+<p>The schedule and the supported basis disagree most about expansion, by 48,000. That is Juniper Ridge: the schedule carried 8,000 a month from day one, the invoices billed 4,000 for the first three months, so on the supported basis the account starts smaller and then expands. The invoice basis grows faster and churns less than the schedule because three accounts bill more than the schedule carries (Quiet Creek, Orphan Billing, Lantern Field after its recorded churn). Reactivation is zero on every basis in this set.</p>
+
+<h2>Deferred revenue implied by the invoices</h2>
+<p>Billed is the invoice line in the month it was raised. Recognised is the share spread into each month of the service period. The difference, carried forward, is deferred revenue where billing runs ahead and unbilled revenue where recognition does. The two sides are reported apart, never netted. Here the only prepaid account is Copperline Freight, an annual invoice raised in November 2024, so the balance runs down by 2,000 a month to zero in October; the June unbilled 3,000 is the Cedar Loop credit memo in the month before its rebill.</p>
+<div class="scroll">
+<table>
+  <thead><tr><th>Month</th><th class="n">Opening</th><th class="n">Billings</th><th class="n">Recognised</th><th class="n">Closing</th><th class="n">Of which deferred</th><th class="n">Of which unbilled</th><th class="n">Per the ledger</th><th class="n">Difference</th></tr></thead>
+  <tbody>
+    <tr><td>2024-11</td><td class="n">0</td><td class="n">95,200</td><td class="n">73,200</td><td class="n">22,000</td><td class="n">22,000</td><td class="n">0</td><td class="n">22,800</td><td class="n">(800)</td></tr>
+    <tr><td>2025-03</td><td class="n">16,000</td><td class="n">76,150</td><td class="n">78,150</td><td class="n">14,000</td><td class="n">14,000</td><td class="n">0</td><td class="n">14,800</td><td class="n">(800)</td></tr>
+    <tr><td>2025-06</td><td class="n">10,000</td><td class="n">70,250</td><td class="n">75,250</td><td class="n">5,000</td><td class="n">8,000</td><td class="n">3,000</td><td class="n">5,800</td><td class="n">(800)</td></tr>
+    <tr><td>2025-09</td><td class="n">4,000</td><td class="n">70,150</td><td class="n">72,150</td><td class="n">2,000</td><td class="n">2,000</td><td class="n">0</td><td class="n">2,800</td><td class="n">(800)</td></tr>
+    <tr><td>2025-10</td><td class="n">2,000</td><td class="n">70,150</td><td class="n">72,150</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">800</td><td class="n">(800)</td></tr>
+  </tbody>
+</table>
+</div>
+<p>Five of the twelve months shown; the full roll forward is in the workbook. Opening plus billings minus recognised equals closing in every month; the kit asserts it and does not report the figures if it fails. The ledger carries 800 more than the invoices imply in every month. That is Granite Peak: a company that kept its deferred balance on the schedule basis for the one account the schedule overstates would sit exactly that far above the invoices. The difference column leads to the same account the exception register already names.</p>
+
+<h3>The month end journal</h3>
+<p><code>journal.csv</code> is the entry a QuickBooks Online user posts by hand today, one line per customer for the change in the deferred or unbilled balance, with the invoices behind it in the memo. Fourteen lines over the twelve months here: November 2024, debit subscription revenue 22,000, credit deferred revenue 22,000 (Copperline, invoice INV-1484); then every month, debit deferred revenue 2,000, credit subscription revenue 2,000, until October. A customer billed monthly for the month has no line. The accounts are named in plain words; it is a schedule to post from, not a posting and not an opinion on revenue recognition policy.</p>
+
+<div class="note">
+  <p>QuickBooks Online invoice exports carry no service period, so an annual invoice would otherwise land in one month and no deferred revenue would ever show. The kit gives such a line a period only when its amount is an exact whole multiple of that customer's schedule MRR, marks the line so, and leaves anything else in its month, flagged. A second fictional set in the QuickBooks shape, with a stated expected balance of 49,300 that the kit reproduces account by account, ships with the code.</p>
+</div>
+
 <h2>Questions this pack raises for the finance lead</h2>
 <p>The kit does not answer these. It makes them specific.</p>
 <dl>
@@ -163,6 +201,7 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);font-si
   <dt>Orphan Billing</dt><dd>Billed nine months, never on the schedule. New logo, reseller child, or a test account?</dd>
   <dt>Cedar Loop</dt><dd>What caused the June credit memo, and was the rebill for the same service?</dd>
   <dt>Maple Street</dt><dd>Is the 15,000 March line implementation services or a recurring charge?</dd>
+  <dt>The ledger</dt><dd>The deferred revenue balance is 800 above what the invoices imply in every month. Is that Granite Peak carried at 5,000 instead of 4,200?</dd>
 </dl>
 
 <h2>How the numbers were made</h2>
@@ -179,13 +218,14 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);font-si
 <p>Invoice lines with no type: 1. Lines with no service period: 14, thirteen for one account billed in arrears and the untyped line. Mapping warnings: 0. The kit does not read contracts, order forms, the general ledger or bank records. Where the schedule and the invoices disagree, it shows the disagreement and the lines behind it. Which figure is right is a question for the finance lead, and in a transaction, for the diligence team. Nothing here is an accounting opinion.</p>
 
 <h3>Running it</h3>
-<pre>python3 pilot.py --schedule schedule.csv --invoices invoices.csv --map mapping.json --asof 2025-10 --out out</pre>
-<p>Runs on a laptop. Python and pandas. No network. Thirteen output files, including the full workbook and the per customer per month comparison. The files stay where they are run; nothing is uploaded anywhere.</p>
+<pre>python3 pilot.py --schedule schedule.csv --invoices invoices.csv --map mapping.json --asof 2025-10 --out out --deferred-gl deferred_gl.csv</pre>
+<p>Runs on a laptop. Python and pandas. No network. Nineteen output files, including the full workbook, the bridge, the deferred roll forward, the journal, the per customer per month comparison and a receipt with the hash of every input and output, so the run can be verified by anyone holding the same files. The files stay where they are run; nothing is uploaded anywhere.</p>
+<p>Or in a browser tab, with nothing leaving it: <a href="/run/">measure.indexxero.com/run</a>. Drop the two files, get the same zip. The code is public: <a href="https://github.com/Indexxero/arr-check">github.com/Indexxero/arr-check</a>, MIT licence.</p>
 
 <h3>The full output, to open without running anything</h3>
 <dl>
-  <dt>Workbook</dt><dd><a href="/example/larkspur/pilot.xlsx">pilot.xlsx</a>, every table above plus the 28 accounts with no exception, the match table, the invoice lines as classified and the per customer per month comparison.</dd>
-  <dt>Everything</dt><dd><a href="/example/larkspur/larkspur-example.zip">larkspur-example.zip</a>, the two input files, the column mapping, and all thirteen output files, so the run can be repeated on any laptop with the same command.</dd>
+  <dt>Workbook</dt><dd><a href="/example/larkspur/pilot.xlsx">pilot.xlsx</a>, every table above plus the 28 accounts with no exception, the match table, the invoice lines as classified, the bridge, the deferred roll forward and the per customer per month comparison.</dd>
+  <dt>Everything</dt><dd><a href="/example/larkspur/larkspur-example.zip">larkspur-example.zip</a>, the two input files, the ledger balance file, the column mapping, and all nineteen output files including the receipt, so the run can be repeated and verified on any laptop with the same command.</dd>
   <dt>Report text</dt><dd><a href="/example/larkspur/report.md">report.md</a>, the kit's own findings as written, before any editing.</dd>
 </dl>
 
