@@ -1,0 +1,38 @@
+{
+  "schedule": {
+    "format": "snapshot",
+    "customer_id": "",
+    "customer_name": "customer_name",
+    "snapshot_date": "snapshot_date",
+    "mrr": "mrr",
+    "arr": "",
+    "start_date": "",
+    "end_date": "",
+    "status": ""
+  },
+  "invoices": {
+    "invoice_id": "Num",
+    "customer_id": "",
+    "customer_name": "Customer",
+    "invoice_date": "Date",
+    "service_start": "",
+    "service_end": "",
+    "amount": "Amount",
+    "line_type": "Transaction Type",
+    "description": "Memo/Description"
+  },
+  "rules": {
+    "recurring_types": [
+      "invoice"
+    ],
+    "credit_types": [
+      "credit memo"
+    ],
+    "non_recurring_types": [],
+    "tolerance_pct": 1.0,
+    "tolerance_abs": 5.0,
+    "ramp_months": 3,
+    "months_for_retention": 12,
+    "periodless_recurring": "whole_months_from_schedule"
+  }
+}

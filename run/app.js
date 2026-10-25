@@ -9,6 +9,44 @@
 import { makeZip, sha256 } from './zip.js';
 
 const $ = (id) => document.getElementById(id);
+
+/**
+ * Check G: the mapping and the as of month are kept, so next month is one click.
+ *
+ * WHAT IS KEPT, AND IT IS NAMED ON THE PAGE RATHER THAN LEFT TO BE DISCOVERED.
+ * The mapping json (which is column NAMES and the rules, never a figure) and the
+ * as of month. Nothing else: no schedule, no invoice line, no output, no
+ * identifier of any kind. The files themselves are never written anywhere.
+ *
+ * WHERE. `localStorage`, which is this browser on this machine, same origin,
+ * and is not sent with any request. Keeping it does not weaken the zero request
+ * claim and check G proves that by measuring it again.
+ *
+ * WHY WRAPPED. `localStorage` throws outright in a private window and in a
+ * browser with site data blocked, and a kit that refuses to run because it
+ * could not save a preference would be a worse kit. Every path here degrades to
+ * "not saved" and says so.
+ */
+const STORE_KEY = 'arr-check.mapping.v1';
+const DEFAULT_ASOF = '2025-10';
+const store = {
+  read() {
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch { return null; }
+  },
+  write(mapping, asof) {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify({ mapping, asof, saved_utc: new Date().toISOString().slice(0, 10) })); return true; }
+    catch { return false; }
+  },
+  clear() { try { localStorage.removeItem(STORE_KEY); return true; } catch { return false; } },
+};
+
+function showSaved(note) {
+  $('savedNote').textContent = note;
+  $('clearSaved').hidden = !note;
+}
 // pilot.py writes thirteen; the page adds receipt.json and mapping-used.json.
 const KIT_FILES = 13;
 const ZIP_FILES = KIT_FILES + 2;
@@ -139,6 +177,7 @@ function ensureWorker() {
     if (m.type === 'progress') setStatus(m.stage, m.detail);
     else if (m.type === 'warm-done') {
       pilotSha = m.pilotSha;
+      window.dispatchEvent(new Event('arr-check-warm'));
       setStatus('Ready', 'Python and pandas are loaded. From here on this page fetches nothing.');
     }
     else if (m.type === 'error') {
@@ -156,67 +195,25 @@ async function finish({ files, printed, elapsedMs }) {
   stopTicker();
   const mappingText = mappingFromForm();
 
-  // THE MAPPING THE RUN ACTUALLY USED GOES IN THE ZIP, and it is a fifteenth
-  // file rather than the thirteen plus the receipt.
+  // THE RECEIPT IS THE KIT'S, NOT THE PAGE'S. From `db092a6` pilot.py imports
+  // receipt.py from its own folder and writes receipt.json itself, so the page
+  // ships receipt.py beside pilot.py and adds nothing. Until then the page wrote
+  // its own receipt: a second implementation of one file, which had already
+  // drifted from the verifier once. `mapping-used.json` is placed in the output
+  // folder by the worker BEFORE the run, so the kit's receipt lists it and the
+  // zip verifies on any laptop with `--map out/mapping-used.json`.
   //
-  // WHY, MEASURED. `receipt.py verify` on the page's own output returned
-  // `MISMATCH input mapping` with every other line `ok`. The page builds the
-  // mapping from the form, so its bytes are not the bytes of any file on disk:
-  // the receipt hashed something nobody else held. A receipt whose inputs
-  // cannot be recomputed proves nothing, which is the one thing it exists to
-  // do. With the file in the zip, `verify --map out/mapping-used.json` can
-  // recompute it, and the same zip verifies on any laptop.
-  //
-  // It is a deviation from "the same thirteen files" and Cowork should rule on
-  // it. The alternative is a receipt that only verifies for an unedited
-  // example, which is to say for no real engagement.
-  files['mapping-used.json'] = new TextEncoder().encode(mappingText);
-
+  // If receipt.json is absent, pilot.py printed why. That is said on screen
+  // rather than papered over with a receipt the page made up.
+  const hasReceipt = !!files['receipt.json'];
   const names = Object.keys(files).sort();
-  // The receipt, same keys and order as arr-check/receipt.py (CP-11), written
-  // here because pilot.py builds its own by calling receipt.py as a subprocess
-  // and subprocess.run raises OSError under Pyodide.
-  const kitVersion = kitVersionFromReport(files);
-  const manifest = JSON.parse(new TextDecoder().decode(files['manifest.json']));
-  const rules = JSON.parse(mappingText).rules || {};
 
-  // THE SHAPE IS receipt.py's, NOT THIS FILE'S READING OF THE SPEC.
-  // CP-11's wording ("inputs: file name, bytes, sha256 for schedule, invoices,
-  // mapping") reads as a list and the implementation is a dict keyed by role,
-  // with the key `file` rather than `name`. Writing the list made
-  // `receipt.py verify` die with `TypeError: list indices must be integers`.
-  // The authority is the verifier, so this mirrors `build()` field for field:
-  // inputs keyed schedule/invoices/mapping, outputs a list sorted by name and
-  // excluding receipt.json, parameters carrying `asof_month` plus the four rule
-  // values, made_utc as "%Y-%m-%d %H:%M:%S" in UTC.
-  const mappingBytes = new TextEncoder().encode(mappingText);
-  const entry = async (name, bytes) => ({ bytes: bytes.length, file: name, sha256: await sha256(bytes) });
-
-  const inputs = {
-    invoices: await entry(picked.invoices.name, picked.invoicesBytes),
-    mapping: await entry('mapping.json', mappingBytes),
-    schedule: await entry(picked.schedule.name, picked.scheduleBytes),
-  };
-  const outputs = [];
-  for (const n of names) outputs.push(await entry(n, files[n]));
-
-  const receipt = {
-    inputs,
-    kit_version: kitVersion,
-    made_utc: new Date().toISOString().slice(0, 19).replace('T', ' '),
-    outputs,
-    parameters: {
-      asof_month: manifest.asof_month ?? null,
-      months_for_retention: rules.months_for_retention ?? null,
-      ramp_months: rules.ramp_months ?? null,
-      tolerance_abs: rules.tolerance_abs ?? null,
-      tolerance_pct: rules.tolerance_pct ?? null,
-    },
-    pilot_sha256: pilotSha,
-  };
-  const sortDeep = (v) => Array.isArray(v) ? v.map(sortDeep)
-    : (v && typeof v === 'object') ? Object.fromEntries(Object.keys(v).sort().map(k => [k, sortDeep(v[k])])) : v;
-  files['receipt.json'] = new TextEncoder().encode(JSON.stringify(sortDeep(receipt), null, 2) + '\n');
+  // Saved only after a run that worked. Saving a mapping that failed would hand
+  // next month a starting point nobody has seen produce a report.
+  const saved = store.write(JSON.parse(mappingText), $('asof').value);
+  showSaved(saved
+    ? `Mapping and month saved in this browser for next time. Column names and rules only, no data.`
+    : `Could not save the mapping in this browser, so nothing was saved. The run itself was unaffected.`);
 
   const blob = makeZip(files);
   const a = $('download');
@@ -230,9 +227,12 @@ async function finish({ files, printed, elapsedMs }) {
   // reported "expected 14 files, got 13" on a zip that did contain 14: the
   // message was wrong, not the zip, which is its own small lesson about
   // trusting a count taken at the wrong moment.
+  // Counted, not compared to a constant. The kit's file list grows (the bridge
+  // and the deferred lane added five), and a hardcoded thirteen would have
+  // called every correct run short.
   const zipped = Object.keys(files).length;
-  const short = zipped === ZIP_FILES ? '' : ` (expected ${ZIP_FILES}, got ${zipped})`;
-  setStatus(`Done in ${(elapsedMs / 1000).toFixed(1)}s`, `${zipped} files in the zip${short}. Nothing was sent anywhere.`);
+  const receiptNote = hasReceipt ? 'receipt.json included' : 'NO receipt.json, see what the run printed below';
+  setStatus(`Done in ${(elapsedMs / 1000).toFixed(1)}s`, `${zipped} files in the zip, ${receiptNote}. Nothing was sent anywhere.`);
   $('run').disabled = false;
 }
 
@@ -253,23 +253,57 @@ async function run() {
 }
 
 // ---- the example -----------------------------------------------------------
-async function loadExample() {
-  setStatus('Loading the Larkspur example', 'fictional, from this page');
-  const grab = async (n) => new File([await (await fetch(`./example/${n}`)).blob()], n);
+/**
+ * The two examples. Same loader, so they cannot drift apart in how they load.
+ *
+ * Larkspur is the identity test: planted exceptions, every figure stated in the
+ * kit's README. QuickBooks is the shape the deferred lane is built for: an
+ * invoice export with no service period at all, monthly, quarterly and annual
+ * invoices and one discounted annual, with the expected deferred balance stated
+ * in arr-check's gen_quickbooks.py. Both are fictional.
+ */
+const EXAMPLES = {
+  larkspur: { dir: './example', label: 'the Larkspur example', asof: '2025-10' },
+  quickbooks: { dir: './example-quickbooks', label: 'the QuickBooks example', asof: '2025-10' },
+};
+
+async function loadExample(which) {
+  const ex = EXAMPLES[which];
+  setStatus(`Loading ${ex.label}`, 'fictional, from this page');
+  const grab = async (n) => new File([await (await fetch(`${ex.dir}/${n}`)).blob()], n);
   picked.schedule = await grab('schedule.csv');
   picked.invoices = await grab('invoices.csv');
-  $('scheduleName').textContent = 'schedule.csv (example)';
-  $('invoicesName').textContent = 'invoices.csv (example)';
-  template = await (await fetch('./example/mapping.json')).json();
+  $('scheduleName').textContent = `schedule.csv (${ex.label})`;
+  $('invoicesName').textContent = `invoices.csv (${ex.label})`;
+  // Its own mapping, rules included. Loading only the column names is the
+  // defect B found: every run then used the example's rules.
+  template = await (await fetch(`${ex.dir}/mapping.json`)).json();
   buildMappingForm(template); renderRules();
-  $('asof').value = '2025-10';
-  setStatus('Example loaded. Press Produce the findings.', '');
+  $('asof').value = ex.asof;
+  setStatus(`${ex.label[0].toUpperCase()}${ex.label.slice(1)} loaded. Press Produce the findings.`, '');
 }
 
 // ---- wiring ----------------------------------------------------------------
 (async () => {
-  template = await (await fetch('./mapping.example.json')).json();
+  const kept = store.read();
+  template = kept && kept.mapping && kept.mapping.schedule
+    ? kept.mapping
+    : await (await fetch('./mapping.example.json')).json();
+  if (kept && kept.asof) $('asof').value = kept.asof;
+  if (kept) showSaved(`Using the mapping you saved on ${kept.saved_utc}. Column names and rules only, no data.`);
   buildMappingForm(template); renderRules();
+  $('clearSaved').onclick = async (e) => {
+    e.preventDefault();
+    store.clear();
+    template = await (await fetch('./mapping.example.json')).json();
+    buildMappingForm(template); renderRules();
+    // The month was saved too, so clearing has to take it. The first version
+    // left 2025-09 on screen under a message saying the fields were back to the
+    // example, which made the message false by one field.
+    $('asof').value = DEFAULT_ASOF;
+    showSaved('');
+    setStatus('Saved mapping cleared', 'The columns, the rules and the month are back to the blank example. Nothing is stored now.');
+  };
   $('mapfile').onchange = async (e) => {
     const f = e.target.files[0]; if (!f) return;
     try {
@@ -287,10 +321,26 @@ async function loadExample() {
   $('schedule').onchange = (e) => { picked.schedule = e.target.files[0]; $('scheduleName').textContent = picked.schedule?.name ?? ''; };
   $('invoices').onchange = (e) => { picked.invoices = e.target.files[0]; $('invoicesName').textContent = picked.invoices?.name ?? ''; };
   $('run').onclick = run;
-  $('example').onclick = loadExample;
+  $('example').onclick = () => loadExample('larkspur');
+  $('exampleQb').onclick = () => loadExample('quickbooks');
   // Warm the runtime NOW, before a file can be chosen. A Playwright run showed
   // all 20 MB arriving after the file-input event when this was lazy, which is
   // the one window the banner promises is silent.
   setStatus('Loading Python', 'about 20 MB from this page, once, before any file is chosen');
+  // A HOST THAT DOES NOT SEND application/wasm LEAVES THIS ON "Loading Python"
+  // FOREVER with only a console warning, which Cowork hit and I did not.
+  // GitHub Pages sends the right type, so this is not the expected path; it is
+  // here because a silent wait is the one failure a reader cannot diagnose.
+  const warmWatch = setTimeout(() => {
+    if (pilotSha) return;                     // it warmed; nothing to say
+    $('error').hidden = false;
+    $('error').textContent =
+      'Python has not started after 60 seconds. This usually means the server '
+      + 'hosting this page is not sending WebAssembly files as application/wasm. '
+      + 'Nothing is wrong with your files, and nothing has been sent anywhere. '
+      + 'Try Chrome or Firefox, or open this page from a host that serves .wasm correctly.';
+  }, 60000);
   ensureWorker().postMessage({ type: 'warm' });
+  const stopWarmWatch = () => clearTimeout(warmWatch);
+  window.addEventListener('arr-check-warm', stopWarmWatch, { once: true });
 })();

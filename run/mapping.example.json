@@ -24,13 +24,35 @@
     "description": "description"
   },
   "rules": {
-    "recurring_types": ["recurring", "subscription", "license", "saas", "plan"],
-    "credit_types": ["credit", "credit memo", "refund", "adjustment"],
-    "non_recurring_types": ["services", "setup", "implementation", "one time", "onboarding", "usage", "overage", "hardware"],
+    "recurring_types": [
+      "recurring",
+      "subscription",
+      "license",
+      "saas",
+      "plan"
+    ],
+    "credit_types": [
+      "credit",
+      "credit memo",
+      "refund",
+      "adjustment"
+    ],
+    "non_recurring_types": [
+      "services",
+      "setup",
+      "implementation",
+      "one time",
+      "onboarding",
+      "usage",
+      "overage",
+      "hardware"
+    ],
     "_types_help": "line_type values are matched case blind after trimming. A line whose type is unknown is treated as recurring if the amount is positive and the service period is set, otherwise it is flagged for review. A negative amount with no type is treated as a credit.",
     "tolerance_pct": 1.0,
     "tolerance_abs": 5.0,
     "ramp_months": 3,
-    "months_for_retention": 12
+    "months_for_retention": 12,
+    "periodless_recurring": "whole_months_from_schedule",
+    "_periodless_help": "A recurring invoice line with no service period (QuickBooks Online exports have none) gets one only when its amount is an exact whole multiple of the schedule MRR for that customer, 2 to 36 months, starting in the invoice month; it is marked period_source = inferred_from_schedule. Set to \"invoice_month\" to keep every periodless line in the month it was raised."
   }
 }

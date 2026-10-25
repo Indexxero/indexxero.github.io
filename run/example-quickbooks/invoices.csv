@@ -1,0 +1,127 @@
+Date,Transaction Type,Num,Customer,Memo/Description,Amount
+01/01/2024,Invoice,1001,Monthly A,Subscription,500.00
+02/01/2024,Invoice,1002,Monthly A,Subscription,500.00
+03/01/2024,Invoice,1003,Monthly A,Subscription,500.00
+04/01/2024,Invoice,1004,Monthly A,Subscription,500.00
+05/01/2024,Invoice,1005,Monthly A,Subscription,500.00
+06/01/2024,Invoice,1006,Monthly A,Subscription,500.00
+07/01/2024,Invoice,1007,Monthly A,Subscription,500.00
+08/01/2024,Invoice,1008,Monthly A,Subscription,500.00
+09/01/2024,Invoice,1009,Monthly A,Subscription,500.00
+10/01/2024,Invoice,1010,Monthly A,Subscription,500.00
+11/01/2024,Invoice,1011,Monthly A,Subscription,500.00
+12/01/2024,Invoice,1012,Monthly A,Subscription,500.00
+01/01/2025,Invoice,1013,Monthly A,Subscription,500.00
+02/01/2025,Invoice,1014,Monthly A,Subscription,500.00
+03/01/2025,Invoice,1015,Monthly A,Subscription,500.00
+04/01/2025,Invoice,1016,Monthly A,Subscription,500.00
+05/01/2025,Invoice,1017,Monthly A,Subscription,500.00
+06/01/2025,Invoice,1018,Monthly A,Subscription,500.00
+07/01/2025,Invoice,1019,Monthly A,Subscription,500.00
+08/01/2025,Invoice,1020,Monthly A,Subscription,500.00
+09/01/2025,Invoice,1021,Monthly A,Subscription,500.00
+10/01/2025,Invoice,1022,Monthly A,Subscription,500.00
+01/01/2024,Invoice,1023,Monthly B,Subscription,800.00
+02/01/2024,Invoice,1024,Monthly B,Subscription,800.00
+03/01/2024,Invoice,1025,Monthly B,Subscription,800.00
+04/01/2024,Invoice,1026,Monthly B,Subscription,800.00
+05/01/2024,Invoice,1027,Monthly B,Subscription,800.00
+06/01/2024,Invoice,1028,Monthly B,Subscription,800.00
+07/01/2024,Invoice,1029,Monthly B,Subscription,800.00
+08/01/2024,Invoice,1030,Monthly B,Subscription,800.00
+09/01/2024,Invoice,1031,Monthly B,Subscription,800.00
+10/01/2024,Invoice,1032,Monthly B,Subscription,800.00
+11/01/2024,Invoice,1033,Monthly B,Subscription,800.00
+12/01/2024,Invoice,1034,Monthly B,Subscription,800.00
+01/01/2025,Invoice,1035,Monthly B,Subscription,800.00
+02/01/2025,Invoice,1036,Monthly B,Subscription,800.00
+03/01/2025,Invoice,1037,Monthly B,Subscription,800.00
+04/01/2025,Invoice,1038,Monthly B,Subscription,800.00
+05/01/2025,Invoice,1039,Monthly B,Subscription,800.00
+06/01/2025,Invoice,1040,Monthly B,Subscription,800.00
+07/01/2025,Invoice,1041,Monthly B,Subscription,800.00
+08/01/2025,Invoice,1042,Monthly B,Subscription,800.00
+09/01/2025,Invoice,1043,Monthly B,Subscription,800.00
+10/01/2025,Invoice,1044,Monthly B,Subscription,800.00
+01/01/2024,Invoice,1045,Monthly C,Subscription,"1,000.00"
+02/01/2024,Invoice,1046,Monthly C,Subscription,"1,000.00"
+03/01/2024,Invoice,1047,Monthly C,Subscription,"1,000.00"
+04/01/2024,Invoice,1048,Monthly C,Subscription,"1,000.00"
+05/01/2024,Invoice,1049,Monthly C,Subscription,"1,000.00"
+06/01/2024,Invoice,1050,Monthly C,Subscription,"1,000.00"
+07/01/2024,Invoice,1051,Monthly C,Subscription,"1,000.00"
+08/01/2024,Invoice,1052,Monthly C,Subscription,"1,000.00"
+09/01/2024,Invoice,1053,Monthly C,Subscription,"1,000.00"
+10/01/2024,Invoice,1054,Monthly C,Subscription,"1,000.00"
+11/01/2024,Invoice,1055,Monthly C,Subscription,"1,000.00"
+12/01/2024,Invoice,1056,Monthly C,Subscription,"1,000.00"
+01/01/2025,Invoice,1057,Monthly C,Subscription,"1,000.00"
+02/01/2025,Invoice,1058,Monthly C,Subscription,"1,000.00"
+03/01/2025,Invoice,1059,Monthly C,Subscription,"1,000.00"
+04/01/2025,Invoice,1060,Monthly C,Subscription,"1,000.00"
+05/01/2025,Invoice,1061,Monthly C,Subscription,"1,000.00"
+06/01/2025,Invoice,1062,Monthly C,Subscription,"1,000.00"
+07/01/2025,Invoice,1063,Monthly C,Subscription,"1,000.00"
+08/01/2025,Invoice,1064,Monthly C,Subscription,"1,000.00"
+09/01/2025,Invoice,1065,Monthly C,Subscription,"1,000.00"
+10/01/2025,Invoice,1066,Monthly C,Subscription,"1,000.00"
+01/01/2024,Invoice,1067,Monthly D,Subscription,"1,200.00"
+02/01/2024,Invoice,1068,Monthly D,Subscription,"1,200.00"
+03/01/2024,Invoice,1069,Monthly D,Subscription,"1,200.00"
+04/01/2024,Invoice,1070,Monthly D,Subscription,"1,200.00"
+05/01/2024,Invoice,1071,Monthly D,Subscription,"1,200.00"
+06/01/2024,Invoice,1072,Monthly D,Subscription,"1,200.00"
+07/01/2024,Invoice,1073,Monthly D,Subscription,"1,200.00"
+08/01/2024,Invoice,1074,Monthly D,Subscription,"1,200.00"
+09/01/2024,Invoice,1075,Monthly D,Subscription,"1,200.00"
+10/01/2024,Invoice,1076,Monthly D,Subscription,"1,200.00"
+11/01/2024,Invoice,1077,Monthly D,Subscription,"1,200.00"
+12/01/2024,Invoice,1078,Monthly D,Subscription,"1,200.00"
+01/01/2025,Invoice,1079,Monthly D,Subscription,"1,200.00"
+02/01/2025,Invoice,1080,Monthly D,Subscription,"1,200.00"
+03/01/2025,Invoice,1081,Monthly D,Subscription,"1,200.00"
+04/01/2025,Invoice,1082,Monthly D,Subscription,"1,200.00"
+05/01/2025,Invoice,1083,Monthly D,Subscription,"1,200.00"
+06/01/2025,Invoice,1084,Monthly D,Subscription,"1,200.00"
+07/01/2025,Invoice,1085,Monthly D,Subscription,"1,200.00"
+08/01/2025,Invoice,1086,Monthly D,Subscription,"1,200.00"
+09/01/2025,Invoice,1087,Monthly D,Subscription,"1,200.00"
+10/01/2025,Invoice,1088,Monthly D,Subscription,"1,200.00"
+01/01/2024,Invoice,1089,Monthly E,Subscription,600.00
+02/01/2024,Invoice,1090,Monthly E,Subscription,600.00
+03/01/2024,Invoice,1091,Monthly E,Subscription,600.00
+04/01/2024,Invoice,1092,Monthly E,Subscription,600.00
+05/01/2024,Invoice,1093,Monthly E,Subscription,600.00
+06/01/2024,Invoice,1094,Monthly E,Subscription,600.00
+07/01/2024,Invoice,1095,Monthly E,Subscription,600.00
+08/01/2024,Invoice,1096,Monthly E,Subscription,600.00
+09/01/2024,Invoice,1097,Monthly E,Subscription,600.00
+10/01/2024,Invoice,1098,Monthly E,Subscription,600.00
+11/01/2024,Invoice,1099,Monthly E,Subscription,600.00
+12/01/2024,Invoice,1100,Monthly E,Subscription,600.00
+01/01/2025,Invoice,1101,Monthly E,Subscription,600.00
+02/01/2025,Invoice,1102,Monthly E,Subscription,600.00
+03/01/2025,Invoice,1103,Monthly E,Subscription,600.00
+04/01/2025,Invoice,1104,Monthly E,Subscription,600.00
+05/01/2025,Invoice,1105,Monthly E,Subscription,600.00
+06/01/2025,Invoice,1106,Monthly E,Subscription,600.00
+07/01/2025,Invoice,1107,Monthly E,Subscription,600.00
+08/01/2025,Invoice,1108,Monthly E,Subscription,600.00
+09/01/2025,Invoice,1109,Monthly E,Subscription,600.00
+10/01/2025,Invoice,1110,Monthly E,Subscription,600.00
+01/15/2024,Invoice,1111,Annual One,Annual subscription,"24,000.00"
+01/15/2025,Invoice,1112,Annual One,Annual subscription,"24,000.00"
+06/01/2025,Invoice,1113,Annual Two,Annual subscription,"18,000.00"
+10/10/2023,Invoice,1114,Annual Three,Annual subscription,"36,000.00"
+10/10/2024,Invoice,1115,Annual Three,Annual subscription,"36,000.00"
+10/10/2025,Invoice,1116,Annual Three,Annual subscription,"36,000.00"
+01/01/2024,Invoice,1117,Quarterly One,Quarterly subscription,"2,700.00"
+04/01/2024,Invoice,1118,Quarterly One,Quarterly subscription,"2,700.00"
+07/01/2024,Invoice,1119,Quarterly One,Quarterly subscription,"2,700.00"
+10/01/2024,Invoice,1120,Quarterly One,Quarterly subscription,"2,700.00"
+01/01/2025,Invoice,1121,Quarterly One,Quarterly subscription,"2,700.00"
+04/01/2025,Invoice,1122,Quarterly One,Quarterly subscription,"2,700.00"
+07/01/2025,Invoice,1123,Quarterly One,Quarterly subscription,"2,700.00"
+10/01/2025,Invoice,1124,Quarterly One,Quarterly subscription,"2,700.00"
+03/05/2024,Invoice,1125,Discount Co,"Annual subscription, 10 percent off","10,800.00"
+03/05/2025,Invoice,1126,Discount Co,"Annual subscription, 10 percent off","10,800.00"

@@ -48,6 +48,7 @@
 
   <div class="panel privacy">
     <p><strong>Your files stay in this tab.</strong> Once you choose them, this page makes no network request of any kind: no upload, no analytics, no fonts, no error reporting. The comparison runs in your browser, in the same Python that runs on a laptop, and the zip is written by the browser onto your own disk.</p>
+    <p class="h"><strong>What this page remembers:</strong> after a run that worked, it keeps your column mapping and the as of month in this browser so next month is one click. That is column names, the rules, and a month. It never keeps a schedule, an invoice line, a figure or a result, and nothing kept is ever sent anywhere. The link beside the month clears it.</p>
     <p class="h">Everything the page needs, including Python and pandas, is already loaded from this page before you choose a file, about 20 MB the first time and cached after. You can confirm all of this yourself in your browser's Network tab, and the code is on the page: <code>run.html</code>, <code>app.js</code>, <code>worker.js</code>, <code>zip.js</code>, <code>pilot.py</code>.</p>
   </div>
 
@@ -65,7 +66,8 @@
         <div class="name" id="invoicesName"></div>
       </div>
     </div>
-    <p class="h" style="margin-top:12px">No file of your own to hand? <button id="example" type="button">Try it on the Larkspur example</button> &nbsp;A fictional company, so you can see the output in a minute.</p>
+    <p class="h" style="margin-top:12px">No file of your own to hand? <button id="example" type="button">Try it on the Larkspur example</button>
+      <button id="exampleQb" type="button">Try it on a QuickBooks export</button> &nbsp;A fictional company, so you can see the output in a minute.</p>
   </div>
 
   <h2>2. Which column is which</h2>
@@ -85,6 +87,10 @@
       <input id="asof" value="2025-10" placeholder="YYYY-MM" spellcheck="false">
       <span class="h">The month the ARR or MRR figure is stated as of.</span>
     </div>
+    <p class="h" style="margin-top:10px">
+      <span id="savedNote"></span>
+      <a href="#" id="clearSaved" hidden>clear saved mapping</a>
+    </p>
     <details style="margin-top:14px">
       <summary>The rules in force</summary>
       <p class="h">Which line types count as recurring, as credits and as one off, and the tolerance. These decide what "supported" means, so they are shown rather than hidden, and they are not editable here: they come from the mapping file and changing one changes every figure. Load your own <code>mapping.json</code> above to use yours.</p>

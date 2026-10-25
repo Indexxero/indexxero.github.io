@@ -15,6 +15,7 @@ import { loadPyodide } from './vendor/pyodide/pyodide.mjs';
 
 let pyodide = null;
 let pilotBytes = null;
+let receiptBytes = null;
 const say = (stage, detail) => postMessage({ type: 'progress', stage, detail });
 
 async function boot() {
@@ -42,6 +43,12 @@ async function boot() {
   // Fetched once, here, and kept: the page needs its bytes for the receipt's
   // pilot_sha256 and must not go back for them mid-run.
   pilotBytes = new Uint8Array(await (await fetch('./pilot.py')).arrayBuffer());
+  // receipt.py beside pilot.py, as on a laptop. pilot.py imports it from its own
+  // folder (never a subprocess, which raises OSError here) and writes
+  // receipt.json itself. The page used to write its own receipt instead: a
+  // second implementation of the same file, which had already drifted from the
+  // verifier once (a list where receipt.py keys by role). One implementation now.
+  receiptBytes = new Uint8Array(await (await fetch('./receipt.py')).arrayBuffer());
   return pyodide;
 }
 
@@ -64,9 +71,16 @@ onmessage = async (e) => {
     for (const n of FS.readdir('/work/out')) if (!n.startsWith('.')) FS.unlink('/work/out/' + n);
 
     FS.writeFile('/work/pilot.py', pilotBytes);
+    FS.writeFile('/work/receipt.py', receiptBytes);
     FS.writeFile('/work/in/' + scheduleName, new Uint8Array(schedule));
     FS.writeFile('/work/in/' + invoicesName, new Uint8Array(invoices));
-    FS.writeFile('/work/in/mapping.json', new TextEncoder().encode(mapping));
+    const mappingBytes = new TextEncoder().encode(mapping);
+    FS.writeFile('/work/in/mapping.json', mappingBytes);
+    // The mapping this run used, in the OUTPUT folder and BEFORE the run, so the
+    // kit's own receipt lists it. receipt.py verify compares the union of the
+    // receipt's outputs and the folder's files, so a file added to the zip after
+    // the receipt was made would read as a mismatch on every laptop.
+    FS.writeFile('/work/out/mapping-used.json', mappingBytes);
 
     say('Running the comparison', 'pilot.py, unchanged');
     const t0 = Date.now();
