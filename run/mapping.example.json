@@ -1,0 +1,36 @@
+{
+  "_note": "Map the company's column names to the kit's names. Leave a value empty when the export has no such column. Dates are parsed in most common formats; amounts may carry currency symbols and commas.",
+  "schedule": {
+    "format": "snapshot",
+    "_format_help": "snapshot = one row per customer per month (needs snapshot_date). contract = one row per customer with start_date and optional end_date; the kit expands it to months.",
+    "customer_id": "customer_id",
+    "customer_name": "customer_name",
+    "snapshot_date": "snapshot_date",
+    "mrr": "mrr",
+    "arr": "",
+    "start_date": "start_date",
+    "end_date": "end_date",
+    "status": "status"
+  },
+  "invoices": {
+    "invoice_id": "invoice_id",
+    "customer_id": "customer_id",
+    "customer_name": "customer_name",
+    "invoice_date": "invoice_date",
+    "service_start": "service_start",
+    "service_end": "service_end",
+    "amount": "amount",
+    "line_type": "line_type",
+    "description": "description"
+  },
+  "rules": {
+    "recurring_types": ["recurring", "subscription", "license", "saas", "plan"],
+    "credit_types": ["credit", "credit memo", "refund", "adjustment"],
+    "non_recurring_types": ["services", "setup", "implementation", "one time", "onboarding", "usage", "overage", "hardware"],
+    "_types_help": "line_type values are matched case blind after trimming. A line whose type is unknown is treated as recurring if the amount is positive and the service period is set, otherwise it is flagged for review. A negative amount with no type is treated as a credit.",
+    "tolerance_pct": 1.0,
+    "tolerance_abs": 5.0,
+    "ramp_months": 3,
+    "months_for_retention": 12
+  }
+}

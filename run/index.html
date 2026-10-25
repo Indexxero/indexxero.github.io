@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>arr-check, in this tab</title>
+<meta name="description" content="Compare a customer ARR schedule with the invoice lines, in the browser tab, nothing uploaded. From Indexxero.">
+<link rel="icon" href="/favicon.ico">
+<style>
+  :root{--fg:#15181d;--mute:#5b636e;--line:#d8dce2;--bg:#fbfbfc;--panel:#fff;--accent:#1f4f8f;--warn:#8a4b00}
+  *{box-sizing:border-box}
+  [hidden]{display:none !important}
+  body{margin:0;font:15px/1.55 ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--fg);background:var(--bg)}
+  main{max-width:860px;margin:0 auto;padding:32px 20px 80px}
+  h1{font-size:22px;margin:0 0 6px}
+  h2{font-size:15px;margin:28px 0 8px;letter-spacing:.01em}
+  p{margin:8px 0;max-width:70ch}
+  .sub{color:var(--mute);margin-bottom:22px}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0}
+  .privacy{border-left:3px solid var(--accent)}
+  .privacy strong{font-weight:600}
+  .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+  .filebox{flex:1 1 300px;min-width:260px}
+  label.file{display:block;font-size:13px;color:var(--mute);margin-bottom:4px}
+  input[type=file]{width:100%;font:inherit;font-size:13px}
+  .name{font-size:12px;color:var(--accent);min-height:16px;word-break:break-all}
+  button,a.btn{font:inherit;padding:9px 16px;border:1px solid var(--line);border-radius:7px;background:#f3f5f8;color:var(--fg);cursor:pointer;text-decoration:none;display:inline-block}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  button.primary{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600}
+  #status{font-weight:600}
+  #statusDetail,.h{color:var(--mute);font-size:12px}
+  .maprow{display:grid;grid-template-columns:150px 1fr;gap:6px 12px;align-items:baseline;padding:5px 0;border-bottom:1px solid #eef0f3}
+  .maprow .k{font-size:13px;color:var(--mute)}
+  .maprow .h{grid-column:2}
+  .maprow input,.maprow select{font:inherit;font-size:13px;padding:4px 7px;border:1px solid var(--line);border-radius:5px;width:100%;background:#fff}
+  details>summary{cursor:pointer;font-size:14px;font-weight:600;padding:2px 0}
+  pre{white-space:pre-wrap;word-break:break-word;background:#f6f7f9;border:1px solid var(--line);border-radius:8px;padding:12px;font:12.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;max-height:460px;overflow:auto}
+  #error{color:#8a1b1b;background:#fdf3f3;border-color:#eccaca}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media (max-width:660px){.cols{grid-template-columns:1fr}.maprow{grid-template-columns:1fr}.maprow .h{grid-column:1}}
+</style>
+</head>
+<body>
+<main>
+  <h1>arr-check</h1>
+  <p class="sub">A second pass on a customer ARR schedule against the invoice lines. Two exports in, a folder of findings out.</p>
+
+  <div class="panel privacy">
+    <p><strong>Your files stay in this tab.</strong> Once you choose them, this page makes no network request of any kind: no upload, no analytics, no fonts, no error reporting. The comparison runs in your browser, in the same Python that runs on a laptop, and the zip is written by the browser onto your own disk.</p>
+    <p class="h">Everything the page needs, including Python and pandas, is already loaded from this page before you choose a file, about 20 MB the first time and cached after. You can confirm all of this yourself in your browser's Network tab, and the code is on the page: <code>run.html</code>, <code>app.js</code>, <code>worker.js</code>, <code>zip.js</code>, <code>pilot.py</code>.</p>
+  </div>
+
+  <h2>1. The two exports</h2>
+  <div class="panel">
+    <div class="row">
+      <div class="filebox">
+        <label class="file" for="schedule">The customer schedule (csv or xlsx)</label>
+        <input type="file" id="schedule" accept=".csv,.xlsx,.xls">
+        <div class="name" id="scheduleName"></div>
+      </div>
+      <div class="filebox">
+        <label class="file" for="invoices">The invoice lines (csv or xlsx)</label>
+        <input type="file" id="invoices" accept=".csv,.xlsx,.xls">
+        <div class="name" id="invoicesName"></div>
+      </div>
+    </div>
+    <p class="h" style="margin-top:12px">No file of your own to hand? <button id="example" type="button">Try it on the Larkspur example</button> &nbsp;A fictional company, so you can see the output in a minute.</p>
+  </div>
+
+  <h2>2. Which column is which</h2>
+  <div class="panel">
+    <p class="h" style="margin-bottom:10px">
+      <label class="file" for="mapfile" style="display:inline">Already have a <code>mapping.json</code>? Load it and every field below is filled in, including the rules.</label>
+      <input type="file" id="mapfile" accept=".json" style="margin-top:4px">
+      <span class="name" id="mapfileName"></span>
+    </p>
+    <p class="h">The kit never guesses a column. Put your export's column names on the right and leave a box empty where your export has no such column. Nothing here changes a number; it only says where to read each one.</p>
+    <div class="cols">
+      <div><h2 style="margin-top:14px">Schedule</h2><div id="map-schedule"></div></div>
+      <div><h2 style="margin-top:14px">Invoices</h2><div id="map-invoices"></div></div>
+    </div>
+    <div class="maprow" style="margin-top:14px">
+      <span class="k">as of month</span>
+      <input id="asof" value="2025-10" placeholder="YYYY-MM" spellcheck="false">
+      <span class="h">The month the ARR or MRR figure is stated as of.</span>
+    </div>
+    <details style="margin-top:14px">
+      <summary>The rules in force</summary>
+      <p class="h">Which line types count as recurring, as credits and as one off, and the tolerance. These decide what "supported" means, so they are shown rather than hidden, and they are not editable here: they come from the mapping file and changing one changes every figure. Load your own <code>mapping.json</code> above to use yours.</p>
+      <pre id="rulesView" style="max-height:220px"></pre>
+    </details>
+  </div>
+
+  <h2>3. Run it</h2>
+  <div class="panel">
+    <div class="row">
+      <button id="run" class="primary" type="button">Produce the findings</button>
+      <a id="download" class="btn" hidden>Download the zip</a>
+      <div><span id="status">Ready</span><div id="statusDetail"></div></div>
+    </div>
+    <pre id="error" hidden></pre>
+  </div>
+
+  <div id="reportWrap" hidden>
+    <h2>report.md</h2>
+    <p class="h">The same file as in the zip, which also holds the other twelve output files, <code>receipt.json</code> (the hashes of inputs, code and outputs, so the run can be verified on any laptop) and <code>mapping-used.json</code> (the mapping this run used).</p>
+    <pre id="report"></pre>
+    <details><summary>What the run printed</summary><pre id="printed"></pre></details>
+  </div>
+
+  <p class="h" style="margin-top:34px">This gives no accounting opinion, does not replace a Quality of Earnings review, and does not decide which figure is right. It makes the disagreement specific.</p>
+  <p class="h">The code is public: <a href="https://github.com/Indexxero/arr-check">github.com/Indexxero/arr-check</a>, MIT licence, the same <code>pilot.py</code> this page runs. A worked example with every output file: <a href="/example">measure.indexxero.com/example</a>. Indexxero, Dallas, Texas.</p>
+</main>
+<script type="module" src="./app.js"></script>
+</body>
+</html>
