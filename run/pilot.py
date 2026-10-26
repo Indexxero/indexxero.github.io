@@ -164,7 +164,32 @@ def load_mapped(path, section, mapping):
             out[kit_col] = ""
             if src:
                 missing.append(f"{section}.{kit_col} -> '{src}' not found")
+    require_columns(section, out, mapping)
     return raw, out, missing
+
+
+REQUIRED = {
+    "invoices": [("amount",), ("invoice_date",), ("customer_id", "customer_name")],
+    "schedule": [("mrr", "arr"), ("snapshot_date", "start_date"), ("customer_id", "customer_name")],
+}
+
+
+def require_columns(section, out, mapping):
+    """Stop before anything is computed when a column every figure depends on is missing.
+    Without this, a mapping that names columns the file does not have (a different export, a
+    report with title rows above the header) produced a complete report on warning lines: every
+    dollar of ARR called unsupported, which reads as a finding about the client when it is a
+    mapping mismatch. Found by Claude Code on a grouped QuickBooks export, 26 Oct."""
+    if section not in REQUIRED:
+        return
+    def present(col):
+        return col in out.columns and out[col].astype(str).str.strip().replace("nan", "").ne("").any()
+    gaps = [" or ".join(group) for group in REQUIRED[section] if not any(present(c) for c in group)]
+    if gaps:
+        named = {c: mapping.get(c, "") for group in REQUIRED[section] for c in group}
+        sys.exit(f"{section}: no values found for {', '.join(gaps)}. The mapping names "
+                 + ", ".join(f"{k} -> '{v}'" for k, v in named.items() if v)
+                 + ". Check that the file's header row holds these column names (a report with title rows above the header, or a different export, will not match). Nothing was computed.")
 
 
 def melt_wide(raw, mapping):

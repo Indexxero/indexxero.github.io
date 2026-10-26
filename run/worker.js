@@ -107,12 +107,29 @@ import sys, runpy, io, contextlib
 sys.argv = ['pilot.py', '--schedule', '/work/in/${scheduleName}', '--invoices', '/work/in/${invoicesName}',
             '--map', '/work/in/mapping.json', '--asof', '${asof}', '--out', '/work/out']${hasGl ? " + ['--deferred-gl', '/work/in/deferred_gl.csv']" : ''}
 _buf = io.StringIO()
-with contextlib.redirect_stdout(_buf):
-    runpy.run_path('/work/pilot.py', run_name='__main__')
+_stopped = None
+try:
+    with contextlib.redirect_stdout(_buf):
+        runpy.run_path('/work/pilot.py', run_name='__main__')
+except SystemExit as _e:
+    # pilot.py stops on purpose with sys.exit("<plain message>") when a run
+    # cannot honestly proceed, e.g. a required column maps to nothing. On a
+    # laptop that prints the sentence; here it would surface as a Pyodide
+    # traceback with the sentence below the fold. So it is caught and only the
+    # kit's own words go to the page. A clean exit (code 0 or None) is not a stop.
+    if _e.code not in (0, None):
+        _stopped = _e.code if isinstance(_e.code, str) else (_buf.getvalue().strip() or f"pilot.py stopped with exit {_e.code}")
 _printed = _buf.getvalue()
 `);
     const printed = py.globals.get('_printed');
+    const stopped = py.globals.get('_stopped');
     const elapsedMs = Date.now() - t0;
+    if (stopped) {
+      // No zip: a stop means nothing was computed, and a zip of partial files
+      // next to a stop message is the confusion this branch exists to prevent.
+      postMessage({ type: 'error', message: String(stopped) });
+      return;
+    }
 
     const files = {};
     for (const n of FS.readdir('/work/out')) {
