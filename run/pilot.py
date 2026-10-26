@@ -28,7 +28,7 @@ try:
 except ImportError:
     HAVE_OPENPYXL = False
 
-KIT_VERSION = "2026-10-25"
+KIT_VERSION = "2026-10-26"
 
 
 # ---------- helpers ----------
@@ -861,12 +861,98 @@ def deferred(lines_df, inv_m, asof, months_back, names=None, gl=None):
     return roll, acc, journal
 
 
+# ---------- 7c ARR to recognised revenue ----------
+ARR_TO_REVENUE_COLUMNS = ["month", "order", "section", "step", "bucket", "amount", "running", "accounts"]
+
+
+def arr_to_revenue(cmp, roll, asof):
+    """arr_to_revenue.csv: schedule MRR to supported MRR to invoiced recurring to the
+    recognised revenue of the roll forward, for the as of month, one row per step.
+
+    READS, DOES NOT RECOMPUTE. Every amount is a sum of columns compare_customer_month.csv
+    and deferred_rollforward.csv already carry (sched_mrr, supported_mrr, inv_mrr,
+    non_recurring_amount; opening, billings, recognised, closing), so the bridge cannot
+    disagree with those files by being worked a second way. A step is one bucket, the
+    kit's own name; under_stated is split where the schedule shows nothing, because
+    "billed to a customer the schedule shows as gone" and "billed above the schedule"
+    are different questions. Each subtotal is read from its own column and compared
+    with the steps before it; any gap is written as a row named residual, never
+    absorbed. One off lines are a memo row: the roll forward carries recurring and
+    credit lines only, so they are in neither ARR nor this recognised figure."""
+    cur = cmp[cmp["month"] == asof].copy()
+    rows = []
+
+    def names(sub):
+        return "; ".join(sorted(f"{(str(r['cname']) if isinstance(r['cname'], str) and r['cname'] else str(r['key']))} ({r['key']})"
+                                for _, r in sub.iterrows()))
+
+    def add(section, step, bucket, amount, accounts="", running=None):
+        rows.append(dict(month=asof, order=len(rows) + 1, section=section, step=step, bucket=bucket,
+                         amount=round(float(amount), 2) + 0.0, running=None if running is None else round(float(running), 2) + 0.0, accounts=accounts))
+
+    def steps(section, gap, sign, word):
+        nonlocal running
+        cur["_gap"] = gap
+        moved = cur[cur["_gap"].round(2) != 0].copy()
+        moved["_label"] = moved["bucket"].astype(str)
+        split = moved["bucket"].astype(str).str.startswith("under_stated")
+        moved.loc[split & (moved["sched_mrr"] == 0), "_label"] = moved["bucket"].astype(str) + "|schedule shows nothing"
+        moved.loc[split & (moved["sched_mrr"] != 0), "_label"] = moved["bucket"].astype(str) + "|billed above the schedule"
+        groups = sorted(moved.groupby("_label"), key=lambda kv: -abs(float(kv[1]["_gap"].sum())))
+        for label, sub in groups:
+            bucket, _, qual = label.partition("|")
+            amount = sign * float(sub["_gap"].sum())
+            running += amount
+            add(section, f"{word} {bucket}" + (f", {qual}" if qual else ""), bucket, amount, names(sub), running)
+
+    def subtotal(section, step, stated):
+        nonlocal running
+        gap = round(float(stated) - running, 2)
+        if gap != 0:
+            running += gap
+            add(section, f"residual: {step} is {stated:,.2f}, the steps above reach {running - gap:,.2f}", "residual", gap, "", running)
+        add(section, f"= {step}", "", stated, "", stated)
+        running = float(stated)
+
+    sched, supported, invoiced = (float(cur[c].sum()) for c in ("sched_mrr", "supported_mrr", "inv_mrr"))
+    running = sched
+    add("schedule_to_supported", "recurring revenue on the schedule", "", sched, "", running)
+    steps("schedule_to_supported", cur["sched_mrr"] - cur["supported_mrr"], -1, "less:")
+    subtotal("schedule_to_supported", "supported by invoices", supported)
+    steps("supported_to_invoiced", cur["inv_mrr"] - cur["supported_mrr"], 1, "plus:")
+    subtotal("supported_to_invoiced", "invoiced recurring, spread over service periods", invoiced)
+    at = roll[roll["month"] == asof] if roll is not None and len(roll) else roll
+    if at is not None and len(at):
+        at = at.iloc[0]
+        subtotal("invoiced_to_recognised", "recognised revenue, deferred_rollforward.csv", float(at["recognised"]))
+        running = float(at["billings"])
+        add("billings_to_recognised", "billed in the month, recurring and credit lines", "", running, "", running)
+        moved = float(at["closing"]) - float(at["opening"])
+        running -= moved
+        add("billings_to_recognised", ("less: added to the net deferred balance" if moved > 0 else "plus: released from the net deferred balance")
+            + f" ({float(at['opening']):,.2f} to {float(at['closing']):,.2f})", "service_period_spreading", -moved, "", running)
+        subtotal("billings_to_recognised", "recognised revenue, deferred_rollforward.csv", float(at["recognised"]))
+    one_off = cur[cur["non_recurring_amount"].round(2) != 0]
+    add("memo", "one off lines in the month, outside ARR and outside the roll forward", "non_recurring",
+        float(cur["non_recurring_amount"].sum()), names(one_off))
+    return pd.DataFrame(rows, columns=ARR_TO_REVENUE_COLUMNS)
+
+
+def arr_to_revenue_markdown(a2r):
+    L = ["| step | MRR |", "|---|---:|"]
+    for _, r in a2r.iterrows():
+        bold = str(r["step"]).startswith("=")
+        amt = f"{float(r['amount']):,.2f}"
+        L.append(f"| {'**' + r['step'] + '**' if bold else r['step']} | {'**' + amt + '**' if bold else amt} |")
+    return L
+
+
 # ---------- 8 report ----------
 def money(x):
     return f"{x:,.0f}"
 
 
-def write_report(out, man, cmp, acc, ret, coh, match, lines_df, asof, rules, answered=None, bridge_df=None, roll=None, dacc=None, gl_given=False, journal=None):
+def write_report(out, man, cmp, acc, ret, coh, match, lines_df, asof, rules, answered=None, bridge_df=None, roll=None, dacc=None, gl_given=False, journal=None, a2r=None):
     cur = cmp[cmp["month"] == asof]
     reported = float(cur["sched_mrr"].sum()) * 12
     supported = float(cur["supported_mrr"].sum()) * 12
@@ -919,6 +1005,10 @@ def write_report(out, man, cmp, acc, ret, coh, match, lines_df, asof, rules, ans
         for r in answered:
             L.append(f"| {r['customer_key']} | {r['month']} | {r['decision']} | {r['reason']} | {r['prior_bucket']} | {r['result_bucket']} | {r['note']} | {r['by']} | {r['date']} | {r['status']} |")
         L += ["", f"Overridden by answers: {len(overridden)} customer months, {money(override_mrr)} MRR", ""]
+    if a2r is not None and len(a2r):
+        L += [f"## ARR to recognised revenue, {asof}", "",
+              "Monthly figures, read from compare_customer_month.csv and deferred_rollforward.csv, one row per bucket; every row and the accounts behind it are in arr_to_revenue.csv. A row named residual is a gap the steps do not explain, shown rather than absorbed.", ""]
+        L += arr_to_revenue_markdown(a2r) + [""]
     if roll is not None and len(roll):
         at = roll[roll["month"] == asof]
         closing = float(at["closing"].iloc[0]) if len(at) else float(roll["closing"].iloc[-1])
@@ -999,7 +1089,7 @@ def supported_export(cmp, out, asof):
 
 
 # ---------- main ----------
-def write_closepack(args, man, cmp, acc, ret, coh, bridge_df, roll, gl_given):
+def write_closepack(args, man, cmp, acc, ret, coh, bridge_df, roll, gl_given, a2r=None):
     """closepack.md: the one page a fractional CFO attaches to the board deck or hands a buyer.
     Every figure comes from a file this run already wrote. With --before <previous out folder>
     it adds what changed since that run, using diff_runs.py's logic (imported, not copied)."""
@@ -1054,6 +1144,8 @@ def write_closepack(args, man, cmp, acc, ret, coh, bridge_df, roll, gl_given):
         else:
             L.append("Per the general ledger: not provided.")
         L.append("")
+    if a2r is not None and len(a2r):
+        L += [f"### ARR to recognised revenue, {asof}", "", "Monthly. Every row, with its accounts, in arr_to_revenue.csv.", ""] + arr_to_revenue_markdown(a2r) + [""]
     L += ["## 8. Since the previous run", ""]
     before = getattr(args, "before", None)
     if before and os.path.exists(os.path.join(before, "accounts.csv")):
@@ -1154,12 +1246,14 @@ def main():
             gl = None
     roll, dacc, journal = deferred(lines_df, inv_m, args.asof, rules["months_for_retention"], names=inv_names, gl=gl)
     roll.to_csv(os.path.join(args.out, "deferred_rollforward.csv"), index=False)
+    a2r = arr_to_revenue(cmp, roll, args.asof)
+    a2r.to_csv(os.path.join(args.out, "arr_to_revenue.csv"), index=False)
     dacc.to_csv(os.path.join(args.out, "deferred_accounts.csv"), index=False)
     journal.to_csv(os.path.join(args.out, "journal.csv"), index=False)
     write_report(args.out, man, cmp, acc, ret, coh, match, lines_df, args.asof, rules, answered, bridge_df,
-                 roll=roll, dacc=dacc, gl_given=gl is not None, journal=journal)
+                 roll=roll, dacc=dacc, gl_given=gl is not None, journal=journal, a2r=a2r)
     supported_export(cmp, args.out, args.asof)
-    write_closepack(args, man, cmp, acc, ret, coh, bridge_df, roll, gl is not None)
+    write_closepack(args, man, cmp, acc, ret, coh, bridge_df, roll, gl is not None, a2r)
     write_receipt(args)
     print("done:", ", ".join(sorted(os.listdir(args.out))))
     for w in man["mapping_warnings"]:

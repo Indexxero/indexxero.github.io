@@ -20,7 +20,6 @@
 <meta name="twitter:description" content="A customer ARR schedule set beside what the invoice lines support, the ARR bridge three ways, the deferred revenue roll forward and the month end journal, from two files. Fictional company, run on a laptop.">
 <meta name="twitter:image" content="https://measure.indexxero.com/og-example.png">
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: a single reading column like a workpaper; wide tables scroll in their own frame; a banner states the synthetic nature on every screen. */
 :root{
@@ -92,14 +91,14 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);font-si
   <div class="tile"><div class="k">Reported ARR, per schedule</div><div class="v">$868,800</div><div class="s">37 accounts carrying ARR in October 2025</div></div>
   <div class="tile"><div class="k">Supported by invoices</div><div class="v">$834,000</div><div class="s">96.0 percent of reported</div></div>
   <div class="tile"><div class="k">Excluded from verified ARR</div><div class="v">$34,800</div><div class="s">4.0 percent, two accounts, unresolved from these two files</div></div>
-  <div class="tile"><div class="k">Accounts with an exception</div><div class="v">10 of 38</div><div class="s">in the last twelve months, any cause</div></div>
+  <div class="tile"><div class="k">Accounts with an exception</div><div class="v">10 of 39</div><div class="s">in the last twelve months, any cause</div></div>
 </div>
 <div class="note">
   <p>Three legs are usually tested in diligence: the schedule against invoices, against deferred revenue, and against cash. This pack covers the first two. The deferred revenue the invoices imply is rolled forward month by month below and compared with the balance the ledger carries. The cash leg is marked not covered in every table, not filled in.</p>
 </div>
 
 <h2>Exception register, October 2025</h2>
-<p>One row per account with an exception in the trailing twelve months. Amounts are annualised. Status is one of: supported, flagged (the amount stands, the cause is on record), or excluded (the invoices do not support it, so it is removed from verified ARR until a document resolves it). The 28 accounts with no exception are in the workbook.</p>
+<p>One row per account with an exception in the trailing twelve months. Amounts are annualised. Status is one of: supported, flagged (the amount stands, the cause is on record), or excluded (the invoices do not support it, so it is removed from verified ARR until a document resolves it). The 29 accounts with no exception are in the workbook.</p>
 <div class="scroll">
 <table>
   <thead><tr>
@@ -116,7 +115,7 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);font-si
     <tr><td>Northwind Dynamics</td><td class="n">28,800</td><td class="n">28,800</td><td class="n"><span class="pill na">not covered</span></td><td class="n">0</td><td>Billed in arrears with no service period on the lines; May step up lands a month late</td><td class="n">1</td><td><span class="pill flag">flagged, timing</span></td></tr>
     <tr><td>Maple Street Health</td><td class="n">31,200</td><td class="n">31,200</td><td class="n"><span class="pill na">not covered</span></td><td class="n">0</td><td>An untyped 15,000 line in March 2025 sits beside the subscription; kept out of ARR, needs a type</td><td class="n">1</td><td><span class="pill flag">flagged, classification</span></td></tr>
     <tr><td>Harbor Light Media</td><td class="n">20,400</td><td class="n">20,400</td><td class="n"><span class="pill na">not covered</span></td><td class="n">0</td><td>Invoice id DUP-202504 appears twice</td><td class="n">1</td><td><span class="pill flag">flagged, duplicate</span></td></tr>
-    <tr class="total"><td>All 38 accounts</td><td class="n">868,800</td><td class="n">865,800</td><td class="n"><span class="pill na">not covered</span></td><td class="n">3,000</td><td>Verified ARR 834,000 after exclusions</td><td class="n"></td><td></td></tr>
+    <tr class="total"><td>All 39 accounts</td><td class="n">868,800</td><td class="n">865,800</td><td class="n"><span class="pill na">not covered</span></td><td class="n">3,000</td><td>Verified ARR 834,000 after exclusions</td><td class="n"></td><td></td></tr>
   </tbody>
 </table>
 </div>
@@ -215,17 +214,18 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);font-si
 </dl>
 
 <h3>What the files could not settle</h3>
-<p>Invoice lines with no type: 1. Lines with no service period: 14, thirteen for one account billed in arrears and the untyped line. Mapping warnings: 0. The kit does not read contracts, order forms, the general ledger or bank records. Where the schedule and the invoices disagree, it shows the disagreement and the lines behind it. Which figure is right is a question for the finance lead, and in a transaction, for the diligence team. Nothing here is an accounting opinion.</p>
+<p>Invoice lines with no type: 1. Lines with no service period: 14, thirteen for one account billed in arrears and the untyped line. Mapping warnings: 0. The kit does not read contracts, order forms, bank records or general ledger detail; from the ledger it takes only the deferred revenue balance by month, given here as deferred_gl.csv. Where the schedule and the invoices disagree, it shows the disagreement and the lines behind it. Which figure is right is a question for the finance lead, and in a transaction, for the diligence team. Nothing here is an accounting opinion.</p>
 
 <h3>Running it</h3>
 <pre>python3 pilot.py --schedule schedule.csv --invoices invoices.csv --map mapping.json --asof 2025-10 --out out --deferred-gl deferred_gl.csv</pre>
-<p>Runs on a laptop. Python and pandas. No network. Nineteen output files, including the full workbook, the bridge, the deferred roll forward, the journal, the per customer per month comparison and a receipt with the hash of every input and output, so the run can be verified by anyone holding the same files. The files stay where they are run; nothing is uploaded anywhere.</p>
+<p>Runs on a laptop. Python and pandas. No network. Twenty one output files, including the full workbook, the bridge, the deferred roll forward, the journal, the per customer per month comparison and a receipt with the hash of every input and output, so the run can be verified by anyone holding the same files. The files stay where they are run; nothing is uploaded anywhere.</p>
+<p>The same month walked from reported ARR to recognised revenue, one step per cause, is on its own page: <a href="/arr-to-revenue/">ARR to recognised revenue</a>, with a deferred revenue template to fill. Anyone holding the pack can check every hash in it against the receipt, in the browser, on <a href="/run/verify.html">the verify page</a>.</p>
 <p>Or in a browser tab, with nothing leaving it: <a href="/run/">measure.indexxero.com/run</a>. Drop the two files, get the same zip. The code is public: <a href="https://github.com/Indexxero/arr-check">github.com/Indexxero/arr-check</a>, MIT licence.</p>
 
 <h3>The full output, to open without running anything</h3>
 <dl>
-  <dt>Workbook</dt><dd><a href="/example/larkspur/pilot.xlsx">pilot.xlsx</a>, every table above plus the 28 accounts with no exception, the match table, the invoice lines as classified, the bridge, the deferred roll forward and the per customer per month comparison.</dd>
-  <dt>Everything</dt><dd><a href="/example/larkspur/larkspur-example.zip">larkspur-example.zip</a>, the two input files, the ledger balance file, the column mapping, and all nineteen output files including the receipt, so the run can be repeated and verified on any laptop with the same command.</dd>
+  <dt>Workbook</dt><dd><a href="/example/larkspur/pilot.xlsx">pilot.xlsx</a>, every table above plus the 29 accounts with no exception, the match table, the invoice lines as classified, the bridge, the deferred roll forward and the per customer per month comparison.</dd>
+  <dt>Everything</dt><dd><a href="/example/larkspur/larkspur-example.zip">larkspur-example.zip</a>, the two input files, the ledger balance file, the column mapping, and all twenty one output files including the receipt, so the run can be repeated and verified on any laptop with the same command.</dd>
   <dt>Report text</dt><dd><a href="/example/larkspur/report.md">report.md</a>, the kit's own findings as written, before any editing.</dd>
 </dl>
 

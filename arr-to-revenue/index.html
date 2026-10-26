@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>ARR to recognised revenue, a worked bridge</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="description" content="One month of a fictional SaaS company, from reported ARR to the revenue in the books to the deferred revenue balance, every figure reproduced by the arr-check kit.">
+<link rel="icon" href="data:,">
+<style>
+:root{--bg:#F3F6F8;--paper:#FFFFFF;--fg:#16222B;--muted:#5A6B77;--line:#CFD9E0;--accent:#0E5A6B;--accent-soft:#DCEEF2;
+  --display:"IBM Plex Serif",Georgia,"Times New Roman",serif;--body:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;--mono:"IBM Plex Mono",Menlo,Consolas,monospace;color-scheme:light}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0E151A;--paper:#151F26;--fg:#E3EAEE;--muted:#9AAAB5;--line:#2A3A44;--accent:#6EC2D4;--accent-soft:#163743;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0E151A;--paper:#151F26;--fg:#E3EAEE;--muted:#9AAAB5;--line:#2A3A44;--accent:#6EC2D4;--accent-soft:#163743;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);line-height:1.5;margin:0;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+.banner{background:var(--accent);color:#fff;font-size:13px;letter-spacing:.04em;text-transform:uppercase;text-align:center;padding:8px 12px;margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px)))}
+.wrap{max-width:860px;margin:0 auto}
+header{padding:40px 0 24px;border-bottom:1px solid var(--line)}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(28px,4.5vw,40px);line-height:1.15;margin:0 0 12px;text-wrap:balance}
+h2{font-family:var(--display);font-weight:600;font-size:22px;margin:40px 0 12px}
+p{max-width:68ch;margin:0 0 12px}
+.lead{font-size:17px}
+.scroll{overflow-x:auto;border:1px solid var(--line);background:var(--paper);margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:560px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600;white-space:nowrap}
+td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.total td{font-weight:600;border-top:2px solid var(--fg)}
+ol li{margin:0 0 8px;max-width:68ch}
+.downloads{background:var(--paper);border:1px solid var(--line);padding:16px;margin:16px 0}
+.downloads a{color:var(--accent);font-weight:600}
+.small{font-size:13px;color:var(--muted)}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="banner">Fictional company, synthetic data</div>
+<div class="wrap">
+<header>
+<h1>ARR to recognised revenue, a worked bridge</h1>
+<p class="lead">A reported ARR figure and the revenue in the books are different numbers, and both can be right. The work is to say exactly why they differ, account by account, and to show that every step traces to an invoice line. This page walks one month for a fictional SaaS company, Larkspur, using the files in the arr-check example folder (github.com/Indexxero/arr-check). Every figure below can be reproduced by running the kit on those files.</p>
+</header>
+
+<h2>The month: October <span data-src="arr_to_revenue.csv|asof|year|text">2025</span></h2>
+<div class="scroll"><table>
+<thead><tr><th>step</th><th class="n">monthly</th><th class="n">annualised</th></tr></thead>
+<tbody>
+<tr><td>Recurring revenue on the schedule</td><td class="n"><span data-src="arr_to_revenue.csv|recurring revenue on the schedule|amount|1">72,400</span></td><td class="n"><span data-src="arr_to_revenue.csv|recurring revenue on the schedule|amount|12">868,800</span></td></tr>
+<tr><td>less: a customer on the schedule with no invoice for the month (Silent Partner Inc)</td><td class="n"><span data-src="arr_to_revenue.csv|less: unmatched_schedule_only|amount|1">2,100</span></td><td class="n"><span data-src="arr_to_revenue.csv|less: unmatched_schedule_only|amount|12">25,200</span></td></tr>
+<tr><td>less: schedule above what is billed (Granite Peak Software, <span data-src="compare_customer_month.csv|F-002|sched_mrr|1">5,000</span> on the schedule, <span data-src="compare_customer_month.csv|F-002|inv_mrr|1">4,200</span> billed)</td><td class="n"><span data-src="arr_to_revenue.csv|less: over_stated|amount|1">800</span></td><td class="n"><span data-src="arr_to_revenue.csv|less: over_stated|amount|12">9,600</span></td></tr>
+<tr class=total><td>Recurring revenue supported by invoices</td><td class="n"><span data-src="arr_to_revenue.csv|= supported by invoices|amount|1">69,500</span></td><td class="n"><span data-src="arr_to_revenue.csv|= supported by invoices|amount|12">834,000</span></td></tr>
+<tr><td>plus: billed, but the schedule shows the customer as gone (Lantern Field Co)</td><td class="n"><span data-src="arr_to_revenue.csv|plus: under_stated, schedule shows nothing|amount|1">1,400</span></td><td class="n"></td></tr>
+<tr><td>plus: billed above the schedule (Quiet Creek Software, <span data-src="compare_customer_month.csv|F-012|inv_mrr|1">1,300</span> billed, <span data-src="compare_customer_month.csv|F-012|sched_mrr|1">1,000</span> on the schedule)</td><td class="n"><span data-src="arr_to_revenue.csv|plus: under_stated, billed above the schedule|amount|1">300</span></td><td class="n"></td></tr>
+<tr><td>plus: billed to a customer not on the schedule at all (Orphan Billing LLC)</td><td class="n"><span data-src="arr_to_revenue.csv|plus: unmatched_invoice_only|amount|1">950</span></td><td class="n"></td></tr>
+<tr class=total><td>Revenue recognised for October</td><td class="n"><span data-src="arr_to_revenue.csv|= recognised revenue, deferred_rollforward.csv|amount|1">72,150</span></td><td class="n"></td></tr>
+</tbody></table></div>
+<p>The two halves answer different questions. The top half asks how much of the reported ARR the invoices support. The bottom half asks what the books should show as revenue for the month. A schedule can be too high and too low at the same time, and netting the two would hide both.</p>
+
+<h2>Then to the balance sheet</h2>
+<p>Recognised revenue is the invoice spread over its service period. Billing ahead of service leaves deferred revenue; service ahead of billing leaves unbilled revenue. The roll forward for Larkspur:</p>
+<div class="scroll"><table>
+<thead><tr><th>month</th><th class="n">opening</th><th class="n">billed</th><th class="n">recognised</th><th class="n">closing</th></tr></thead>
+<tbody>
+<tr><td><span data-src="deferred_rollforward.csv|2025-08|month|text">2025-08</span></td><td class="n"><span data-src="deferred_rollforward.csv|2025-08|opening|1">6,000</span></td><td class="n"><span data-src="deferred_rollforward.csv|2025-08|billings|1">70,150</span></td><td class="n"><span data-src="deferred_rollforward.csv|2025-08|recognised|1">72,150</span></td><td class="n"><span data-src="deferred_rollforward.csv|2025-08|closing|1">4,000</span></td></tr>
+<tr><td><span data-src="deferred_rollforward.csv|2025-09|month|text">2025-09</span></td><td class="n"><span data-src="deferred_rollforward.csv|2025-09|opening|1">4,000</span></td><td class="n"><span data-src="deferred_rollforward.csv|2025-09|billings|1">70,150</span></td><td class="n"><span data-src="deferred_rollforward.csv|2025-09|recognised|1">72,150</span></td><td class="n"><span data-src="deferred_rollforward.csv|2025-09|closing|1">2,000</span></td></tr>
+<tr><td><span data-src="deferred_rollforward.csv|2025-10|month|text">2025-10</span></td><td class="n"><span data-src="deferred_rollforward.csv|2025-10|opening|1">2,000</span></td><td class="n"><span data-src="deferred_rollforward.csv|2025-10|billings|1">70,150</span></td><td class="n"><span data-src="deferred_rollforward.csv|2025-10|recognised|1">72,150</span></td><td class="n"><span data-src="deferred_rollforward.csv|2025-10|closing|1">0</span></td></tr>
+</tbody></table></div>
+<p>At the end of October the invoices imply no deferred revenue, and the ledger carries <span data-src="deferred_rollforward.csv|2025-10|gl_balance|1">800</span>. That <span data-src="deferred_rollforward.csv|2025-10|gl_balance|1">800</span> is the last step of the bridge. It has sat there every month of the year, which points to an old posting rather than this month's billing. The ledger gives one balance, not one per customer, so the question goes to whoever posts the journals. Deferred and unbilled are reported apart, never netted, for the same reason as above.</p>
+
+<h2>The checklist, before an ARR figure goes in a deck, a data room or a lender pack</h2>
+<ol>
+<li>Does every customer on the schedule have an invoice for the month, and is every billed customer on the schedule?</li>
+<li>For customers on both, does the schedule amount equal the recurring billed amount? Where it does not, is the cause written down (price change, ramp, credit, rebill, timing)?</li>
+<li>Are credit memos and rebills netted against the month they correct, not the month they were raised?</li>
+<li>Are one off lines (setup, services, usage overage) kept out of ARR, and still accounted for in revenue? The kit lists them beside the bridge rather than inside it.</li>
+<li>Are duplicate invoice numbers caught before anything is summed?</li>
+<li>Does the schedule treat a churned customer as churned in the same month the billing stops?</li>
+<li>Is ARR stated twice, as reported and as supported, with the difference listed by account?</li>
+<li>Does recognised revenue for the month come from service periods, not invoice dates?</li>
+<li>Does the deferred revenue roll forward tie to the ledger balance, and is any difference explained?</li>
+<li>Can someone else rerun the whole thing from the same exports and get the same numbers?</li>
+</ol>
+<p>The kit puts these questions to the exports on the firm's own laptop and writes the answers to plain files, with a receipt recording a hash of every input and output. It gives no accounting opinion. It makes the differences specific so the people who know the contracts can settle them.</p>
+
+<div class="downloads">
+<p><a href="deferred_revenue_template.xlsx">The deferred revenue template</a>, blank: a roll forward, an account schedule, the month end journal and this bridge, tied to each other by formulas. No macros, no links to other files.</p>
+<p><a href="larkspur_deferred_revenue.xlsx">The same template filled from the Larkspur run</a>, the figures above in it, every check reading zero.</p>
+<p class="small">The filled copy carries formulas, not stored results.</p>
+</div>
+
+<p class="small">Sajjad Hossain / CEO, Indexxero / Dallas, Texas / sajjad.hossain@indexxero.com</p>
+</div>
+</body>
+</html>

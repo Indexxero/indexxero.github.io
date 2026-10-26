@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>arr-check, verify a pack</title>
+<meta name="description" content="Recompute every hash in an arr-check receipt in the browser tab. Nothing is uploaded.">
+<style>
+  :root{--fg:#15181d;--mute:#5b636e;--line:#d8dce2;--bg:#fbfbfc;--panel:#fff;--accent:#1f4f8f;--ok:#1d6b3a;--bad:#8a1b1b}
+  *{box-sizing:border-box}
+  [hidden]{display:none !important}
+  body{margin:0;font:15px/1.55 ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--fg);background:var(--bg)}
+  main{max-width:860px;margin:0 auto;padding:32px 20px 80px}
+  h1{font-size:22px;margin:0 0 6px}
+  h2{font-size:15px;margin:28px 0 8px}
+  p{margin:8px 0;max-width:70ch}
+  .sub{color:var(--mute);margin-bottom:22px}
+  .h{color:var(--mute);font-size:12px}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0}
+  .privacy{border-left:3px solid var(--accent)}
+  #drop{border:2px dashed var(--line);border-radius:10px;padding:26px 16px;text-align:center;color:var(--mute)}
+  #drop.over{border-color:var(--accent);background:#f2f6fb}
+  input[type=file]{font:inherit;font-size:13px;max-width:100%}
+  button{font:inherit;padding:7px 14px;border:1px solid var(--line);border-radius:7px;background:#f3f5f8;color:var(--fg);cursor:pointer}
+  #verdict{font-weight:600;font-size:16px}
+  #verdict.ok{color:var(--ok)} #verdict.bad{color:var(--bad)}
+  .tablewrap{overflow-x:auto}
+  table{border-collapse:collapse;width:100%;font-size:13px}
+  th,td{text-align:left;padding:6px 8px;border-bottom:1px solid #eef0f3;vertical-align:top}
+  th{color:var(--mute);font-weight:600}
+  td.state{font-weight:600;white-space:nowrap}
+  tr[data-state=ok] td.state{color:var(--ok)}
+  tr[data-state=MISMATCH] td.state,tr[data-state=missing] td.state,tr[data-state="not in the receipt"] td.state{color:var(--bad)}
+  code{font:12px ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-all}
+</style>
+</head>
+<body>
+<main>
+  <h1>Verify an arr-check pack</h1>
+  <p class="sub">An arr-check run writes <code>receipt.json</code>: the sha256 of every input, of pilot.py and of every output. This page recomputes each one from the files chosen here and says, file by file, whether it matches.</p>
+
+  <div class="panel privacy">
+    <p><strong>The files stay in this tab.</strong> This page is one file with nothing to load: no scripts from elsewhere, no fonts, no analytics. Once files are chosen it makes no network request of any kind. The hashes are computed by the browser's own Web Crypto. The browser's network panel shows it.</p>
+    <p class="h">A match proves that these exact files are the ones the receipt names. It does not prove the method is right or that the inputs are true.</p>
+  </div>
+
+  <h2>1. Choose the files</h2>
+  <div class="panel">
+    <div id="drop">
+      <p>Drop the output folder's files and the inputs here, receipt.json included.</p>
+      <p><input type="file" id="files" multiple></p>
+      <p class="h">Files can be added in more than one go: the outputs first, then the schedule, the invoices, the mapping and any ledger, answers, payments or rates file the run used. pilot.py too, to check the code.</p>
+    </div>
+    <p><span id="chosen" class="h">No files chosen.</span> <button id="clear" hidden>Start again</button></p>
+  </div>
+
+  <h2>2. The result</h2>
+  <div class="panel">
+    <p id="verdict">Waiting for receipt.json.</p>
+    <p id="meta" class="h"></p>
+    <div class="tablewrap">
+      <table id="rows" hidden>
+        <thead><tr><th>State</th><th>What</th><th>File</th><th>Detail</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</main>
+<script>
+"use strict";
+const chosen = new Map();               // file name -> File; a later choice of the same name replaces it
+const $ = id => document.getElementById(id);
+
+async function sha256(file) {
+  const buf = await file.arrayBuffer();
+  const h = await crypto.subtle.digest("SHA-256", buf);
+  return Array.from(new Uint8Array(h), b => b.toString(16).padStart(2, "0")).join("");
+}
+
+function add(list) {
+  for (const f of list) chosen.set(f.name, f);
+  $("chosen").textContent = chosen.size + " file" + (chosen.size === 1 ? "" : "s") + " chosen: " + [...chosen.keys()].sort().join(", ");
+  $("clear").hidden = chosen.size === 0;
+  check();
+}
+
+function row(state, what, file, detail) {
+  const tr = document.createElement("tr");
+  tr.dataset.state = state;
+  tr.dataset.file = file;
+  for (const [cls, text] of [["state", state], ["", what], ["", file], ["", detail]]) {
+    const td = document.createElement("td");
+    if (cls) td.className = cls;
+    td.textContent = text;
+    tr.appendChild(td);
+  }
+  return tr;
+}
+
+let run = 0;
+async function check() {
+  const mine = ++run;                   // a newer choice supersedes a check still hashing
+  const body = $("rows").querySelector("tbody");
+  const v = $("verdict");
+  if (!chosen.has("receipt.json")) {
+    body.replaceChildren(); $("rows").hidden = true; $("meta").textContent = "";
+    v.className = ""; v.textContent = chosen.size ? "receipt.json is not among the files chosen." : "Waiting for receipt.json.";
+    return;
+  }
+  let rec;
+  try { rec = JSON.parse(await chosen.get("receipt.json").text()); }
+  catch (e) { v.className = "bad"; v.textContent = "receipt.json is not readable: " + e.message; return; }
+  if (!rec || typeof rec.inputs !== "object" || !Array.isArray(rec.outputs)) {
+    v.className = "bad"; v.textContent = "receipt.json does not have the inputs and outputs of an arr-check receipt."; return;
+  }
+  v.className = ""; v.textContent = "Computing hashes in this tab.";
+  const hashes = new Map();
+  for (const [name, f] of chosen) if (name !== "receipt.json") hashes.set(name, await sha256(f));
+  if (mine !== run) return;
+
+  const rows = [], named = new Set(["receipt.json"]);
+  const compare = (what, file, want) => {
+    named.add(file);
+    if (!hashes.has(file)) return row("missing", what, file, "not among the files chosen");
+    const got = hashes.get(file);
+    return got === want ? row("ok", what, file, got.slice(0, 16) + "…")
+                        : row("MISMATCH", what, file, "receipt " + String(want).slice(0, 16) + "…, this file " + got.slice(0, 16) + "…");
+  };
+  for (const role of Object.keys(rec.inputs).sort()) rows.push(compare("input " + role, rec.inputs[role].file, rec.inputs[role].sha256));
+  for (const o of [...rec.outputs].sort((a, b) => a.file < b.file ? -1 : 1)) rows.push(compare("output", o.file, o.sha256));
+  let code = "not chosen";
+  if (rec.pilot_sha256) {
+    if (hashes.has("pilot.py")) { rows.push(compare("the code", "pilot.py", rec.pilot_sha256)); code = rows[rows.length - 1].dataset.state; }
+    else { named.add("pilot.py"); rows.push(row("not chosen", "the code", "pilot.py", "optional: choose pilot.py to check the code that made the outputs")); }
+  }
+  for (const name of [...hashes.keys()].sort())
+    if (!named.has(name)) rows.push(row("not in the receipt", "chosen file", name, "the receipt names no file by this name"));
+  body.replaceChildren(...rows);
+  $("rows").hidden = false;
+
+  const failed = rows.filter(r => !["ok", "not chosen"].includes(r.dataset.state)).length;
+  const okCount = rows.filter(r => r.dataset.state === "ok").length;
+  $("meta").textContent = "Receipt made " + (rec.made_utc || "at an unstated time") + " UTC, kit " + (rec.kit_version || "unstated") +
+    (rec.parameters && rec.parameters.asof_month ? ", as of " + rec.parameters.asof_month : "") + ".";
+  if (failed) { v.className = "bad"; v.textContent = "PACK FAILED: " + failed + " of " + rows.length + " entries do not match the receipt."; }
+  else if (code !== "ok") { v.className = "ok"; v.textContent = "FILES OK: all " + okCount + " files match the receipt. pilot.py was not chosen, so the code that made them is not checked."; }
+  else { v.className = "ok"; v.textContent = "PACK OK: all " + okCount + " entries match the receipt, the code included."; }
+}
+
+$("files").addEventListener("change", e => { add(e.target.files); e.target.value = ""; });
+$("clear").addEventListener("click", () => { chosen.clear(); add([]); });
+const drop = $("drop");
+drop.addEventListener("dragover", e => { e.preventDefault(); drop.classList.add("over"); });
+drop.addEventListener("dragleave", () => drop.classList.remove("over"));
+drop.addEventListener("drop", e => { e.preventDefault(); drop.classList.remove("over"); add(e.dataTransfer.files); });
+</script>
+</body>
+</html>
