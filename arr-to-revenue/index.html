@@ -8,12 +8,13 @@
 <meta name="description" content="One month of a fictional SaaS company, from reported ARR to the revenue in the books to the deferred revenue balance, every figure reproduced by the arr-check kit.">
 <link rel="icon" href="data:,">
 <style>
-:root{--bg:#F3F6F8;--paper:#FFFFFF;--fg:#16222B;--muted:#5A6B77;--line:#CFD9E0;--accent:#0E5A6B;--accent-soft:#DCEEF2;
-  --display:"IBM Plex Serif",Georgia,"Times New Roman",serif;--body:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;--mono:"IBM Plex Mono",Menlo,Consolas,monospace;color-scheme:light}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0E151A;--paper:#151F26;--fg:#E3EAEE;--muted:#9AAAB5;--line:#2A3A44;--accent:#6EC2D4;--accent-soft:#163743;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#0E151A;--paper:#151F26;--fg:#E3EAEE;--muted:#9AAAB5;--line:#2A3A44;--accent:#6EC2D4;--accent-soft:#163743;color-scheme:dark}
+:root{--bg:var(--color-background);--paper:var(--color-surface);--fg:var(--color-foreground);--muted:var(--color-text-secondary);--line:var(--color-border);--accent:var(--color-accent);--accent-soft:var(--color-accent-soft);--ok:var(--color-positive);--warn:var(--color-warning);--flag:var(--color-danger);--display:var(--font-sans);--body:var(--font-sans);--mono:var(--font-mono);--ix-width:860px;}
+.downloads{background:var(--color-surface);border:1px solid var(--color-border);border-radius:24px}
+.scroll{background:var(--color-surface);border:1px solid var(--color-border);border-radius:24px}
+.downloads{transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}.downloads:hover{transform:translateY(-2px);box-shadow:0 24px 60px -40px rgba(0,0,0,0.85)}
+
 body{background:var(--bg);color:var(--fg);font-family:var(--body);line-height:1.5;margin:0;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
-.banner{background:var(--accent);color:#fff;font-size:13px;letter-spacing:.04em;text-transform:uppercase;text-align:center;padding:8px 12px;margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px)))}
+.banner{background:var(--ix-fill);color:var(--color-on-primary);font-size:13px;letter-spacing:.04em;text-transform:uppercase;text-align:center;padding:8px 12px;margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px)))}
 .wrap{max-width:860px;margin:0 auto}
 header{padding:40px 0 24px;border-bottom:1px solid var(--line)}
 h1{font-family:var(--display);font-weight:600;font-size:clamp(28px,4.5vw,40px);line-height:1.15;margin:0 0 12px;text-wrap:balance}
@@ -32,17 +33,20 @@ ol li{margin:0 0 8px;max-width:68ch}
 .small{font-size:13px;color:var(--muted)}
 a{color:var(--accent)}
 </style>
+<link rel="stylesheet" href="/assets/theme.css">
+<script src="/assets/theme.js"></script>
 </head>
-<body>
+<body class="ix-page">
 <div class="banner">Fictional company, synthetic data</div>
+<div class="ix-bar"><a class="ix-logo" href="/what-we-do.html" aria-label="Indexxero"><img src="/assets/logo-red.png" alt="Indexxero" width="30" height="30"></a><div class="ix-toggle" role="group" aria-label="Colour theme"><button type="button" data-mode="system" aria-pressed="false" aria-label="Follow the device setting" title="Follow the device setting"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></button><button type="button" data-mode="light" aria-pressed="false" aria-label="Light theme" title="Light theme"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><button type="button" data-mode="dark" aria-pressed="false" aria-label="Dark theme" title="Dark theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></div>
 <div class="wrap">
 <header>
-<h1>ARR to recognised revenue, a worked bridge</h1>
+<h1 class="text-gradient-red">ARR to recognised revenue, a worked bridge</h1>
 <p class="lead">A reported ARR figure and the revenue in the books are different numbers, and both can be right. The work is to say exactly why they differ, account by account, and to show that every step traces to an invoice line. This page walks one month for a fictional SaaS company, Larkspur, using the files in the arr-check example folder (github.com/Indexxero/arr-check). Every figure below can be reproduced by running the kit on those files.</p>
 </header>
 
 <h2>The month: October <span data-src="arr_to_revenue.csv|asof|year|text">2025</span></h2>
-<div class="scroll"><table>
+<div class="scroll" data-ix-reveal><table>
 <thead><tr><th>step</th><th class="n">monthly</th><th class="n">annualised</th></tr></thead>
 <tbody>
 <tr><td>Recurring revenue on the schedule</td><td class="n"><span data-src="arr_to_revenue.csv|recurring revenue on the schedule|amount|1">72,400</span></td><td class="n"><span data-src="arr_to_revenue.csv|recurring revenue on the schedule|amount|12">868,800</span></td></tr>
@@ -58,7 +62,7 @@ a{color:var(--accent)}
 
 <h2>Then to the balance sheet</h2>
 <p>Recognised revenue is the invoice spread over its service period. Billing ahead of service leaves deferred revenue; service ahead of billing leaves unbilled revenue. The roll forward for Larkspur:</p>
-<div class="scroll"><table>
+<div class="scroll" data-ix-reveal><table>
 <thead><tr><th>month</th><th class="n">opening</th><th class="n">billed</th><th class="n">recognised</th><th class="n">closing</th></tr></thead>
 <tbody>
 <tr><td><span data-src="deferred_rollforward.csv|2025-08|month|text">2025-08</span></td><td class="n"><span data-src="deferred_rollforward.csv|2025-08|opening|1">6,000</span></td><td class="n"><span data-src="deferred_rollforward.csv|2025-08|billings|1">70,150</span></td><td class="n"><span data-src="deferred_rollforward.csv|2025-08|recognised|1">72,150</span></td><td class="n"><span data-src="deferred_rollforward.csv|2025-08|closing|1">4,000</span></td></tr>
@@ -82,10 +86,11 @@ a{color:var(--accent)}
 </ol>
 <p>The kit puts these questions to the exports on the firm's own laptop and writes the answers to plain files, with a receipt recording a hash of every input and output. It gives no accounting opinion. It makes the differences specific so the people who know the contracts can settle them.</p>
 
-<div class="downloads">
+<div class="downloads" data-ix-reveal>
 <p><a href="deferred_revenue_template.xlsx">The deferred revenue template</a>, blank: a roll forward, an account schedule, the month end journal and this bridge, tied to each other by formulas. No macros, no links to other files.</p>
 <p><a href="larkspur_deferred_revenue.xlsx">The same template filled from the Larkspur run</a>, the figures above in it, every check reading zero.</p>
 <p class="small">The filled copy carries formulas, not stored results.</p>
+<p><a href="arr-to-revenue.pdf">One page PDF of this month</a>, to print or hand over. <a href="for-founders/">A shorter version for founders</a>, with a paragraph to forward to whoever keeps the books. <a href="/diligence-pack/">The diligence pack</a>: ARR by customer by month, the movement by customer and the deferred revenue roll forward, in one workbook.</p>
 </div>
 
 <p class="small">Sajjad Hossain / CEO, Indexxero / Dallas, Texas / sajjad.hossain@indexxero.com</p>

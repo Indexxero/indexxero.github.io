@@ -8,10 +8,11 @@
 <meta name="description" content="Compare a customer ARR schedule with the invoice lines, in the browser tab, nothing uploaded. From Indexxero.">
 <link rel="icon" href="/favicon.ico">
 <style>
-  :root{--fg:#15181d;--mute:#5b636e;--line:#d8dce2;--bg:#fbfbfc;--panel:#fff;--accent:#1f4f8f;--warn:#8a4b00}
+:root{--fg:var(--color-foreground);--mute:var(--color-text-secondary);--line:var(--color-border);--bg:var(--color-background);--panel:var(--color-surface);--accent:var(--color-accent);--ok:var(--color-positive);--warn:var(--color-warning);--bad:var(--color-danger);--ix-width:860px;}
+
   *{box-sizing:border-box}
   [hidden]{display:none !important}
-  body{margin:0;font:15px/1.55 ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--fg);background:var(--bg)}
+  body{margin:0;font:15px/1.55 var(--font-sans);color:var(--fg);background:var(--bg)}
   main{max-width:860px;margin:0 auto;padding:32px 20px 80px}
   h1{font-size:22px;margin:0 0 6px}
   h2{font-size:15px;margin:28px 0 8px;letter-spacing:.01em}
@@ -25,23 +26,26 @@
   label.file{display:block;font-size:13px;color:var(--mute);margin-bottom:4px}
   input[type=file]{width:100%;font:inherit;font-size:13px}
   .name{font-size:12px;color:var(--accent);min-height:16px;word-break:break-all}
-  button,a.btn{font:inherit;padding:9px 16px;border:1px solid var(--line);border-radius:7px;background:#f3f5f8;color:var(--fg);cursor:pointer;text-decoration:none;display:inline-block}
+  button,a.btn{font:inherit;padding:9px 16px;border:1px solid var(--line);border-radius:7px;background:var(--color-surface-2);color:var(--fg);cursor:pointer;text-decoration:none;display:inline-block}
   button:disabled{opacity:.45;cursor:not-allowed}
-  button.primary{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600}
+  button.primary{background:var(--ix-fill);color:var(--color-on-primary);border-color:var(--ix-fill);font-weight:600}
   #status{font-weight:600}
   #statusDetail,.h{color:var(--mute);font-size:12px}
-  .maprow{display:grid;grid-template-columns:150px 1fr;gap:6px 12px;align-items:baseline;padding:5px 0;border-bottom:1px solid #eef0f3}
+  .maprow{display:grid;grid-template-columns:150px 1fr;gap:6px 12px;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--color-border)}
   .maprow .k{font-size:13px;color:var(--mute)}
   .maprow .h{grid-column:2}
-  .maprow input,.maprow select{font:inherit;font-size:13px;padding:4px 7px;border:1px solid var(--line);border-radius:5px;width:100%;background:#fff}
+  .maprow input,.maprow select{font:inherit;font-size:13px;padding:4px 7px;border:1px solid var(--line);border-radius:5px;width:100%;background:var(--color-surface)}
   details>summary{cursor:pointer;font-size:14px;font-weight:600;padding:2px 0}
-  pre{white-space:pre-wrap;word-break:break-word;background:#f6f7f9;border:1px solid var(--line);border-radius:8px;padding:12px;font:12.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;max-height:460px;overflow:auto}
-  #error{color:#8a1b1b;background:#fdf3f3;border-color:#eccaca}
+  pre{white-space:pre-wrap;word-break:break-word;background:var(--color-surface-2);border:1px solid var(--line);border-radius:8px;padding:12px;font:12.5px/1.5 var(--font-mono);max-height:460px;overflow:auto}
+  #error{color:var(--color-danger);background:var(--color-accent-soft);border-color:var(--color-danger)}
   .cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
   @media (max-width:660px){.cols{grid-template-columns:1fr}.maprow{grid-template-columns:1fr}.maprow .h{grid-column:1}}
 </style>
+<link rel="stylesheet" href="/assets/theme.css">
+<script src="/assets/theme.js"></script>
 </head>
-<body>
+<body class="ix-page">
+<div class="ix-bar"><a class="ix-logo" href="/what-we-do.html" aria-label="Indexxero"><img src="/assets/logo-red.png" alt="Indexxero" width="30" height="30"></a><div class="ix-toggle" role="group" aria-label="Colour theme"><button type="button" data-mode="system" aria-pressed="false" aria-label="Follow the device setting" title="Follow the device setting"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></button><button type="button" data-mode="light" aria-pressed="false" aria-label="Light theme" title="Light theme"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><button type="button" data-mode="dark" aria-pressed="false" aria-label="Dark theme" title="Dark theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></div>
 <main>
   <h1>arr-check</h1>
   <p class="sub">A second pass on a customer ARR schedule against the invoice lines. Two exports in, a folder of findings out.</p>

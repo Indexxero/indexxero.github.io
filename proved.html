@@ -23,28 +23,15 @@
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <style>
-  :root{
-    color-scheme:light;
-    --plane:#f9f9f7; --surface:#fcfcfb; --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
-    --grid:#e1e0d9; --border:rgba(11,11,11,0.10); --asof:#2a78d6; --export:#eb6834; --ok:#2f7d5b;
-    --shadow:0 1px 2px rgba(11,11,11,.05),0 8px 24px rgba(11,11,11,.04);
-  }
-  @media (prefers-color-scheme:dark){
-    :root:not([data-theme="light"]){
-      color-scheme:dark; --plane:#0f0f0e; --surface:#161615; --ink:#f2f2ee; --ink-2:#c9c8c1; --muted:#8f8e87;
-      --grid:#2a2a27; --border:rgba(255,255,255,0.10); --asof:#5c9cf0; --export:#f0855a; --ok:#5fb58c;
-      --shadow:none;
-    }
-  }
-  :root[data-theme="dark"]{
-    color-scheme:dark; --plane:#0f0f0e; --surface:#161615; --ink:#f2f2ee; --ink-2:#c9c8c1; --muted:#8f8e87;
-    --grid:#2a2a27; --border:rgba(255,255,255,0.10); --asof:#5c9cf0; --export:#f0855a; --ok:#5fb58c; --shadow:none;
-  }
+:root{--plane:var(--color-background);--surface:var(--color-surface);--ink:var(--color-foreground);--ink-2:var(--color-text-secondary);--muted:var(--color-text-secondary);--grid:var(--color-border);--axis:var(--color-text-muted);--border:var(--color-border);--asof:var(--color-primary);--export:var(--color-info);--ok:var(--color-positive);--soft:var(--color-accent-soft);--shadow:none;--ix-width:860px;}
+.card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:24px}
+.seal{background:var(--color-surface);border:1px solid var(--color-border);border-radius:24px}
+
   *{box-sizing:border-box}
-  body{margin:0;background:var(--plane);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+  body{margin:0;background:var(--plane);color:var(--ink);font:16px/1.55 var(--font-sans)}
   .wrap{max-width:860px;margin:0 auto;padding:0 24px 96px}
   header{padding:56px 0 28px;border-bottom:1px solid var(--grid)}
-  .eyebrow{font:500 12px/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--asof);margin:0 0 14px}
+  .eyebrow{font:500 12px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--asof);margin:0 0 14px}
   h1{font-size:2rem;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em;text-wrap:balance}
   h2{font-size:1.3rem;margin:44px 0 10px;text-wrap:balance}
   h3{font-size:1.02rem;margin:22px 0 6px}
@@ -54,43 +41,45 @@
   a{color:var(--asof)}
   .card{background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);padding:20px 22px;margin:18px 0}
   .card h3{margin-top:0}
-  pre{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;overflow-x:auto;font:13px/1.6 ui-monospace,Menlo,Consolas,monospace;color:var(--ink-2);margin:10px 0 14px}
+  pre{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;overflow-x:auto;font:13px/1.6 var(--font-mono);color:var(--ink-2);margin:10px 0 14px}
   pre .ok{color:var(--ok)} pre .bad{color:var(--export)} pre .dim{color:var(--muted)}
-  code{font:.92em ui-monospace,Menlo,Consolas,monospace;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 5px}
+  code{font:.92em var(--font-mono);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 5px}
   ul{margin:0 0 14px;padding-left:1.2rem} li{margin:4px 0}
-  .btn{display:inline-block;background:var(--asof);color:#fff;text-decoration:none;font-weight:600;padding:9px 14px;border-radius:6px;font-size:.95rem}
+  .btn{display:inline-block;background:var(--ix-fill);color:var(--color-on-primary);text-decoration:none;font-weight:600;padding:9px 14px;border-radius:6px;font-size:.95rem}
   .btn.ghost{background:transparent;color:var(--asof);border:1px solid var(--asof)}
   .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0 6px}
-  .toggle{position:fixed;top:14px;right:16px;font:12px system-ui;border:1px solid var(--border);background:var(--surface);color:var(--ink-2);padding:6px 10px;border-radius:999px;cursor:pointer}
+  .toggle{position:fixed;top:14px;right:16px;font:12px var(--font-sans);border:1px solid var(--border);background:var(--surface);color:var(--ink-2);padding:6px 10px;border-radius:999px;cursor:pointer}
   /* the seal */
   .seal{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow);margin:14px 0 8px}
-  .seal-head,.seal-foot{display:flex;justify-content:space-between;gap:12px;padding:8px 14px;font:11px/1.4 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.06em;color:var(--muted);background:var(--plane);border-bottom:1px solid var(--grid)}
+  .seal-head,.seal-foot{display:flex;justify-content:space-between;gap:12px;padding:8px 14px;font:11px/1.4 var(--font-mono);letter-spacing:.06em;color:var(--muted);background:var(--plane);border-bottom:1px solid var(--grid)}
   .seal-foot{border-bottom:0;border-top:1px solid var(--grid);flex-direction:column;gap:6px;letter-spacing:0}
   .seal ul{list-style:none;margin:0;padding:0}
   .seal li{display:flex;align-items:center;gap:12px;padding:9px 14px;border-bottom:1px solid var(--grid)}
   .seal li:last-child{border-bottom:0}
-  .lab{flex:1;min-width:0} .lab b{display:block;font-weight:500;font-size:14px} .lab small{font:11px ui-monospace,Menlo,monospace;color:var(--muted)}
-  .val{width:5.4rem;text-align:right;font:15px ui-monospace,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
+  .lab{flex:1;min-width:0} .lab b{display:block;font-weight:500;font-size:14px} .lab small{font:11px var(--font-mono);color:var(--muted)}
+  .val{width:5.4rem;text-align:right;font:15px var(--font-mono);font-variant-numeric:tabular-nums}
   .val.moved{color:var(--export)} .val.nil{color:var(--muted)}
   .step{display:flex;flex-direction:column;border:1px solid var(--border);border-radius:5px;overflow:hidden}
-  .step button{font:11px/1 system-ui;padding:3px 8px;border:0;background:var(--surface);color:var(--ink-2);cursor:pointer}
+  .step button{font:11px/1 var(--font-sans);padding:3px 8px;border:0;background:var(--surface);color:var(--ink-2);cursor:pointer}
   .step button+button{border-top:1px solid var(--border)}
   .step button:hover{background:var(--plane);color:var(--ink)}
-  .chip{font:10px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;padding:4px 7px;border-radius:4px;width:7.2rem;text-align:center;flex-shrink:0}
+  .chip{font:10px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;padding:4px 7px;border-radius:4px;width:7.2rem;text-align:center;flex-shrink:0}
   .chip.m{color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent)} .chip.u{color:var(--muted);background:var(--plane)}
-  .kv{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap} .mono{font-family:ui-monospace,Menlo,monospace;font-size:.78rem;word-break:break-all} .kv .ok{color:var(--ok)} .kv .bad{color:var(--export)}
-  .reset{align-self:flex-end;font:12px system-ui;border:1px solid var(--border);background:var(--surface);color:var(--ink-2);padding:4px 10px;border-radius:5px;cursor:pointer}
+  .kv{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap} .mono{font-family:var(--font-mono);font-size:.78rem;word-break:break-all} .kv .ok{color:var(--ok)} .kv .bad{color:var(--export)}
+  .reset{align-self:flex-end;font:12px var(--font-sans);border:1px solid var(--border);background:var(--surface);color:var(--ink-2);padding:4px 10px;border-radius:5px;cursor:pointer}
   .reset:disabled{opacity:.4;cursor:default}
   @media (max-width:640px){ .chip{display:none} h1{font-size:1.6rem} }
 </style>
+<link rel="stylesheet" href="/assets/theme.css">
+<script src="/assets/theme.js"></script>
 </head>
-<body>
-<button class="toggle" id="themeToggle" type="button">Dark</button>
+<body class="ix-page">
+<div class="ix-bar"><a class="ix-logo" href="/what-we-do.html" aria-label="Indexxero"><img src="/assets/logo-red.png" alt="Indexxero" width="30" height="30"></a><div class="ix-toggle" role="group" aria-label="Colour theme"><button type="button" data-mode="system" aria-pressed="false" aria-label="Follow the device setting" title="Follow the device setting"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></button><button type="button" data-mode="light" aria-pressed="false" aria-label="Light theme" title="Light theme"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><button type="button" data-mode="dark" aria-pressed="false" aria-label="Dark theme" title="Dark theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></div>
 <div class="wrap">
 
 <header>
   <p class="eyebrow">Indexxero &middot; What we have proved</p>
-  <h1>Four things you can check without trusting us.</h1>
+  <h1 class="text-gradient-red">Four things you can check without trusting us.</h1>
   <p class="standfirst">Every claim on this page comes with the file or the command that lets you test it yourself, offline. Where something is not yet proved, it says so.</p>
 </header>
 
@@ -141,14 +130,14 @@ It does not establish that the computation from input to number is correct.</spa
 <span class="bad">RESULT: FAIL.</span> 1 of 5 checks did not pass.
 <span class="dim">This FAIL establishes that the report does NOT match its manifest. The field that moved is accounts_analysed.</span></pre>
 <p>Those two runs are what a stranger performs. We cannot make the second one pass by editing the report alone.</p>
-<div class="card">
+<div class="card" data-ix-reveal>
   <h3>The anchor, and why it matters</h3>
   <p>The seal is a plain hash, not a signature. Anyone holding the folder can change a number and re-seal both files, and the verifier will pass. We tried it, and it passed. So a PASS means the report matches its manifest. To know the manifest is ours, compare the <code>content_hash</code> in it with the value published here.</p>
   <div class="kv"><span>content_hash</span><span class="mono">c7dca95f30ab7c37e448458dc9b2744da29556cf062ff1c5aded1b8292717f50</span></div>
   <div class="kv"><span>document_seal</span><span class="mono">9082d4c82158ac2a84685602c39f32c3349a10076134c264e36d709b1fb8a9ed</span></div>
   <p class="muted" style="margin:0">For a real engagement the same two values go to you in the delivery note, outside the folder. Whether to sign the manifest with a key is a product decision we have not made, and this page will say so when we do.</p>
 </div>
-<div class="card">
+<div class="card" data-ix-reveal>
   <h3>What this does and does not establish</h3>
   <p>It establishes that a report matches its manifest and that the manifest belongs to the named input. It does not establish who sealed it; the anchor above is for that. <b>It does not establish that the computation from input to number is correct.</b> The verifier says that in its own output, on every run. The correctness of the computation is what the first demonstration and the code behind it are for.</p>
 </div>
@@ -158,7 +147,7 @@ It does not establish that the computation from input to number is correct.</spa
 <p>Three labels, measured, a floor, or not measurable, and no fourth. A tool that estimates can print a retention percentage for anybody who uploads a file. Often we cannot, and we print the reason.</p>
 
 <h2>In progress, and not yet proved</h2>
-<div class="card">
+<div class="card" data-ix-reveal>
   <p><b>A detector for the same defect in public code.</b> We are running a scanner for outputs that print zero where nothing was measured against widely used open source reporting and analytics libraries. So far: 18 findings across 12 public repositories, every one read by hand from the public source, none yet reproduced in a running process. The target we set ourselves is 25. <b>None reported to maintainers yet, nothing published, and no project is named here until its maintainers have heard from us first.</b></p>
   <p class="muted" style="margin:0">Last updated 24 September 2026.</p>
 </div>
@@ -175,12 +164,6 @@ It does not establish that the computation from input to number is correct.</spa
 
 <script>
 (function(){
-  // theme toggle, same as proof.html
-  var t=document.getElementById('themeToggle'), root=document.documentElement;
-  function label(){ var d=root.getAttribute('data-theme')==='dark' || (!root.getAttribute('data-theme') && matchMedia('(prefers-color-scheme: dark)').matches); t.textContent=d?'Light':'Dark'; }
-  t.addEventListener('click',function(){ var d=root.getAttribute('data-theme')==='dark' || (!root.getAttribute('data-theme') && matchMedia('(prefers-color-scheme: dark)').matches); root.setAttribute('data-theme', d?'light':'dark'); label(); });
-  label();
-
   // the seal
   var ORIGINAL=[
     {key:'gross_revenue_retention',label:'Gross revenue retention',value:0.861,places:3,state:'measured'},

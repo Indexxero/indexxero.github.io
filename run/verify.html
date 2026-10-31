@@ -7,10 +7,11 @@
 <title>arr-check, verify a pack</title>
 <meta name="description" content="Recompute every hash in an arr-check receipt in the browser tab. Nothing is uploaded.">
 <style>
-  :root{--fg:#15181d;--mute:#5b636e;--line:#d8dce2;--bg:#fbfbfc;--panel:#fff;--accent:#1f4f8f;--ok:#1d6b3a;--bad:#8a1b1b}
+:root{--fg:var(--color-foreground);--mute:var(--color-text-secondary);--line:var(--color-border);--bg:var(--color-background);--panel:var(--color-surface);--accent:var(--color-accent);--ok:var(--color-positive);--warn:var(--color-warning);--bad:var(--color-danger);--ix-width:860px;}
+
   *{box-sizing:border-box}
   [hidden]{display:none !important}
-  body{margin:0;font:15px/1.55 ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--fg);background:var(--bg)}
+  body{margin:0;font:15px/1.55 var(--font-sans);color:var(--fg);background:var(--bg)}
   main{max-width:860px;margin:0 auto;padding:32px 20px 80px}
   h1{font-size:22px;margin:0 0 6px}
   h2{font-size:15px;margin:28px 0 8px}
@@ -20,22 +21,25 @@
   .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0}
   .privacy{border-left:3px solid var(--accent)}
   #drop{border:2px dashed var(--line);border-radius:10px;padding:26px 16px;text-align:center;color:var(--mute)}
-  #drop.over{border-color:var(--accent);background:#f2f6fb}
+  #drop.over{border-color:var(--accent);background:var(--color-accent-soft)}
   input[type=file]{font:inherit;font-size:13px;max-width:100%}
-  button{font:inherit;padding:7px 14px;border:1px solid var(--line);border-radius:7px;background:#f3f5f8;color:var(--fg);cursor:pointer}
+  button{font:inherit;padding:7px 14px;border:1px solid var(--line);border-radius:7px;background:var(--color-surface-2);color:var(--fg);cursor:pointer}
   #verdict{font-weight:600;font-size:16px}
   #verdict.ok{color:var(--ok)} #verdict.bad{color:var(--bad)}
   .tablewrap{overflow-x:auto}
   table{border-collapse:collapse;width:100%;font-size:13px}
-  th,td{text-align:left;padding:6px 8px;border-bottom:1px solid #eef0f3;vertical-align:top}
+  th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--color-border);vertical-align:top}
   th{color:var(--mute);font-weight:600}
   td.state{font-weight:600;white-space:nowrap}
   tr[data-state=ok] td.state{color:var(--ok)}
   tr[data-state=MISMATCH] td.state,tr[data-state=missing] td.state,tr[data-state="not in the receipt"] td.state{color:var(--bad)}
-  code{font:12px ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-all}
+  code{font:12px var(--font-mono);word-break:break-all}
 </style>
+<link rel="stylesheet" href="/assets/theme.css">
+<script src="/assets/theme.js"></script>
 </head>
-<body>
+<body class="ix-page">
+<div class="ix-bar"><a class="ix-logo" href="/what-we-do.html" aria-label="Indexxero"><img src="/assets/logo-red.png" alt="Indexxero" width="30" height="30"></a><div class="ix-toggle" role="group" aria-label="Colour theme"><button type="button" data-mode="system" aria-pressed="false" aria-label="Follow the device setting" title="Follow the device setting"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></button><button type="button" data-mode="light" aria-pressed="false" aria-label="Light theme" title="Light theme"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><button type="button" data-mode="dark" aria-pressed="false" aria-label="Dark theme" title="Dark theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></div>
 <main>
   <h1>Verify an arr-check pack</h1>
   <p class="sub">An arr-check run writes <code>receipt.json</code>: the sha256 of every input, of pilot.py and of every output. This page recomputes each one from the files chosen here and says, file by file, whether it matches.</p>

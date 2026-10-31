@@ -23,44 +23,15 @@
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <style>
-  :root {
-    color-scheme: light;
-    --plane: #f9f9f7;
-    --surface: #fcfcfb;
-    --ink: #0b0b0b;
-    --ink-2: #52514e;
-    --muted: #898781;
-    --grid: #e1e0d9;
-    --axis: #c3c2b7;
-    --border: rgba(11,11,11,0.10);
-    --asof: #2a78d6;
-    --export: #eb6834;
-    --shadow: 0 1px 2px rgba(11,11,11,.05), 0 8px 24px rgba(11,11,11,.04);
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:where(:not([data-theme="light"])) {
-      color-scheme: dark;
-      --plane: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7;
-      --muted: #898781; --grid: #2c2c2a; --axis: #383835;
-      --border: rgba(255,255,255,0.10);
-      --asof: #3987e5; --export: #d95926;
-      --shadow: none;
-    }
-  }
-  :root[data-theme="dark"] {
-    color-scheme: dark;
-    --plane: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7;
-    --muted: #898781; --grid: #2c2c2a; --axis: #383835;
-    --border: rgba(255,255,255,0.10);
-    --asof: #3987e5; --export: #d95926;
-    --shadow: none;
-  }
+:root{--plane:var(--color-background);--surface:var(--color-surface);--ink:var(--color-foreground);--ink-2:var(--color-text-secondary);--muted:var(--color-text-secondary);--grid:var(--color-border);--axis:var(--color-text-muted);--border:var(--color-border);--asof:var(--color-primary);--export:var(--color-info);--ok:var(--color-positive);--soft:var(--color-accent-soft);--shadow:none;--ix-width:860px;}
+.card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:24px}
+
 
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; }
   body {
     margin: 0; background: var(--plane); color: var(--ink);
-    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-family:var(--font-sans);
     font-size: 16px; line-height: 1.62;
   }
   .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px 96px; }
@@ -138,9 +109,9 @@
   pre {
     background: var(--plane); border: 1px solid var(--border); border-radius: 10px;
     padding: 16px; overflow-x: auto; font-size: 12.5px; line-height: 1.62;
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--ink-2);
+    font-family:var(--font-mono); color: var(--ink-2);
   }
-  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .92em; }
+  code { font-family:var(--font-mono); font-size: .92em; }
 
   .note {
     font-size: 13.5px; color: var(--ink-2); border-left: 2px solid var(--axis);
@@ -161,17 +132,19 @@
     position: fixed; top: 16px; right: 16px; z-index: 30;
     background: var(--surface); border: 1px solid var(--border); color: var(--ink-2);
     border-radius: 8px; padding: 6px 11px; font-size: 12.5px; cursor: pointer;
-    font-family: inherit;
+    font-family:inherit;
   }
 </style>
+<link rel="stylesheet" href="/assets/theme.css">
+<script src="/assets/theme.js"></script>
 </head>
-<body>
-<button class="toggle" id="themeToggle" type="button">Dark</button>
+<body class="ix-page">
+<div class="ix-bar"><a class="ix-logo" href="/what-we-do.html" aria-label="Indexxero"><img src="/assets/logo-red.png" alt="Indexxero" width="30" height="30"></a><div class="ix-toggle" role="group" aria-label="Colour theme"><button type="button" data-mode="system" aria-pressed="false" aria-label="Follow the device setting" title="Follow the device setting"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></button><button type="button" data-mode="light" aria-pressed="false" aria-label="Light theme" title="Light theme"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><button type="button" data-mode="dark" aria-pressed="false" aria-label="Dark theme" title="Dark theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></div></div>
 <div class="wrap">
 
 <header>
   <p class="eyebrow">Indexxero &middot; Demonstration</p>
-  <h1>The same customers, measured two ways</h1>
+  <h1 class="text-gradient-red">The same customers, measured two ways</h1>
   <p class="standfirst">One synthetic book of 2,000 accounts. One set of churn events. Two measurements that differ in exactly one respect: whether the book is read from today's export or rebuilt as it stood on each day. No model is involved, and the gap between them is not a rounding error.</p>
 </header>
 
@@ -180,7 +153,7 @@
 <h2>The headline number</h2>
 <p class="lede">Take one synthetic book of 2,000 accounts and ask the question a board asks: of the customers who were there three years ago, what share are still customers today?</p>
 
-<div class="card">
+<div class="card" data-ix-reveal>
   <div class="hero">
     <div class="hero-cell">
       <div class="hero-num export">91.6%</div>
@@ -200,7 +173,7 @@
 <p class="lede">Here is where the gap comes from.</p>
 <p>Rebuild a three year cohort from the customer table as it stands today and the accounts that were purged under an ordinary data-retention policy are simply absent from the denominator. They were customers. They left. The table no longer holds them, so the cohort appears to have been made of survivors from the beginning.</p>
 
-<div class="card">
+<div class="card" data-ix-reveal>
   <div class="card-head">
     <h3>Share of the opening cohort still a customer</h3>
     <p>Synthetic data. 2,000 accounts opened. 1,772 still on file today. Churned accounts are deleted 12 months after they leave. One run is plotted here. The spread table below reports all 25 runs, which is why this curve ends at 81.2 where the table reports 80.8.</p>
@@ -226,7 +199,7 @@
 <h2>What was actually different</h2>
 <p class="lede">Five ordinary writes separate today's export from the book as it stood. None of them is a bug, and none is unusual. Each one records what happened later in a place that keeps no history. The last one, deleting churned accounts, is what moves the retention figure. The other four change anything else you read from those fields.</p>
 
-<div class="card">
+<div class="card" data-ix-reveal>
   <ul class="mech">
     <li><b>Seats set to zero on offboarding</b><span>Deprovisioning is the correct operational response to a cancellation. The field records the outcome, and there is no record of what it held last March.</span></li>
     <li><b>Owner unassigned when the account closes</b><span>The field is empty because the customer already left. Read later, it looks like a warning sign that was there all along.</span></li>
@@ -241,7 +214,7 @@
 <h2>The spread, across 25 independent runs of the synthetic book</h2>
 <p class="lede">One dataset could be a lucky draw. The whole synthetic book and both measurements were rebuilt under 25 independent seeds. The ranges below are the observed minimum and maximum, not confidence intervals.</p>
 
-<div class="card">
+<div class="card" data-ix-reveal>
   <table>
     <thead>
       <tr><th>Measure</th><th>Current export</th><th>As of the day</th><th>Gap</th></tr>
@@ -258,7 +231,7 @@
 <h2>Reproduce it</h2>
 <p class="lede">The process that generates the book is written before either measurement, and neither measurement can see it. It is a short Python script, and all 25 runs take a few seconds.</p>
 
-<div class="card">
+<div class="card" data-ix-reveal>
   <details open>
     <summary>The writes that make today's export differ, in full</summary>
 <pre><code># Ordinary operational hygiene. None of it malicious. All of it writes the
@@ -392,18 +365,9 @@ function drawAll() {
   });
 })();
 
-/* theme */
-const btn = document.getElementById('themeToggle');
-const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark' ||
-  (!document.documentElement.getAttribute('data-theme') && matchMedia('(prefers-color-scheme: dark)').matches);
-function syncBtn() { btn.textContent = isDark() ? 'Light' : 'Dark'; }
-btn.addEventListener('click', () => {
-  document.documentElement.setAttribute('data-theme', isDark() ? 'light' : 'dark');
-  syncBtn(); drawAll();
-});
-matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { syncBtn(); drawAll(); });
-
-syncBtn();
+/* theme: the shared control (assets/theme.js) announces each change; the device setting can change too */
+document.addEventListener('ix-theme', drawAll);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', drawAll);
 drawAll();
 addEventListener('resize', () => { hideTip(); });
 </script>
